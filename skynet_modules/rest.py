@@ -132,5 +132,5 @@ def rest(argv):
 
 
 ## run rest interactively
-rest(sys.argv[1:])        
+#rest(sys.argv[1:])        
 
