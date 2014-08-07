@@ -14,14 +14,13 @@ temp_dir = '/tmp'
 
 
 # import necessary modules
-import sys
-import requests
+
 import json
+import requests
+import sys
+import traceback
 import getopt
 
-# import skynet modules
-from skynet_modules.config import *
-import skynet_modules.rest as rest
 
 def get_api(path):
   data = rest.rest(('get',base_url+path,user,token))
