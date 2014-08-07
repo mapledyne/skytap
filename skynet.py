@@ -22,18 +22,110 @@ import traceback
 import getopt
 
 
-def get_api(path):
-  data = rest.rest(('get',base_url+path,user,token))
+
 ############################################################################ 
+#### begin api interactions
+
+
+def _api_get(url):
+    url, name, passwd = url, user, token
+    
+    requisite_headers = { 'Accept' : 'application/json',
+                          'Content-Type' : 'application/json'
+    }
+    auth = (name, passwd) 
+    
+    response =  requests.get(url, headers=requisite_headers, auth=auth)
+    
+    return response.status_code, response.text
+
+
+def _api_put(argv):
+    url, name, passwd = argv[0], argv[1], argv[2]
+    
+    requisite_headers = { 'Accept' : 'application/json',
+                          'Content-Type' : 'application/json'
+    }
+    auth = (name, passwd) 
  
-# argument parser
-def ui(argv):
-  
-# define variables to be used by getopts and sent them to null
-  action = ''
-  scope = ''
-  
-  usage = """
+    if len(argv) > 3:
+        data = load_file(argv[3])
+    else:
+        data = None
+    
+    response =  requests.put(url, headers=requisite_headers, auth=auth, data=data)
+    
+    return response.status_code, response.text
+    
+
+def _api_post(argv):
+    url, name, passwd = argv[0], argv[1], argv[2]
+    
+    requisite_headers = { 'Accept' : 'application/json',
+                          'Content-Type' : 'application/json'
+    }
+    auth = (name, passwd) 
+ 
+    if len(argv) > 3:
+        data = load_file(argv[3])
+    else:
+        data = None
+    
+    response =  requests.post(url, headers=requisite_headers, auth=auth, data=data)
+    
+    return response.status_code, response.text
+
+
+def _api_del(argv):
+    url, name, passwd = argv[0], argv[1], argv[2]
+    
+    requisite_headers = { 'Accept' : 'application/json',
+                          'Content-Type' : 'application/json'
+    }
+    auth = (name, passwd) 
+    
+    response =  requests.delete(url, headers=requisite_headers, auth=auth)
+    
+    return response.status_code, response.text
+
+
+def rest-usage():
+    print "usage: rest [put|get|post|delete] url name passwd"
+    sys.exit(-1)
+
+cmds = {
+    "GET": _api_get, 
+    "PUT": _api_put, 
+    "POST": _api_post,
+    "DELETE": _api_del
+    }
+
+def load_file(fname):
+  with open(fname) as f:
+    return f.read()
+
+def rest(req, url, user, token):
+
+#     if len(argv) < 4:
+#         rest-usage()
+        
+    if 'HTTPS' not in url.upper():
+        print "Secure connection required: HTTP not valid, please use HTTPS or https"
+        rest-usage()       
+        
+    cmd = req.upper()
+    if cmd not in cmds.keys():
+        rest-usage()
+
+    status,body=cmds[cmd](url)
+    print
+    if int(status) == 200:
+        json_output = json.loads(body)
+        print json.dumps(json_output, indent = 4)        
+    else:
+        print "Oops!  Error: status: %s\n%s" % (status, body)
+        print
+        
 ##########    Welcome to Skynet    ##########
 
 At this time Skynet takes two arguments at most.  Here are your options
