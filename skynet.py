@@ -126,6 +126,13 @@ def rest(req, url, user, token):
         print "Oops!  Error: status: %s\n%s" % (status, body)
         print
         
+############################################################################ 
+#### begin interface items
+
+
+def usage(exitcode):
+
+  usage="""
 ##########    Welcome to Skynet    ##########
 
 At this time Skynet takes two arguments at most.  Here are your options
@@ -139,20 +146,38 @@ EXAMPLES:
 skynet -a suspend -s limited
   
 """
-  print 'ARGV     :', sys.argv[1:]
+
+  try:
+    exitcode
+  except NameError:
+    print usage
+    sys.exit(-1)
+  else:
+    print usage
+    sys.exit(exitcode)
+
+ 
+# argument parser
+def ui(argv):
+  
+# define variables to be used by getopts and sent them to null
+  action = ''
+  scope = ''
+  
+#  print 'ARGV     :', sys.argv[1:]
   
   try:
-    options, remainder = getopt.gnu_getopt(sys.argv[1:], 'a:hs:', ['help',
+    options, remainder = getopt.gnu_getopt(sys.argv[1:], 'a:hs:t', ['help',
                                                           'action=',
                                                           'scope=',
                                                           ])
                                             
   except getopt.GetoptError:
-    print usage
+    usage()
     sys.exit(2)
 
 
-  print 'OPTIONS    :', options
+#  print 'OPTIONS    :', options
 
   for opt, arg in options:
     if opt in ('-h', '--help'):
@@ -164,10 +189,13 @@ skynet -a suspend -s limited
     
     elif opt in ( '-s', '--scope' ):
       scope = arg
+      
+    elif opt in ( '-t' ):
+      rest('get', base_url+'/configurations', user, token)
     
-  print 'ACTION   :', action
-  print 'SCOPE      :', scope
-  print 'REMAINING  :', remainder
+#   print 'ACTION   :', action
+#   print 'SCOPE      :', scope
+#   print 'REMAINING  :', remainder
 
 
 
