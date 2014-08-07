@@ -2,6 +2,17 @@
 #
 #
 
+# set some variables
+
+base_url = 'https://cloud.skytap.com'
+user = 'skynet@fulcrum.net'
+token = '55b5e1a75ce9a122db3c976d161f96b15b5eb825'
+
+working_dir = '/Users/thewellington/Development/skynet'              # this is the path to the skynet.py file
+control_dir = '/Users/thewellington/Development/skytap-control'      # this is the path to the skytap-control directory
+temp_dir = '/tmp'
+
+
 # import necessary modules
 import sys
 import requests
