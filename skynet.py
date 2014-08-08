@@ -167,7 +167,7 @@ def suspend_configurations():
   
   data = {'runstate' : 'suspended'}
   for i in suspends:
-  #  _api_put(base_url+'/configurations', data)
+  #  _api_put(base_url+'/configurations/'+i, data)
     print base_url+'/configurations/'+i, data
 
 
