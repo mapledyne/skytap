@@ -145,6 +145,20 @@ def get_configurations():
   return l
       
 
+def get_exclusions():
+  exclusions = []
+  f = open(control_dir+'/exclusions-final.conf', 'r')
+  for line in f:
+    exclusions.append(line.split("#",1)[0].rstrip())
+    
+  exclusions = filter(None, exclusions)  
+  
+  #encode exclusions in unicode
+  unicode_exclusions = [unicode(i) for i in exclusions]
+  
+  return unicode_exclusions
+  
+
 ############################################################################ 
 #### begin interface items
 
