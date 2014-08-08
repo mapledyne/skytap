@@ -45,20 +45,19 @@ def _api_get(url):
     return response.status_code, response.text
 
 
-def _api_put(argv):
-    url, name, passwd = argv[0], argv[1], argv[2]
+def _api_put(url, data):
+    url, name, passwd = url, user, token
     
     requisite_headers = { 'Accept' : 'application/json',
                           'Content-Type' : 'application/json'
     }
     auth = (name, passwd) 
  
-    if len(argv) > 3:
-        data = load_file(argv[3])
-    else:
-        data = None
-    
-    response =  requests.put(url, headers=requisite_headers, auth=auth, data=data)
+#     if len(argv) > 3:
+#         data = load_file(argv[3])
+#     else:
+#         data = None
+
     
     return response.status_code, response.text
     
