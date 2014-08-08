@@ -137,14 +137,9 @@ def rest(req, url, user, token):
 def get_configurations():
   body = rest('get', base_url+'/configurations', user, token)
   json_output = json.loads(body)
-  #print json_output
-  #print json.dumps(json_output, indent = 4)
-
   l = []
   for j in json_output:
     l.append(j.get('id'))
-
-  print l
       
 
 ############################################################################ 
