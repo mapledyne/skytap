@@ -181,17 +181,28 @@ def suspend_configurations():
 def usage(exitcode):
 
   usage="""
-##########    Welcome to Skynet    ##########
-
-At this time Skynet takes two arguments at most.  Here are your options
   
-  -h --help     Produces this help file
-  -a --action   Indicates the action you wish to take
-  -s --scope    Defines the scope of the action(s)
+  
+##########################    Welcome to Skynet    #########################
+
+  skynet [--help] [--action=<action-name>]
+
+OPTIONS:
+  --help, -h
+    prints this document
+    
+  --action=<action-name>, -a <action-name>
+    Take an action
+
+ACTIONS:
+  'suspend' will suspend configurations that are not on the exclusions list.
   
 EXAMPLES:
+  skynet -a suspend 
 
-skynet -a suspend -s limited
+############################################################################ 
+
+
   
 """
 
