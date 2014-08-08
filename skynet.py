@@ -58,6 +58,7 @@ def _api_put(url, data):
 #     else:
 #         data = None
 
+#    response =  requests.put(url, headers=requisite_headers, auth=auth, data=data)
     
     return response.status_code, response.text
     
