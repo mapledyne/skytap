@@ -159,6 +159,20 @@ def get_exclusions():
   return unicode_exclusions
   
 
+def suspend_configurations():
+  configurations = set(get_configurations())
+  exclusions = set(get_exclusions())
+  suspends = list(configurations - exclusions)
+  
+  data = {'runstate' : 'suspended'}
+  for i in suspends:
+  #  _api_put(base_url+'/configurations', data)
+    print base_url+'/configurations/'+i, data
+
+
+
+
+  
 ############################################################################ 
 #### begin interface items
 
