@@ -240,15 +240,20 @@ def ui(argv):
 
   for opt, arg in options:
     if opt in ('-h', '--help'):
-      print usage
+      usage(2)
       sys.exit()
 
     elif opt in ( '-a', '--action' ):
       action = arg
-    
+      if action == 'suspend':
+        suspend_configurations()
+      elif action != 'suspend':
+        usage(2)
+      
     elif opt in ( '-s', '--scope' ):
       scope = arg
-      
+      usage(3)
+
     elif opt in ( '-t' ):
       print 'TEST ENVIRONMENT'
       suspend_configurations()
