@@ -94,7 +94,7 @@ def _api_del(argv):
     return response.status_code, response.text
 
 
-def rest-usage():
+def rest_usage():
     print "usage: rest [put|get|post|delete] url name passwd"
     sys.exit(-1)
 
@@ -112,15 +112,15 @@ def load_file(fname):
 def rest(req, url, user, token):
 
 #     if len(argv) < 4:
-#         rest-usage()
+#         rest_usage()
         
     if 'HTTPS' not in url.upper():
         print "Secure connection required: HTTP not valid, please use HTTPS or https"
-        rest-usage()       
+        rest_usage()       
         
     cmd = req.upper()
     if cmd not in cmds.keys():
-        rest-usage()
+        rest_usage()
 
     status,body=cmds[cmd](url)
     print
