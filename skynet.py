@@ -239,7 +239,8 @@ def ui(argv):
       scope = arg
       
     elif opt in ( '-t' ):
-      rest('get', base_url+'/configurations', user, token)
+      print 'TEST ENVIRONMENT'
+      suspend_configurations()
     
 #   print 'ACTION   :', action
 #   print 'SCOPE      :', scope
