@@ -126,7 +126,8 @@ def rest(req, url, user, token):
     print
     if int(status) == 200:
         json_output = json.loads(body)
-        print json.dumps(json_output, indent = 4)        
+#        return json.dumps(json_output, indent = 4)        
+        return body
     else:
         print "Oops!  Error: status: %s\n%s" % (status, body)
         print
