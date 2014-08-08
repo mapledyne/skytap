@@ -15,11 +15,16 @@ temp_dir = '/tmp'
 
 # import necessary modules
 
-import json
-import requests
 import sys
 import traceback
 import getopt
+import json
+
+try:
+  import requests
+except ImportError:
+  sys.stderr.write("You do not have the 'requests' module installed.  Please see http://docs.python-requests.org/en/latest/ for more information.")
+  exit(1)
 
 
 
