@@ -126,7 +126,7 @@ def rest(req, url, user, token, data=None):
     print
     if int(status) == 200:
         json_output = json.loads(body)
-#        return json.dumps(json_output, indent = 4)        
+        print json.dumps(json_output, indent = 4)        
         return body
     else:
         print "Oops!  Error: status: %s\n%s" % (status, body)
@@ -168,6 +168,7 @@ def suspend_configurations():
   data = {'runstate' : 'suspended'}
 
   for i in suspends:
+    print i
     rest('put', base_url+'/configurations/2156312?runstate=suspended', user, token, data=data)
 
 
