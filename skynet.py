@@ -166,11 +166,9 @@ def suspend_configurations():
   suspends = list(configurations - exclusions)
   
   data = {'runstate' : 'suspended'}
+
   for i in suspends:
-  #  _api_put(base_url+'/configurations/'+i, data)
-    print base_url+'/configurations/'+i, data
-
-
+    rest('put', base_url+'/configurations/2156312?runstate=suspended', user, token, data=data)
 
 
   
