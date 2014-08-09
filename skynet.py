@@ -32,7 +32,7 @@ except ImportError:
 #### begin api interactions
 
 
-def _api_get(url):
+def _api_get(url, data=None):
     url, name, passwd = url, user, token
     
     requisite_headers = { 'Accept' : 'application/json',
@@ -58,8 +58,8 @@ def _api_put(url, data):
 #     else:
 #         data = None
 
-#    response =  requests.put(url, headers=requisite_headers, auth=auth, data=data)
-    
+    response =  requests.put(url, headers=requisite_headers, auth=auth, params=data)
+
     return response.status_code, response.text
     
 
@@ -109,7 +109,7 @@ def load_file(fname):
   with open(fname) as f:
     return f.read()
 
-def rest(req, url, user, token):
+def rest(req, url, user, token, data=None):
 
 #     if len(argv) < 4:
 #         rest_usage()
@@ -122,7 +122,7 @@ def rest(req, url, user, token):
     if cmd not in cmds.keys():
         rest_usage()
 
-    status,body=cmds[cmd](url)
+    status,body=cmds[cmd](url, data)
     print
     if int(status) == 200:
         json_output = json.loads(body)
