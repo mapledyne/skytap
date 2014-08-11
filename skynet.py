@@ -2,17 +2,6 @@
 #
 #
 
-# set some variables
-
-base_url = 'https://cloud.skytap.com'
-user = 'skynet@fulcrum.net'
-token = '55b5e1a75ce9a122db3c976d161f96b15b5eb825'
-
-working_dir = '/Users/thewellington/Development/skynet'              # this is the path to the skynet.py file
-control_dir = '/Users/thewellington/Development/skytap-control'      # this is the path to the skytap-control directory
-temp_dir = '/tmp'
-
-
 # import necessary modules
 
 import sys
@@ -31,6 +20,21 @@ try:
 except ImportError:
   sys.stderr.write("You do not have the 'yaml' module installed.  Please see http://pyyaml.org/wiki/PyYAMLDocumentation for more information.")
   exit(1)
+
+
+# get configuration from yaml and populate variables
+
+f = open ('config.yml')
+config_data = yaml.safe_load(f)
+f.close()
+
+base_url = config_data["base_url"]
+user = config_data["user"]
+token = config_data["token"]
+working_dir = config_data["working_dir"]
+control_dir = config_data["control_dir"]
+temp_dir = config_data["temp_dir"]
+
 
 
 ############################################################################ 
