@@ -1,0 +1,3 @@
+*.pyc
+skynet_modules/config.py
+config.yml
