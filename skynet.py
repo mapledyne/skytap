@@ -145,6 +145,7 @@ def rest(req, url, user, token, data=None):
 ############################################################################ 
 #### begin custom functions
 
+
 def get_configurations():
   body = rest('get', base_url+'/configurations', user, token)
   json_output = json.loads(body)
@@ -245,8 +246,6 @@ def ui(argv):
     sys.exit(2)
 
 
-#  print 'OPTIONS    :', options
-
   for opt, arg in options:
     if opt in ('-h', '--help'):
       usage(2)
@@ -266,13 +265,6 @@ def ui(argv):
     elif opt in ( '-t' ):
       print 'TEST ENVIRONMENT'
     
-#   print 'ACTION   :', action
-#   print 'SCOPE      :', scope
-#   print 'REMAINING  :', remainder
-
-
-
-
  
 # call main
 if __name__=='__main__':
