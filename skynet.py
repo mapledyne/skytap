@@ -265,7 +265,6 @@ def ui(argv):
 
     elif opt in ( '-t' ):
       print 'TEST ENVIRONMENT'
-      suspend_configurations()
     
 #   print 'ACTION   :', action
 #   print 'SCOPE      :', scope
