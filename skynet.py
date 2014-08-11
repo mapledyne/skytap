@@ -26,6 +26,11 @@ except ImportError:
   sys.stderr.write("You do not have the 'requests' module installed.  Please see http://docs.python-requests.org/en/latest/ for more information.")
   exit(1)
 
+try:
+  import yaml
+except ImportError:
+  sys.stderr.write("You do not have the 'yaml' module installed.  Please see http://pyyaml.org/wiki/PyYAMLDocumentation for more information.")
+  exit(1)
 
 
 ############################################################################ 
