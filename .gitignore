@@ -1,8 +1,4 @@
 *.pyc
-<<<<<<< HEAD
 skynet_modules/config.py
 config.yml
 .DS_Store
-=======
-config.yml
->>>>>>> 34e04619294eea2bcd760fd869febb3b15ecda02
