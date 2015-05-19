@@ -8,6 +8,7 @@ import sys
 import traceback
 import getopt
 import json
+import time
 
 try:
   import requests
@@ -182,8 +183,33 @@ def suspend_configurations():
     print i
     rest('put', base_url+'/configurations/2156312?runstate=suspended', user, token, data=data)
 
+def update_dashing(id, usage, limit):
+# curl -d '{ "auth_token": "YOUR_AUTH_TOKEN", "value": 83 }' \http://localhost:3030/widgets/svm-current-usage
 
+  dashing_url = "http://localhost:3030/widgets/"+id
+  data = { "auth_token": "YOUR_AUTH_TOKEN", "value": usage, "max": limit, "current": usage,}
+  requisite_headers = { 'Accept' : 'application/json',
+                          'Content-Type' : 'application/json'
+  }
+  response = requests.post(dashing_url, data=json.dumps(data), headers=requisite_headers)
+  print data
+  return response.status_code, response.text
   
+  
+def get_quotas():
+  body = rest('get', base_url+'/company/quotas/', user, token)
+  json_output = json.loads(body)
+  
+  for j in json_output:
+    id, usage, limit = j['id'], j['usage'], j['limit']
+    
+    if id == "concurrent_storage_size":
+      usage = usage / 100000 / 10.0
+      limit = limit / 100000 / 10.0
+      print id, usage, limit
+    update_dashing(id, usage, limit)
+    
+
 ############################################################################ 
 #### begin interface items
 
@@ -255,6 +281,10 @@ def ui(argv):
       action = arg
       if action == 'suspend':
         suspend_configurations()
+      elif action == 'quotas':
+#         while True: 
+          get_quotas()
+#           time.sleep(10)
       elif action != 'suspend':
         usage(2)
       
