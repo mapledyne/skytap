@@ -282,9 +282,9 @@ def ui(argv):
       if action == 'suspend':
         suspend_configurations()
       elif action == 'quotas':
-#         while True: 
-          get_quotas()
-#           time.sleep(10)
+         while True: 
+           get_quotas()
+           time.sleep(15)
       elif action != 'suspend':
         usage(2)
       
