@@ -137,7 +137,7 @@ def rest(req, url, user, token, data=None):
     print
     if int(status) == 200:
         json_output = json.loads(body)
-        print json.dumps(json_output, indent = 4)        
+#        print json.dumps(json_output, indent = 4)        
         return body
     else:
         print "Oops!  Error: status: %s\n%s" % (status, body)
@@ -192,7 +192,6 @@ def update_dashing(id, usage, limit, status):
                           'Content-Type' : 'application/json'
   }
   response = requests.post(dashing_url, data=json.dumps(data), headers=requisite_headers)
-  print data
   return response.status_code, response.text
   
   
