@@ -204,8 +204,8 @@ def get_quotas():
     id, usage, limit = j['id'], j['usage'], j['limit']
     
     if id == "concurrent_storage_size":
-      usage = usage / 100000 / 10.0
-      limit = limit / 100000 / 10.0
+      usage = round( usage / 1048576.0, 1)
+      limit = round( limit / 1048576.0, 1)
       print id, usage, limit
     update_dashing(id, usage, limit)
     
