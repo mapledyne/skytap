@@ -183,11 +183,11 @@ def suspend_configurations():
     print i
     rest('put', base_url+'/configurations/2156312?runstate=suspended', user, token, data=data)
 
-def update_dashing(id, usage, limit):
+def update_dashing(id, usage, limit, status):
 # curl -d '{ "auth_token": "YOUR_AUTH_TOKEN", "value": 83 }' \http://localhost:3030/widgets/svm-current-usage
 
   dashing_url = "http://localhost:3030/widgets/"+id
-  data = { "auth_token": "YOUR_AUTH_TOKEN", "value": usage, "max": limit, "current": usage,}
+  data = { "auth_token": "YOUR_AUTH_TOKEN", "value": usage, "max": limit, "current": usage, "status": status}
   requisite_headers = { 'Accept' : 'application/json',
                           'Content-Type' : 'application/json'
   }
@@ -202,12 +202,21 @@ def get_quotas():
   
   for j in json_output:
     id, usage, limit = j['id'], j['usage'], j['limit']
+    status = ""
+    
+    if limit is not None:
+      if usage * 100 / limit >= 90:
+         status = 'warning'
+      
+      if id == "concurrent_public_ips" or id == "concurrent_netowrks":
+        if status == "warning":
+          status = 'danger'
     
     if id == "concurrent_storage_size":
       usage = round( usage / 1048576.0, 1)
       limit = round( limit / 1048576.0, 1)
-      print id, usage, limit
-    update_dashing(id, usage, limit)
+      
+    update_dashing(id, usage, limit, status)
     
 
 ############################################################################ 
