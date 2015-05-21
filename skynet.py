@@ -9,6 +9,7 @@ import traceback
 import getopt
 import json
 import time
+import os
 
 try:
   import requests
@@ -25,14 +26,14 @@ except ImportError:
 
 # get configuration from yaml and populate variables
 
-f = open ('config.yml')
+f = open (os.path.dirname(os.path.realpath(sys.argv[0])) + "/config.yml")
 config_data = yaml.safe_load(f)
 f.close()
 
 base_url = config_data["base_url"]
 user = config_data["user"]
 token = config_data["token"]
-working_dir = config_data["working_dir"]
+working_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
 control_dir = config_data["control_dir"]
 temp_dir = config_data["temp_dir"]
 
@@ -194,9 +195,12 @@ def update_dashing(id, usage, limit, status):
   response = requests.post(dashing_url, data=json.dumps(data), headers=requisite_headers)
   return response.status_code, response.text
   
+def get_ips():
+  body = rest('get', base_url+'/ips', user, token)
+  print body
   
 def get_quotas():
-  body = rest('get', base_url+'/company/quotas/', user, token)
+  body = rest('get', base_url+'/company/quotas', user, token)
   json_output = json.loads(body)
   
   for j in json_output:
@@ -289,6 +293,8 @@ def ui(argv):
       action = arg
       if action == 'suspend':
         suspend_configurations()
+      elif action == 'ips':
+        get_ips()
       elif action == 'quotas':
          while True: 
            get_quotas()
@@ -303,8 +309,7 @@ def ui(argv):
     elif opt in ( '-t' ):
       print 'TEST ENVIRONMENT'
     
- 
+
 # call main
 if __name__=='__main__':
-
   ui(sys.argv[1:]) 
