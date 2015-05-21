@@ -292,7 +292,7 @@ def ui(argv):
       elif action == 'quotas':
          while True: 
            get_quotas()
-           time.sleep(15)
+           time.sleep(120)
       elif action != 'suspend':
         usage(2)
       
