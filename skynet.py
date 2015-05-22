@@ -219,7 +219,8 @@ def get_quotas():
       usage = round( usage / 1048576.0, 1)
       limit = round( limit / 1048576.0, 1)
       
-    update_dashing(id, usage, limit, status)
+    if id != "concurrent_public_ips":
+      update_dashing(id, usage, limit, status)
     
 
 ############################################################################ 
