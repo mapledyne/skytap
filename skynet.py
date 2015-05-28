@@ -135,7 +135,6 @@ def rest(req, url, user, token, data=None):
         rest_usage()
 
     status,body=cmds[cmd](url, data)
-    print
     if int(status) == 200:
         json_output = json.loads(body)
 #        print json.dumps(json_output, indent = 4)        
@@ -195,10 +194,37 @@ def update_dashing(id, usage, limit, status):
   response = requests.post(dashing_url, data=json.dumps(data), headers=requisite_headers)
   return response.status_code, response.text
   
+  
+def get_vms(environment):
+  body = rest('get', base_url+'/configurations/' + environment, user, token)
+  return body
+
 def get_ips():
   body = rest('get', base_url+'/ips', user, token)
-  print body
+  return body
   
+def get_environments():
+  body = rest('get', base_url+'/users', user, token)
+  json_output = json.loads(body)
+  envs = []
+  for j in json_output:
+    envs = envs + get_user_environments(j.get('id'))
+  return json.dumps(envs)
+  
+def get_user_environments(user_id):
+  body = rest('get', base_url+'/users/'+user_id, user, token)
+  env = []
+  jbody = json.loads(body)
+  conf = jbody.get('configurations') 
+  for c in conf:
+    env.append(c.get('id'))
+  return env
+  
+def get_users():
+  body = rest('get', base_url+'/users', user, token)
+  return body
+    
+
 def get_quotas():
   body = rest('get', base_url+'/company/quotas', user, token)
   json_output = json.loads(body)
@@ -295,7 +321,13 @@ def ui(argv):
       if action == 'suspend':
         suspend_configurations()
       elif action == 'ips':
-        get_ips()
+        print get_ips()
+      elif action == 'env':
+        print get_environments()
+      elif action == 'users':
+        print get_users()
+      elif action == 'vms':
+        print get_vms(remainder[0])
       elif action == 'quotas':
          while True: 
            get_quotas()
