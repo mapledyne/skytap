@@ -202,6 +202,10 @@ def get_vms(environment):
 def get_ips():
   body = rest('get', base_url+'/ips', user, token)
   return body
+
+def get_dashingquotas():
+  body = rest('get', base_url+'/company/quotas', user, token)
+  return body
   
 def get_environments():
   body = rest('get', base_url+'/users', user, token)
@@ -328,10 +332,12 @@ def ui(argv):
         print get_users()
       elif action == 'vms':
         print get_vms(remainder[0])
+      elif action == 'dashingquotas':
+        print get_dashingquotas()
       elif action == 'quotas':
-         while True: 
-           get_quotas()
-           time.sleep(120)
+        while True: 
+          get_quotas()
+          time.sleep(120)
       elif action != 'suspend':
         usage(2)
       
