@@ -26,6 +26,8 @@ except ImportError:
 
 # get configuration from yaml and populate variables
 
+requests.packages.urllib3.disable_warnings()
+
 f = open (os.path.dirname(os.path.realpath(sys.argv[0])) + "/config.yml")
 config_data = yaml.safe_load(f)
 f.close()
