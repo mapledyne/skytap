@@ -1,32 +1,28 @@
 #!/usr/bin/env python
-#
-#
-
-# import necessary modules
-
+"""This app encapsulates all of our interactions with the Skytap API."""
 import sys
-import traceback
-import getopt
 import json
-import time
 import os
+import inspect
+import argparse
+import textwrap
+import skynet_api as api
+import skynet_actions as actions
 
 try:
-  import requests
+    import yaml
 except ImportError:
-  sys.stderr.write("You do not have the 'requests' module installed.  Please see http://docs.python-requests.org/en/latest/ for more information.")
-  exit(1)
+    sys.stderr.write("You do not have the 'yaml' module installed.  Please see http://pyyaml.org/wiki/PyYAMLDocumentation for more information.")
+    exit(1)
 
 try:
-  import yaml
+    import requests
 except ImportError:
-  sys.stderr.write("You do not have the 'yaml' module installed.  Please see http://pyyaml.org/wiki/PyYAMLDocumentation for more information.")
-  exit(1)
-
-
-# get configuration from yaml and populate variables
+    sys.stderr.write("You do not have the 'requests' module installed.  Please see http://docs.python-requests.org/en/latest/ for more information.")
+    exit(1)
 
 requests.packages.urllib3.disable_warnings()
+
 
 f = open (os.path.dirname(os.path.realpath(sys.argv[0])) + "/config.yml")
 config_data = yaml.safe_load(f)
@@ -39,120 +35,26 @@ working_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
 control_dir = config_data["control_dir"]
 temp_dir = config_data["temp_dir"]
 
+api.token = token
+api.user = user
+api.base_url = base_url
 
+# get configuration from yaml and populate variables
 
 ############################################################################
 #### begin api interactions
-
-
-def _api_get(url, data=None):
-    url, name, passwd = url, user, token
-
-    requisite_headers = { 'Accept' : 'application/json',
-                          'Content-Type' : 'application/json'
-    }
-    auth = (name, passwd)
-
-    response =  requests.get(url, headers=requisite_headers, auth=auth)
-
-    return response.status_code, response.text
-
-
-def _api_put(url, data):
-    url, name, passwd = url, user, token
-
-
-    requisite_headers = { 'Accept' : 'application/json',
-                          'Content-Type' : 'application/json'
-    }
-    auth = (name, passwd)
-
-#     if len(argv) > 3:
-#         data = load_file(argv[3])
-#     else:
-#         data = None
-
-    response =  requests.put(url, headers=requisite_headers, auth=auth, params=data)
-
-    return response.status_code, response.text
-
-
-def _api_post(argv):
-    url, name, passwd = argv[0], argv[1], argv[2]
-
-    requisite_headers = { 'Accept' : 'application/json',
-                          'Content-Type' : 'application/json'
-    }
-    auth = (name, passwd)
-
-    if len(argv) > 3:
-        data = load_file(argv[3])
-    else:
-        data = None
-
-    response =  requests.post(url, headers=requisite_headers, auth=auth, data=data)
-
-    return response.status_code, response.text
-
-
-def _api_del(argv):
-    url, name, passwd = argv[0], argv[1], argv[2]
-
-    requisite_headers = { 'Accept' : 'application/json',
-                          'Content-Type' : 'application/json'
-    }
-    auth = (name, passwd)
-
-    response =  requests.delete(url, headers=requisite_headers, auth=auth)
-
-    return response.status_code, response.text
-
 
 def rest_usage():
     """Print rest / app usage."""
     print "usage: rest [put|get|post|delete] url name passwd"
     sys.exit(-1)
 
-cmds = {
-    "GET": _api_get,
-    "PUT": _api_put,
-    "POST": _api_post,
-    "DELETE": _api_del
-    }
-
-def load_file(fname):
-    """Load the file."""
-    with open(fname) as the_file:
-        return the_file.read()
-
-def rest(req, url, user, token, data=None):
-    """Send a rest rest request to the server."""
-
-#     if len(argv) < 4:
-#         rest_usage()
-
-    if 'HTTPS' not in url.upper():
-        print "Secure connection required: HTTP not valid, please use HTTPS or https"
-        rest_usage()
-
-    cmd = req.upper()
-    if cmd not in cmds.keys():
-        rest_usage()
-
-    status,body=cmds[cmd](url, data)
-    if int(status) == 200:
-#        json_output = json.loads(body)
-#        print json.dumps(json_output, indent = 4)
-        return body
-    else:
-        print "Oops!  Error: status: %s\n%s\n" % (status, body)
-
 ############################################################################
 #### begin custom functions
 
 def get_configurations():
     """Get the configurations list from Skytap."""
-    body = rest('get', base_url+'/configurations', user, token)
+    body = api.rest('get', base_url+'/configurations', user, token)
     json_output = json.loads(body)
 
     l = []
@@ -187,7 +89,7 @@ def suspend_configurations():
 
     for i in suspends:
         print i
-        rest('put', base_url+'/configurations/2156312?runstate=suspended', user, token, data=data)
+        api.rest('put', base_url+'/configurations/2156312?runstate=suspended', user, token, data=data)
 
 def update_dashing(widget_id, usage_value, limit, status):
     """Update dashing with some piece of info."""
@@ -202,163 +104,117 @@ def update_dashing(widget_id, usage_value, limit, status):
     return response.status_code, response.text
 
 
-def get_vms(environment):
-    """Get a list of VMs."""
-    body = rest('get', base_url+'/configurations/' + environment, user, token)
-    return body
-
-def get_ips():
-    """Get all IPs assigned by Skytap."""
-    body = rest('get', base_url+'/ips', user, token)
-    return body
-
-def get_dashingquotas():
-    """Get Skytap quotas."""
-    body = rest('get', base_url+'/company/quotas', user, token)
-    return body
-
-def get_environments():
-    body = rest('get', base_url+'/users', user, token)
-    json_output = json.loads(body)
-    envs = []
-    for j in json_output:
-        envs = envs + get_user_environments(j.get('id'))
-    return json.dumps(envs)
-
-def get_user_environments(user_id):
-  body = rest('get', base_url+'/users/'+user_id, user, token)
-  env = []
-  jbody = json.loads(body)
-  conf = jbody.get('configurations')
-  for c in conf:
-    env.append(c.get('id'))
-  return env
-
-def get_users():
-  body = rest('get', base_url+'/users', user, token)
-  return body
 
 
 def get_quotas():
-  body = rest('get', base_url+'/company/quotas', user, token)
-  json_output = json.loads(body)
+    """Return the quotas info from Skytap API."""
+    body = api.rest('get', base_url+'/company/quotas', user, token)
+    json_output = json.loads(body)
 
-  for j in json_output:
-    id, usage, limit = j['id'], j['usage'], j['limit']
-    status = ""
+    for j in json_output:
+        skytap_id, skytap_usage, limit = j['id'], j['usage'], j['limit']
+        status = ""
 
-    if limit is not None:
-      if usage * 100 / limit >= 90:
-         status = 'warning'
+        if limit is not None:
+            if usage * 100 / limit >= 90:
+                status = 'warning'
 
-      if id == "concurrent_public_ips" or id == "concurrent_netowrks":
-        if status == "warning":
-          status = 'danger'
+                if skytap_id == "concurrent_public_ips" or skytap_id == "concurrent_netowrks":
+                    if status == "warning":
+                        status = 'danger'
 
-    if id == "concurrent_storage_size":
-      usage = round( usage / 1048576.0, 1)
-      limit = round( limit / 1048576.0, 1)
+        if skytap_id == "concurrent_storage_size":
+            skytap_usage = round( skytap_usage / 1048576.0, 1)
+            limit = round( limit / 1048576.0, 1)
 
-    if id != "concurrent_public_ips":
-      update_dashing(id, usage, limit, status)
+        if skytap_id != "concurrent_public_ips":
+            update_dashing(skytap_id, skytap_usage, limit, status)
 
+def banner_line(msg = ''):
+    """A banner line (functionally an <hr>) for the help page."""
+    if len(msg)>0:
+        msg = '  ' + msg + '  '
+    return  '\n{:#^76}\n'.format(msg)
 
-############################################################################
-#### begin interface items
-
-
-def usage(exitcode):
-
-  usage="""
-
-
-##########################    Welcome to Skynet    #########################
-
-  skynet [--help] [--action=<action-name>]
+def usage_general():
+    """Print the general usage statement for the app, along with available actions."""
+    usage_msg = """skynet [--help] [--action <action-name>] [--user <userid>]
 
 OPTIONS:
-  --help, -h
-    prints this document
+    --help/-h : Prints this document
+    --help/-h <action-name> : More detailed help on an action
+    --action/-a <action-name> : Run specified action
+    --user/-u <userid> : Provide user id to actions that require it
+    --env/-e <environmentid> : Provide environment to actions that require it
 
-  --action=<action-name>, -a <action-name>
-    Take an action
-
-ACTIONS:
-  'suspend' will suspend configurations that are not on the exclusions list.
-
-EXAMPLES:
-  skynet -a suspend
-
-############################################################################
-
-
-
+EXAMPLE:
+    skynet -a suspend
 """
+    print banner_line('Welcome to Skynet') + usage_msg + banner_line() + "ACTIONS:"
+    action_list = inspect.getmembers(actions)
+    for n,v in action_list:
+        if n.startswith("_"): # We want to skip all the built in stuff
+            continue
+        use_help = inspect.getdoc(v)
+        use_help = use_help.splitlines()[0]
+        use_help = "\n\t".join(textwrap.wrap(use_help,68-3-len(n)))
+        print "    " + n + " : " + use_help
 
-  try:
-    exitcode
-  except NameError:
-    print usage
-    sys.exit(-1)
-  else:
-    print usage
-    sys.exit(exitcode)
+    print banner_line()
 
+def usage_detailed(detail):
+    """Print detailed help on one available action."""
+    print banner_line('Welcome to Skynet')
 
-# argument parser
-def ui(argv):
+    try:
+        function = getattr(actions, detail)
+        usage_detail = inspect.getdoc(function)
+        print "Extended help for action: " + detail + "\n"
+        print usage_detail
+    except AttributeError:
+        print "No action by this name found: " + str(detail) + "\n"
+        print "Available actions are:\n"
+        action_list = inspect.getmembers(actions)
+        for n,v in action_list:
+            if n.startswith("_"): # We want to skip all the built in stuff
+                continue
+            use_help = inspect.getdoc(v)
+            use_help = use_help.splitlines()[0]
+            use_help = "\n\t\t".join(textwrap.wrap(use_help,68-3-len(n)))
+            print "\t" + n + " : " + use_help + ""
 
-# define variables to be used by getopts and sent them to null
-  action = ''
-  scope = ''
+    print banner_line()
 
-#  print 'ARGV     :', sys.argv[1:]
+def usage(detail = ""):
+    """Display the usage for the app.
 
-  try:
-    options, remainder = getopt.gnu_getopt(sys.argv[1:], 'a:hs:t', ['help',
-                                                          'action=',
-                                                          'scope=',
-                                                          ])
-
-  except getopt.GetoptError:
-    usage()
-    sys.exit(2)
-
-
-  for opt, arg in options:
-    if opt in ('-h', '--help'):
-      usage(2)
-      sys.exit()
-
-    elif opt in ( '-a', '--action' ):
-      action = arg
-      if action == 'suspend':
-        suspend_configurations()
-      elif action == 'ips':
-        print get_ips()
-      elif action == 'env':
-        print get_environments()
-      elif action == 'users':
-        print get_users()
-      elif action == 'vms':
-        print get_vms(remainder[0])
-      elif action == 'dashingquotas':
-        print get_dashingquotas()
-      elif action == 'quotas':
-        while True:
-          get_quotas()
-          time.sleep(120)
-      elif action != 'suspend':
-        usage(2)
-
-    elif opt in ( '-s', '--scope' ):
-      scope = arg
-      usage(3)
-
-    elif opt in ( '-t' ):
-      print 'TEST ENVIRONMENT'
-
+    If there's a 'detail' (action) passed, display more specific
+    info on that action, otherwise display general help. These two fuctions are
+    split up into two functions (usage_detail and usage_general) simply for
+    code clarity.
+    """
+    if detail == "":
+        usage_general()
+    else:
+        usage_detailed(detail)
+    sys.exit(1)
 
 # call main
 if __name__=='__main__':
-  ui(sys.argv[1:])
+
+    parser = argparse.ArgumentParser(add_help = False, argument_default = '')
+    parser.add_argument('-a', '--action', action='store')
+    parser.add_argument('-u', '--user', action='store')
+    parser.add_argument('-e', '--env', action='store')
+    parser.add_argument('-h', '--help', action='store', nargs='*')
+
+    args = parser.parse_args()
+    if args.help != '':
+        usage(" ".join(args.help))
+
+    try:
+        f = getattr(actions,args.action)
+        print f(args.user + args.env)
+
+    except AttributeError:
+        usage(args.action)
