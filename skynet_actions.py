@@ -7,8 +7,62 @@ function is the name of the action as exposed to the user.
 import json as _json
 import skynet_api as _api
 
+
+def exclusions():
+    """Get list of exclusions from the exclusions file.
+
+    This action doesn't query the API, but instead looks for the
+    exclusiotns-final.conf file in the control_dir (specified in the config.yml).
+
+    This file should be updated from git regularly, so here we're just reading
+    the current contents to know what machines should not be suspended.
+
+    See the exclusions file for details on its format.
+    """
+    exclusion_list = []
+    exclusions_file = open(_api.control_dir+'/exclusions-final.conf', 'r')
+    for line in exclusions_file:
+        exclusion_list.append(line.split("#",1)[0].rstrip())
+
+    exclusion_list = [item for item in exclusions if item] #filter(None, exclusions)
+
+    #encode exclusions in unicode
+    unicode_exclusions = [unicode(i) for i in exclusion_list]
+
+    return unicode_exclusions
+
+def suspend():
+    """Suspend the appropriate configurations.
+
+    This takes a set of the environments (see action env for a sample list) and
+    removes any environment in the exclusion list (see action exclusions for a
+    sample list) and then issues a suspend command.
+
+    Warning: This action will actively suspend environments. If exclusions is
+    not up to date, this could suspend everything in skytap.
+    """
+    configurations = set(env())
+    exclusion_list = set(exclusions())
+    suspends = list(configurations - exclusion_list)
+
+    data = {'runstate' : 'suspended'}
+
+    for i in suspends:
+        print 'Suspending environment: ' + i
+        _api._rest('put', _api.base_url+'/configurations/' + i + '?runstate=suspended', _api.user, _api.token, data=data)
+
+
 def env(_ = None):
-    """Return a simple list of environments."""
+    """Return a simple list of environments (configurations).
+
+    Sample output:
+
+    [
+        "437940",
+        "561948",
+        "1111664"
+    ]
+    """
     json_output = _json.loads(users())
     envs = []
     for j in json_output:
@@ -16,7 +70,30 @@ def env(_ = None):
     return _json.dumps(envs)
 
 def env_full(_ = None):
-    """Return a detailed list of environments."""
+    """Return a detailed list of environments.
+
+    Sample output:
+    [
+      {
+        "url": "https://cloud.skytap.com/configurations/2836084",
+        "error": "",
+        "id": "2836084",
+        "name": "XO Master"
+      },
+      {
+        "url": "https://cloud.skytap.com/configurations/3168668",
+        "error": "",
+        "id": "3168668",
+        "name": "XO Production"
+      },
+      {
+        "url": "https://cloud.skytap.com/configurations/3942800",
+        "error": "",
+        "id": "3942800",
+        "name": "XO CI Testing - IT"
+      }
+    ]
+    """
     json_output = _json.loads(users())
     envs = []
     for j in json_output:
@@ -41,7 +118,22 @@ def user_env_full(user_id):
     return conf
 
 def users(_ = None):
-    """Get the basic user list."""
+    """Get the basic user list.
+
+    Sample output:
+    [
+      {
+        "id": "14414",
+        "url": "https://cloud.skytap.com/users/14414",
+        "login_name": "phaury@fulcrum.net",
+        "first_name": "Paul",
+        "last_name": "Haury",
+        "title": "",
+        "email": "phaury@fulcrum.net",
+        "created_at": "2012-01-02T12:43:05-08:00",
+        "deleted": false
+      }
+     ]"""
     body = _api.rest('/users')
     return body
 

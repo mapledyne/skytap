@@ -21,8 +21,11 @@ except ImportError:
     sys.stderr.write("You do not have the 'requests' module installed.  Please see http://docs.python-requests.org/en/latest/ for more information.")
     exit(1)
 
+# SSL certs can't be checked using the default libraries. This causes an SSL
+# warning on every call, which floods the screen, making using this script
+# interactively much harder. Disabling warnings is sad, but was the only way
+# we found around it.
 requests.packages.urllib3.disable_warnings()
-
 
 f = open (os.path.dirname(os.path.realpath(sys.argv[0])) + "/config.yml")
 config_data = yaml.safe_load(f)
@@ -39,57 +42,10 @@ api.token = token
 api.user = user
 api.base_url = base_url
 
-# get configuration from yaml and populate variables
-
-############################################################################
-#### begin api interactions
-
 def rest_usage():
     """Print rest / app usage."""
     print "usage: rest [put|get|post|delete] url name passwd"
     sys.exit(-1)
-
-############################################################################
-#### begin custom functions
-
-def get_configurations():
-    """Get the configurations list from Skytap."""
-    body = api.rest('get', base_url+'/configurations', user, token)
-    json_output = json.loads(body)
-
-    l = []
-    for j in json_output:
-        l.append(j.get('id'))
-
-    return l
-
-
-def get_exclusions():
-    """Get exclusions from the exclusions file."""
-    exclusions = []
-    exclusions_file = open(control_dir+'/exclusions-final.conf', 'r')
-    for line in exclusions_file:
-        exclusions.append(line.split("#",1)[0].rstrip())
-
-    exclusions = [item for item in exclusions if item] #filter(None, exclusions)
-
-    #encode exclusions in unicode
-    unicode_exclusions = [unicode(i) for i in exclusions]
-
-    return unicode_exclusions
-
-
-def suspend_configurations():
-    """Suspend the appropriate configurations."""
-    configurations = set(get_configurations())
-    exclusions = set(get_exclusions())
-    suspends = list(configurations - exclusions)
-
-    data = {'runstate' : 'suspended'}
-
-    for i in suspends:
-        print i
-        api.rest('put', base_url+'/configurations/2156312?runstate=suspended', user, token, data=data)
 
 def update_dashing(widget_id, usage_value, limit, status):
     """Update dashing with some piece of info."""
@@ -102,9 +58,6 @@ def update_dashing(widget_id, usage_value, limit, status):
                           }
     response = requests.post(dashing_url, data=json.dumps(data), headers=requisite_headers)
     return response.status_code, response.text
-
-
-
 
 def get_quotas():
     """Return the quotas info from Skytap API."""
@@ -204,8 +157,10 @@ if __name__=='__main__':
 
     parser = argparse.ArgumentParser(add_help = False, argument_default = '')
     parser.add_argument('-a', '--action', action='store')
-    parser.add_argument('-u', '--user', action='store')
-    parser.add_argument('-e', '--env', action='store')
+    # --user and --env are simply aliases for the same thing (the parameter
+    # passed to the action), but are both here for more clarity on the command
+    # line.
+    parser.add_argument('-u', '--user', '-e', '--env', action='store')
     parser.add_argument('-h', '--help', action='store', nargs='*')
 
     args = parser.parse_args()
@@ -214,7 +169,7 @@ if __name__=='__main__':
 
     try:
         f = getattr(actions,args.action)
-        print f(args.user + args.env)
+        print f(args.user)
 
     except AttributeError:
         usage(args.action)
