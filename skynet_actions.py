@@ -12,7 +12,8 @@ def exclusions():
     """Get list of exclusions from the exclusions file.
 
     This action doesn't query the API, but instead looks for the
-    exclusiotns-final.conf file in the control_dir (specified in the config.yml).
+    exclusiotns-final.conf file in the control_dir
+    (specified in the config.yml).
 
     This file should be updated from git regularly, so here we're just reading
     the current contents to know what machines should not be suspended.
@@ -20,16 +21,18 @@ def exclusions():
     See the exclusions file for details on its format.
     """
     exclusion_list = []
-    exclusions_file = open(_api.control_dir+'/exclusions-final.conf', 'r')
+    exclusions_file = open(_api.control_dir + '/exclusions-final.conf', 'r')
     for line in exclusions_file:
-        exclusion_list.append(line.split("#",1)[0].rstrip())
+        exclusion_list.append(line.split("#", 1)[0].rstrip())
 
-    exclusion_list = [item for item in exclusions if item] #filter(None, exclusions)
+    exclusion_list = [item for item in exclusions if item]
+    # was: = filter(None, exclusions)
 
-    #encode exclusions in unicode
+    # encode exclusions in unicode
     unicode_exclusions = [unicode(i) for i in exclusion_list]
 
     return unicode_exclusions
+
 
 def suspend():
     """Suspend the appropriate configurations.
@@ -45,14 +48,15 @@ def suspend():
     exclusion_list = set(exclusions())
     suspends = list(configurations - exclusion_list)
 
-    data = {'runstate' : 'suspended'}
+    data = {'runstate': 'suspended'}
 
     for i in suspends:
         print 'Suspending environment: ' + i
-        _api._rest('put', _api.base_url+'/configurations/' + i + '?runstate=suspended', _api.user, _api.token, data=data)
+        _api.rest('/configurations/' + i + '?runstate=suspended',
+                  'PUT', data=data)
 
 
-def env(_ = None):
+def env(_=None):
     """Return a simple list of environments (configurations).
 
     Sample output:
@@ -69,7 +73,8 @@ def env(_ = None):
         envs = envs + user_env(j.get('id'))
     return _json.dumps(envs)
 
-def env_full(_ = None):
+
+def env_full(_=None):
     """Return a detailed list of environments.
 
     Sample output:
@@ -100,6 +105,7 @@ def env_full(_ = None):
         envs = envs + user_env_full(j.get('id'))
     return _json.dumps(envs)
 
+
 def user_env(user_id):
     """Get a list of environments associated with a particular user."""
     body = _api.rest('/users/'+user_id)
@@ -110,14 +116,19 @@ def user_env(user_id):
         env_list.append(c.get('id'))
     return env_list
 
+
 def user_env_full(user_id):
-    """Get detailed environment details for environments associated with a particular user."""
+    """Get detailed environment details.
+
+    Gets details for environments associated with a particular user_id.
+    """
     body = _api.rest('/users/'+user_id)
     jbody = _json.loads(body)
     conf = jbody.get('configurations')
     return conf
 
-def users(_ = None):
+
+def users(_=None):
     """Get the basic user list.
 
     Sample output:
@@ -133,11 +144,13 @@ def users(_ = None):
         "created_at": "2012-01-02T12:43:05-08:00",
         "deleted": false
       }
-     ]"""
+    ]
+    """
     body = _api.rest('/users')
     return body
 
-def quotas(_ = None):
+
+def quotas(_=None):
     """Get Skytap quotas and basic info on the Skytap service.
 
     Sample output:
@@ -160,7 +173,8 @@ def quotas(_ = None):
     body = _api.rest('/company/quotas')
     return body
 
-def ips(_ = None):
+
+def ips(_=None):
     """Get all public IPs assigned by Skytap.
 
     A return will look something like the JSON below. Unused IPs
@@ -191,6 +205,7 @@ def ips(_ = None):
     """
     body = _api.rest('/ips')
     return body
+
 
 def vms(environment):
     """Get a list of VMs for a given environment.
@@ -305,7 +320,8 @@ def vms(environment):
           "region_backend": "skytap",
           "created_at": "2015/07/15 21:53:31 -0700",
           "can_change_object_state": true,
-          "configuration_url": "https://cloud.skytap.com/configurations/4693564"
+          "configuration_url":
+                        "https://cloud.skytap.com/configurations/4693564"
         }
     }
     """
