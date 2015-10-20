@@ -31,10 +31,17 @@ except ImportError:
 # interactively much harder. Disabling warnings is sad, but was the only way
 # we found around it.
 requests.packages.urllib3.disable_warnings()
-
-f = open(os.path.dirname(os.path.realpath(sys.argv[0])) + "/config.yml")
-config_data = yaml.safe_load(f)
-f.close()
+config_data = {}
+try:
+    f = open(os.path.dirname(os.path.realpath(sys.argv[0])) + "/config.yml")
+    config_data = yaml.safe_load(f)
+    f.close()
+except IOError:
+    config_data["base_url"] = ""
+    config_data["user"] = ""
+    config_data["token"] = ""
+    config_data["control_dir"] = ""
+    config_data["temp_dir"] = ""
 
 api.base_url = config_data["base_url"]
 api.user = config_data["user"]

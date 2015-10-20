@@ -2,3 +2,4 @@
 skynet_modules/config.py
 config.yml
 .DS_Store
+build/
