@@ -132,7 +132,7 @@ EXAMPLE:
             continue
         use_help = inspect.getdoc(v)
         use_help = use_help.splitlines()[0]
-        use_help = "\n\t".join(textwrap.wrap(use_help, 68-3-len(n)))
+        use_help = "\n\t".join(textwrap.wrap(use_help, 68 - 3 - len(n)))
         print "    " + n + " : " + use_help
 
     print banner_line()
@@ -156,7 +156,7 @@ def usage_detailed(detail):
                 continue
             use_help = inspect.getdoc(v)
             use_help = use_help.splitlines()[0]
-            use_help = "\n\t\t".join(textwrap.wrap(use_help, 68-3-len(n)))
+            use_help = "\n\t\t".join(textwrap.wrap(use_help, 68 - 3 - len(n)))
             print "\t" + n + " : " + use_help + ""
 
     print banner_line()
@@ -178,7 +178,6 @@ def usage(detail=""):
 
 # call main
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser(add_help=False, argument_default='')
     parser.add_argument('-a', '--action', action='store')
     # --user and --env are simply aliases for the same thing (the parameter
