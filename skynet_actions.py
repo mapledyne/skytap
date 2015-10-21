@@ -10,7 +10,6 @@ import skynet_api as _api
 
 def vm_detail(vm_id):
     """Get the detailed information from a VM id."""
-
     body = _api.rest('/vms/' + vm_id)
     jbody = _json.loads(body)
     return jbody
