@@ -336,7 +336,7 @@ def vms(environment):
     return body
 
 
-def get_documentation():
+def get_documentation(_=None):
     """Return relevant information to be used in auto-documentation."""
     json_output = _json.loads(users())
     envs = []
