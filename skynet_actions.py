@@ -19,7 +19,7 @@ def exclusions():
     """Get list of exclusions from the exclusions file.
 
     This action doesn't query the API, but instead looks for the
-    exclusiotns-final.conf file in the control_dir
+    exclusions-final.conf file in the control_dir
     (specified in the config.yml).
 
     This file should be updated from git regularly, so here we're just reading
