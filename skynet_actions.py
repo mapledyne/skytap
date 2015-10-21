@@ -342,6 +342,6 @@ def get_documentation(_=None):
     envs = []
     for j in json_output:
         envs = envs + user_env_full(j.get('id'))
-    envsObj = _json.loads(envs)
-    print "The start link is " + envsObj["url"]
+    print _json.dumps(envs)
+    # print "The start link is " + envsObj[3]
     return "To be continued..."
