@@ -334,3 +334,14 @@ def vms(environment):
     """
     body = _api.rest('/configurations/' + environment)
     return body
+
+
+def get_documentation():
+    """Return relevant information to be used in auto-documentation."""
+    json_output = _json.loads(users())
+    envs = []
+    for j in json_output:
+        envs = envs + user_env_full(j.get('id'))
+    envsObj = _json.dumps(envs)
+    print "The start link is " + envsObj["url"]
+    print "nothing here yet!"

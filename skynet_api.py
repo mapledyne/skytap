@@ -39,11 +39,11 @@ def _rest(req, url, data=None):
 
     if 'HTTPS' not in url.upper():
         print "Secure connection required: Please use HTTPS or https"
-        return "boo!"
+        return ""
 
     cmd = req.upper()
     if cmd not in cmds.keys():
-        return "yah!"
+        return ""
 
     status, body = cmds[cmd](url, data)
     if int(status) == 200:
