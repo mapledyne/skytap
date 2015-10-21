@@ -37,12 +37,13 @@ try:
     config_data = yaml.safe_load(f)
     f.close()
 except IOError:
-    sys.stderr.write("There is no config.yml installed.")
+    sys.stderr.write("There is no config.yml installed.\n")
     config_data["base_url"] = ""
     config_data["user"] = ""
     config_data["token"] = ""
     config_data["control_dir"] = ""
     config_data["temp_dir"] = ""
+    exit(1)
 
 api.base_url = config_data["base_url"]
 api.user = config_data["user"]
@@ -104,7 +105,7 @@ def banner_line(msg=''):
     """A banner line (functionally an <hr>) for the help page."""
     if len(msg) > 0:
         msg = '  ' + msg + '  '
-    return '\n{:#^76}\n'.format(msg)
+    return '\n{0:#^76}\n'.format(msg)
 
 
 def usage_general():
