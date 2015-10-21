@@ -37,7 +37,8 @@ try:
     config_data = yaml.safe_load(f)
     f.close()
 except IOError:
-    sys.stderr.write("There is no config.yml installed.\n")
+    sys.stderr.write("There is no config.yml in the directory. Create one " +
+                     "and then try again.\n")
     config_data["base_url"] = ""
     config_data["user"] = ""
     config_data["token"] = ""
