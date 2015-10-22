@@ -58,7 +58,7 @@ def suspend():
     data = {'runstate': 'suspended'}
 
     for i in suspends:
-        print 'Suspending environment: ' + i
+        print('Suspending environment: ' + i)
         _api.rest('/configurations/' + i + '?runstate=suspended',
                   'PUT', data=data)
 
@@ -115,7 +115,7 @@ def env_full(_=None):
 
 def user_env(user_id):
     """Get a list of environments associated with a particular user."""
-    body = _api.rest('/users/'+user_id)
+    body = _api.rest('/users/' + user_id)
     env_list = []
     jbody = _json.loads(body)
     conf = jbody.get('configurations')
@@ -129,7 +129,7 @@ def user_env_full(user_id):
 
     Gets details for environments associated with a particular user_id.
     """
-    body = _api.rest('/users/'+user_id)
+    body = _api.rest('/users/' + user_id)
     jbody = _json.loads(body)
     conf = jbody.get('configurations')
     return conf
@@ -342,7 +342,7 @@ def get_documentation(_=None):
     envs = []
     for j in json_output:
         envs = envs + user_env_full(j.get('id'))
-    print _json.dumps(envs)
+    print(_json.dumps(envs))
     print "The name of the environment is: " + envs[0].get('name')
     print "The start link is: " + envs[0].get('url')
     return "To be continued..."
