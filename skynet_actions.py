@@ -6,6 +6,7 @@ function is the name of the action as exposed to the user.
 """
 import json as _json
 import skynet_api as _api
+import argparse
 
 
 def vm_detail(vm_id):
@@ -115,7 +116,7 @@ def env_full(_=None):
 
 def user_env(user_id):
     """Get a list of environments associated with a particular user."""
-    body = _api.rest('/users/'+user_id)
+    body = _api.rest('/users/' + user_id)
     env_list = []
     jbody = _json.loads(body)
     conf = jbody.get('configurations')
@@ -129,7 +130,7 @@ def user_env_full(user_id):
 
     Gets details for environments associated with a particular user_id.
     """
-    body = _api.rest('/users/'+user_id)
+    body = _api.rest('/users/' + user_id)
     jbody = _json.loads(body)
     conf = jbody.get('configurations')
     return conf

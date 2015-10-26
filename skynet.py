@@ -74,7 +74,7 @@ def update_dashing(widget_id, usage_value, limit, status):
     # curl -d '{ "auth_token": "YOUR_AUTH_TOKEN", "value": 83 }'
     # \http://localhost:3030/widgets/svm-current-usage
 
-    dashing_url = "http://localhost:3030/widgets/"+widget_id
+    dashing_url = "http://localhost:3030/widgets/" + widget_id
     data = {"auth_token": "YOUR_AUTH_TOKEN", "value": usage_value,
             "max": limit, "current": usage, "status": status}
     requisite_headers = {'Accept': 'application/json',
@@ -200,7 +200,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.help != '':
         usage(" ".join(args.help))
-
     try:
         f = getattr(actions, args.action)
         print f(args.user)
