@@ -6,7 +6,6 @@ function is the name of the action as exposed to the user.
 """
 import json as _json
 import skynet_api as _api
-import argparse
 
 
 def vm_detail(vm_id):
@@ -62,6 +61,24 @@ def suspend():
         print('Suspending environment: ' + i)
         _api.rest('/configurations/' + i + '?runstate=suspended',
                   'PUT', data=data)
+
+
+def vpns(_=None):
+    """Get list of all VPNs.
+
+    Gets details for global VPN settings.
+    """
+    body = _api.rest('/vpns.json')
+    return body
+
+
+def vpn(vpn_id):
+    """Get list of one VPN detail set.
+
+    Gets details for one VPN's info.
+    """
+    body = _api.rest('/vpns/' + vpn_id)
+    return body
 
 
 def env(_=None):
