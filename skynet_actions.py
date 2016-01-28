@@ -15,6 +15,20 @@ def vm_detail(vm_id):
     return jbody
 
 
+def projects(_):
+    """Get info on the projects and VMs in them."""
+    body = _api.rest('/v2/projects/')
+    jbody = _json.loads(body)
+    return jbody
+
+
+def project(project_id):
+    """Get info on the projects and VMs in them."""
+    body = _api.rest('/v2/projects/' + project_id)
+    jbody = _json.loads(body)
+    return jbody
+
+
 def exclusions():
     """Get list of exclusions from the exclusions file.
 
@@ -361,6 +375,6 @@ def get_documentation(_=None):
     for j in json_output:
         envs = envs + user_env_full(j.get('id'))
     print(_json.dumps(envs))
-    print "The name of the environment is: " + envs[0].get('name')
-    print "The start link is: " + envs[0].get('url')
+    print("The name of the environment is: " + envs[0].get('name'))
+    print("The start link is: " + envs[0].get('url'))
     return "To be continued..."
