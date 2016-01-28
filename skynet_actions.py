@@ -16,14 +16,14 @@ def vm_detail(vm_id):
 
 
 def projects(_):
-    """Get info on the projects and VMs in them."""
+    """Get info on the projects and environments in them."""
     body = _api.rest('/v2/projects/')
     jbody = _json.loads(body)
     return jbody
 
 
 def project(project_id):
-    """Get info on the projects and VMs in them."""
+    """Get info on the specifed project id."""
     body = _api.rest('/v2/projects/' + project_id)
     jbody = _json.loads(body)
     return jbody
