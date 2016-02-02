@@ -15,7 +15,7 @@ def vm_detail(vm_id):
 
 def projects(_):
     """Get info on the projects and environments in them."""
-    return _api.rest('/v2/projects/')
+    return _api.rest('/v2/projects?count=100&offset=0')
 
 
 def project(project_id):
