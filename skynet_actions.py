@@ -15,12 +15,17 @@ def vm_detail(vm_id):
 
 def projects(_):
     """Get info on the projects and environments in them."""
-    return _api.rest('/v2/projects?count=100&offset=0')
+    return _api.rest('/v2/projects/')
 
 
 def project(project_id):
     """Get info on the specifed project id."""
     return _api.rest('/v2/projects/' + project_id)
+
+
+def project_full(project_id):
+    """Get configuration info on the specifed project id."""
+    return _api.rest('/v2/projects/' + project_id + '/configurations/')
 
 
 def exclusions():
