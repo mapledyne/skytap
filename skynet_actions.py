@@ -1,5 +1,4 @@
 """skynet_actions is the actual actions available to the skynet function.
-
 To make a new action, add a new function to this class. The docstring is
 used to make the usage info available to the end user, and the name of the
 function is the name of the action as exposed to the user.
@@ -30,14 +29,11 @@ def project_full(project_id):
 
 def exclusions():
     """Get list of exclusions from the exclusions file.
-
     This action doesn't query the API, but instead looks for the
     exclusions-final.conf file in the control_dir
     (specified in the config.yml).
-
     This file should be updated from git regularly, so here we're just reading
     the current contents to know what machines should not be suspended.
-
     See the exclusions file for details on its format.
     """
     exclusion_list = []
@@ -56,11 +52,9 @@ def exclusions():
 
 def suspend():
     """Suspend the appropriate configurations.
-
     This takes a set of the environments (see action env for a sample list) and
     removes any environment in the exclusion list (see action exclusions for a
     sample list) and then issues a suspend command.
-
     Warning: This action will actively suspend environments. If exclusions is
     not up to date, this could suspend everything in skytap.
     """
@@ -78,7 +72,6 @@ def suspend():
 
 def vpns(_=None):
     """Get list of all VPNs.
-
     Gets details for global VPN settings.
     """
     return _api.rest('/vpns.json')
@@ -86,7 +79,6 @@ def vpns(_=None):
 
 def vpn(vpn_id):
     """Get list of one VPN detail set.
-
     Gets details for one VPN's info.
     """
     return _api.rest('/vpns/' + vpn_id)
@@ -94,9 +86,7 @@ def vpn(vpn_id):
 
 def env(_=None):
     """Return a simple list of environments (configurations).
-
     Sample output:
-
     [
         "437940",
         "561948",
@@ -112,7 +102,6 @@ def env(_=None):
 
 def env_full(_=None):
     """Return a detailed list of environments.
-
     Sample output:
     [
       {
@@ -150,23 +139,21 @@ def user_env(user_id):
     conf = jbody.get('configurations')
     for c in conf:
         env_list.append(c.get('id'))
-    return _json.dumps(env_list)
+    return env_list
 
 
 def user_env_full(user_id):
     """Get detailed environment details.
-
     Gets details for environments associated with a particular user_id.
     """
     body = _api.rest('/users/' + user_id)
     jbody = _json.loads(body)
     conf = jbody.get('configurations')
-    return _json.dumps(conf)
+    return conf
 
 
 def users(_=None):
     """Get the basic user list.
-
     Sample output:
     [
       {
@@ -187,7 +174,6 @@ def users(_=None):
 
 def quotas(_=None):
     """Get Skytap quotas and basic info on the Skytap service.
-
     Sample output:
     [
       {
@@ -200,7 +186,6 @@ def quotas(_=None):
         "max_limit": 184320000
       }
     ]
-
     Full list of ids returned:
         concurrent_vms, concurrent_svms, cumulative_svms,
         concurrent_storage_size, concurrent_networks, concurrent_public_ips
@@ -210,11 +195,9 @@ def quotas(_=None):
 
 def ips(_=None):
     """Get all public IPs assigned by Skytap.
-
     A return will look something like the JSON below. Unused IPs
     will have an empty 'nics' variable, and used ones will include what
     nic/vm is using a public IP in the same variable.
-
     [
       {
         "id": "76.191.119.24",
@@ -242,11 +225,9 @@ def ips(_=None):
 
 def vms(environment):
     """Get a list of VMs for a given environment.
-
     A return will look something like the JSON below, including information
     on the environment itself, and detailed information on each VM in the
     environment.
-
     {
       "id": "4693564",
       "url": "https://cloud.skytap.com/configurations/4693564",
@@ -359,16 +340,4 @@ def vms(environment):
     }
     """
     return _api.rest('/configurations/' + environment)
-
-
-def get_documentation(_=None):
-    """Return relevant information to be used in auto-documentation."""
-    json_output = _json.loads(users())
-    envs = []
-    for j in json_output:
-        envs = envs + user_env_full(j.get('id'))
-    print(_json.dumps(envs))
-    print("The name of the environment is: " + envs[0].get('name'))
-    print("The start link is: " + envs[0].get('url'))
-    return "To be continued..."
 
