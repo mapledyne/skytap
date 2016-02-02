@@ -10,23 +10,17 @@ import skynet_api as _api
 
 def vm_detail(vm_id):
     """Get the detailed information from a VM id."""
-    body = _api.rest('/vms/' + vm_id)
-    jbody = _json.loads(body)
-    return jbody
+    return _api.rest('/vms/' + vm_id)
 
 
 def projects(_):
     """Get info on the projects and environments in them."""
-    body = _api.rest('/v2/projects/')
-    jbody = _json.loads(body)
-    return jbody
+    return _api.rest('/v2/projects/')
 
 
 def project(project_id):
     """Get info on the specifed project id."""
-    body = _api.rest('/v2/projects/' + project_id)
-    jbody = _json.loads(body)
-    return jbody
+    return _api.rest('/v2/projects/' + project_id)
 
 
 def exclusions():
@@ -82,8 +76,7 @@ def vpns(_=None):
 
     Gets details for global VPN settings.
     """
-    body = _api.rest('/vpns.json')
-    return body
+    return _api.rest('/vpns.json')
 
 
 def vpn(vpn_id):
@@ -91,8 +84,7 @@ def vpn(vpn_id):
 
     Gets details for one VPN's info.
     """
-    body = _api.rest('/vpns/' + vpn_id)
-    return body
+    return _api.rest('/vpns/' + vpn_id)
 
 
 def env(_=None):
@@ -153,7 +145,7 @@ def user_env(user_id):
     conf = jbody.get('configurations')
     for c in conf:
         env_list.append(c.get('id'))
-    return env_list
+    return _json.dumps(env_list)
 
 
 def user_env_full(user_id):
@@ -164,7 +156,7 @@ def user_env_full(user_id):
     body = _api.rest('/users/' + user_id)
     jbody = _json.loads(body)
     conf = jbody.get('configurations')
-    return conf
+    return _json.dumps(conf)
 
 
 def users(_=None):
@@ -185,8 +177,7 @@ def users(_=None):
       }
     ]
     """
-    body = _api.rest('/users')
-    return body
+    return _api.rest('/users')
 
 
 def quotas(_=None):
@@ -209,8 +200,7 @@ def quotas(_=None):
         concurrent_vms, concurrent_svms, cumulative_svms,
         concurrent_storage_size, concurrent_networks, concurrent_public_ips
     """
-    body = _api.rest('/company/quotas')
-    return body
+    return _api.rest('/company/quotas')
 
 
 def ips(_=None):
@@ -242,8 +232,7 @@ def ips(_=None):
       }
     ]
     """
-    body = _api.rest('/ips')
-    return body
+    return _api.rest('/ips')
 
 
 def vms(environment):
@@ -364,8 +353,7 @@ def vms(environment):
         }
     }
     """
-    body = _api.rest('/configurations/' + environment)
-    return body
+    return _api.rest('/configurations/' + environment)
 
 
 def get_documentation(_=None):
@@ -378,3 +366,4 @@ def get_documentation(_=None):
     print("The name of the environment is: " + envs[0].get('name'))
     print("The start link is: " + envs[0].get('url'))
     return "To be continued..."
+
