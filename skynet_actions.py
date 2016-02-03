@@ -340,3 +340,4 @@ def vms(environment):
     }
     """
     return _api.rest('/configurations/' + environment)
+
