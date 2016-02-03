@@ -1,5 +1,10 @@
-# this is a configuration template for skynet.  Copy this file to ./config.yml and populate with variables for your environment
-#
+# This is a configuration template for skynet.  Copy this file to ./config.yml and populate with variables for your environment.
+# base_url: leave as is
+# user: your email address.
+# token: API token found in profile information on the Skytap website.
+# working_dir: path to Skynet.py. Usually /opt/skynet.
+# control_dir: can be left as is.
+# temp_dir: /tmp
 
 base_url:       https://cloud.skytap.com                                # base url for rest queries
 user:           <skytap_user_name>                                      # username
@@ -8,4 +13,3 @@ token:          <api_token>                                             # API To
 working_dir:    <path to skynet.py>                                     # this is the path to the skynet.py file
 control_dir:    <path to skytap-control repository>                     # this is the path to the skytap-control directory
 temp_dir:       <path to temp directory>                                # path to a temporary directory
-

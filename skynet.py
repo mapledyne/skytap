@@ -39,19 +39,7 @@ try:
 except IOError:
     sys.stderr.write("There is no config.yml in the directory. Create one " +
                      "and then try again.\nFor reference, check config_" +
-                     "template.yml and follow these guidelines:\n" +
-                     "base_url: leave as is.\n" +
-                     "user: your email address.\n" +
-                     "token: API token found in profile information on the " +
-                     "Skytap website.\n" +
-                     "working_dir: path to Skynet.py. Usually /opt/skynet.\n" +
-                     "control_dir: can be left as is.\n" +
-                     "temp_dir: /tmp.\n")
-    config_data["base_url"] = ""
-    config_data["user"] = ""
-    config_data["token"] = ""
-    config_data["control_dir"] = ""
-    config_data["temp_dir"] = ""
+                     "template.yml and follow the listed guidelines.\n")
     exit(1)
 
 api.base_url = config_data["base_url"]
