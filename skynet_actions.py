@@ -27,7 +27,7 @@ def project_full(project_id):
     return _api.rest('/v2/projects/' + project_id + '/configurations/')
 
 
-def exclusions():
+def exclusions(_):
     """Get list of exclusions from the exclusions file.
     This action doesn't query the API, but instead looks for the
     exclusions-final.conf file in the control_dir
@@ -50,7 +50,7 @@ def exclusions():
     return unicode_exclusions
 
 
-def suspend():
+def suspend(_):
     """Suspend the appropriate configurations.
     This takes a set of the environments (see action env for a sample list) and
     removes any environment in the exclusion list (see action exclusions for a
@@ -59,7 +59,7 @@ def suspend():
     not up to date, this could suspend everything in skytap.
     """
     configurations = set(env())
-    exclusion_list = set(exclusions())
+    exclusion_list = set(exclusions(None))
     suspends = list(configurations - exclusion_list)
 
     data = {'runstate': 'suspended'}
@@ -340,4 +340,3 @@ def vms(environment):
     }
     """
     return _api.rest('/configurations/' + environment)
-

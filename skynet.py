@@ -45,9 +45,9 @@ except IOError:
 api.base_url = config_data["base_url"]
 api.user = config_data["user"]
 api.token = config_data["token"]
+api.control_dir = config_data["control_dir"]
 
 working_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
-control_dir = config_data["control_dir"]
 temp_dir = config_data["temp_dir"]
 
 

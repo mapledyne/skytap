@@ -15,6 +15,7 @@ requests.packages.urllib3.disable_warnings()
 token = ""
 user = ""
 base_url = ""
+control_dir = ""
 
 
 def load_file(fname):
