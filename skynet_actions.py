@@ -41,7 +41,7 @@ def exclusions(_):
     for line in exclusions_file:
         exclusion_list.append(line.split("#", 1)[0].rstrip())
 
-    exclusion_list = [item for item in exclusions if item]
+    exclusion_list = [item for item in exclusion_list if item]
     # was: = filter(None, exclusions)
 
     # encode exclusions in unicode
@@ -58,7 +58,7 @@ def suspend(_):
     Warning: This action will actively suspend environments. If exclusions is
     not up to date, this could suspend everything in skytap.
     """
-    configurations = set(env())
+    configurations = set(_json.loads(env()))
     exclusion_list = set(exclusions(None))
     suspends = list(configurations - exclusion_list)
 
