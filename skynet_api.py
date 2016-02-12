@@ -39,7 +39,7 @@ def _rest(req, url, data=None):
 #         rest_usage()
 
     if 'HTTPS' not in url.upper():
-        print "Secure connection required: Please use HTTPS or https"
+        print("Secure connection required: Please use HTTPS or https")
         return ""
 
     cmd = req.upper()
@@ -52,7 +52,7 @@ def _rest(req, url, data=None):
         # print json.dumps(json_output, indent = 4)
         return body
     else:
-        print "Oops!  Error: status: %s\n%s\n" % (status, body)
+        print("Oops!  Error: status: %s\n%s\n" % (status, body))
 
 
 def _api_get(url, _=None):
@@ -109,4 +109,4 @@ cmds = {
     "PUT": _api_put,
     "POST": _api_post,
     "DELETE": _api_del
-    }
+}

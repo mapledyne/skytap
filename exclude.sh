@@ -5,7 +5,7 @@
 REPO=/Users/thewellington/Development/skytap-control
 BRANCH='master'
 RUNTYPE=$1
-RUNTIME=`date '+%Y-%m-%d %H:%M:%S'`
+RUNTIME=$(date '+%Y-%m-%d %H:%M:%S')
 EXCLUDESPATH="${REPO}/exclusions-final.conf"
 
 
@@ -45,7 +45,7 @@ then
 # Configurations noted here will be excluded from the evening run only.
 # The result will be a configuration that will run past 7:00 PM but be suspended at midnight.
 
-# This file is purged automatically after the midnight run.  
+# This file is purged automatically after the midnight run.
 
 # Last purged: ${RUNTIME}
 
@@ -56,14 +56,14 @@ then
 #### End Evening Exclusions ################################################
 
 " > ${REPO}/evening-exclusions.conf
-    
+
     echo "# This file lists the Skytap Configuration IDs that should be excluded from
 # blanket Skynet suspend commands,
 
 # Configurations noted here will be excluded from the evening run and from the midnight run.
 # The result will be a configuration that will run all night long.
 
-# This file is purged after the midnight run.  
+# This file is purged after the midnight run.
 
 # Last purged: ${RUNTIME}
 
@@ -81,4 +81,3 @@ else
     pull_repo
     exclude
 fi
-

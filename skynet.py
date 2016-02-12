@@ -7,8 +7,8 @@ import os
 import sys
 import textwrap
 
-import skynet_api as api
 import skynet_actions as actions
+import skynet_api as api
 
 try:
     import yaml
@@ -53,7 +53,7 @@ temp_dir = config_data["temp_dir"]
 
 def rest_usage():
     """Print rest / app usage."""
-    print "usage: rest [put|get|post|delete] url name passwd"
+    print("usage: rest [put|get|post|delete] url name passwd")
     sys.exit(-1)
 
 
@@ -132,23 +132,23 @@ EXAMPLE:
         use_help = inspect.getdoc(v)
         use_help = use_help.splitlines()[0]
         use_help = "\n\t".join(textwrap.wrap(use_help, 68 - 3 - len(n)))
-        print "    " + n + " : " + use_help
+        print("    " + n + " : " + use_help)
 
-    print banner_line()
+    print(banner_line())
 
 
 def usage_detailed(detail):
     """Print detailed help on one available action."""
-    print banner_line('Welcome to Skynet')
+    print(banner_line('Welcome to Skynet'))
 
     try:
         function = getattr(actions, detail)
         usage_detail = inspect.getdoc(function)
-        print "Extended help for action: " + detail + "\n"
-        print usage_detail
+        print("Extended help for action: " + detail + "\n")
+        print(usage_detail)
     except AttributeError:
-        print "No action by this name found: " + str(detail) + "\n"
-        print "Available actions are:\n"
+        print("No action by this name found: " + str(detail) + "\n")
+        print("Available actions are:\n")
         action_list = inspect.getmembers(actions)
         for n, v in action_list:
             if n.startswith("_"):  # We want to skip all the built in stuff
@@ -156,9 +156,9 @@ def usage_detailed(detail):
             use_help = inspect.getdoc(v)
             use_help = use_help.splitlines()[0]
             use_help = "\n\t\t".join(textwrap.wrap(use_help, 68 - 3 - len(n)))
-            print "\t" + n + " : " + use_help + ""
+            print("\t" + n + " : " + use_help + "")
 
-    print banner_line()
+    print(banner_line())
 
 
 def usage(detail=""):
@@ -190,7 +190,7 @@ if __name__ == '__main__':
         usage(" ".join(args.help))
     try:
         f = getattr(actions, args.action)
-        print f(args.user)
+        print(f(args.user))
 
     except AttributeError:
         usage(args.action)

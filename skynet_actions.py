@@ -1,4 +1,5 @@
 """skynet_actions is the actual actions available to the skynet function.
+
 To make a new action, add a new function to this class. The docstring is
 used to make the usage info available to the end user, and the name of the
 function is the name of the action as exposed to the user.
@@ -29,6 +30,7 @@ def project_full(project_id):
 
 def exclusions(_):
     """Get list of exclusions from the exclusions file.
+
     This action doesn't query the API, but instead looks for the
     exclusions-final.conf file in the control_dir
     (specified in the config.yml).
@@ -52,6 +54,7 @@ def exclusions(_):
 
 def suspend(_):
     """Suspend the appropriate configurations.
+
     This takes a set of the environments (see action env for a sample list) and
     removes any environment in the exclusion list (see action exclusions for a
     sample list) and then issues a suspend command.
@@ -72,6 +75,7 @@ def suspend(_):
 
 def vpns(_=None):
     """Get list of all VPNs.
+
     Gets details for global VPN settings.
     """
     return _api.rest('/vpns.json')
@@ -79,6 +83,7 @@ def vpns(_=None):
 
 def vpn(vpn_id):
     """Get list of one VPN detail set.
+
     Gets details for one VPN's info.
     """
     return _api.rest('/vpns/' + vpn_id)
@@ -86,6 +91,7 @@ def vpn(vpn_id):
 
 def env(_=None):
     """Return a simple list of environments (configurations).
+
     Sample output:
     [
         "437940",
@@ -102,6 +108,7 @@ def env(_=None):
 
 def env_full(_=None):
     """Return a detailed list of environments.
+
     Sample output:
     [
       {
@@ -144,6 +151,7 @@ def user_env(user_id):
 
 def user_env_full(user_id):
     """Get detailed environment details.
+
     Gets details for environments associated with a particular user_id.
     """
     body = _api.rest('/users/' + user_id)
@@ -154,6 +162,7 @@ def user_env_full(user_id):
 
 def users(_=None):
     """Get the basic user list.
+
     Sample output:
     [
       {
@@ -174,6 +183,7 @@ def users(_=None):
 
 def quotas(_=None):
     """Get Skytap quotas and basic info on the Skytap service.
+
     Sample output:
     [
       {
@@ -195,6 +205,7 @@ def quotas(_=None):
 
 def ips(_=None):
     """Get all public IPs assigned by Skytap.
+
     A return will look something like the JSON below. Unused IPs
     will have an empty 'nics' variable, and used ones will include what
     nic/vm is using a public IP in the same variable.
@@ -225,6 +236,7 @@ def ips(_=None):
 
 def vms(environment):
     """Get a list of VMs for a given environment.
+
     A return will look something like the JSON below, including information
     on the environment itself, and detailed information on each VM in the
     environment.
