@@ -48,7 +48,6 @@ api.token = config_data["token"]
 api.control_dir = config_data["control_dir"]
 
 working_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
-temp_dir = config_data["temp_dir"]
 
 
 def rest_usage():
