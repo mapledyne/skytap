@@ -1,7 +1,7 @@
 skynet
 ======
 
-Skynet is an extensible set of functions that we use to manage many aspects of our Skytap infrastructure here at [Fulcrum Technologies](http://fulcrum.net).
+Skynet is an extensible set of functions that we use to manage aspects of our Skytap infrastructure here at [Fulcrum Technologies](http://fulcrum.net).
 
 We made this to be easily extensible so we can quickly make use of other pieces of the Skytap API.
 
@@ -27,7 +27,7 @@ You'll get back a JSON for the request, something like:
       }
     ]
 
-To get a list of actions, just run it without any parameters:
+To get a list of actions, run it without any parameters:
 
     python skynet.py
 
@@ -54,6 +54,8 @@ For instance, when Skytap starts offering jokes via their API, this can be added
         return _api.rest('/joke/' + user_id)
 
 And that's it. The `skynet.py` will see the function and add it to the list of actions in its help, and the docstrings are accessible both via the action list (calling `skynet.py` with no parameters) and via full help (`skynet.py -h joke`).
+
+The `_api` module is from the `skytap_api.py` file, which wraps the Skytap API itself. It then knows the URL and rest of the info needed to get to the API, so you can use `_api.rest()` or `_api.post()` as desired. The string sent should either look like `'/users'` or, for the v2 API, like `'/v2/configurations'`
 
 ## Contributor list:
 * Bill Wellington [github](https://github.com/thewellington/) [twitter]() [blog](http://www.wellingtonnet.net)
