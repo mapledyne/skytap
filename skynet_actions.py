@@ -4,8 +4,174 @@ To make a new action, add a new function to this class. The docstring is
 used to make the usage info available to the end user, and the name of the
 function is the name of the action as exposed to the user.
 """
+
+import datetime as _datetime
 import json as _json
 import skynet_api as _api
+
+
+def put_user_data(id, content='none'):
+    """Get info on metadata for specific environment."""
+    return _api.rest('/v2/configurations/' + id + '/user_data.json', 'PUT',
+                     data=content)
+
+
+def get_user_data(id):
+    """Get info on metadata for specific environment."""
+    return _api.rest('/v2/configurations/' + id + '/user_data.json')
+
+
+def init_metadata(_=None):
+    """Initialize shutdown_delay and shutdown_interval for metadata."""
+    try:
+        import yaml
+    except ImportError:
+        sys.stderr.write("You do not have the 'yaml' module installed. ",
+                         "Please see http://pyyaml.org/wiki/",
+                         "PyYAMLDocumentation for more information.")
+        exit(1)
+
+    env_list = _json.loads(env_full())
+
+    for i in env_list:
+        data = yaml.load(get_user_data(i["id"]))
+
+        # If there's no metadata, create the template.
+        if not data["contents"]:
+            print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " "
+                   "is empty. Writing template...")
+            data["contents"] = ("shutdown_interval: 2 # Ex.: \"2\" = 2 A.M. \n"
+                                "shutdown_delay: 0 # Number of days remaining "
+                                "before shutdown\n")
+            put_user_data(i["id"], data)
+            continue
+
+        # This will store updated content
+        new_content = ""
+
+        contents = data["contents"]
+
+        if "shutdown_interval" not in contents:
+            new_content += ("shutdown_interval: 2 # Ex.: \"2\" = 2 A.M.\n")
+
+        if "shutdown_delay" not in contents:
+            new_content += ("shutdown_delay: 0 # Number of days remaining "
+                            "before shutdown\n")
+
+        new_content += ("" + contents)
+
+        if data["contents"] != new_content:
+            print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " has "
+                   "existing data. Appending template...")
+            data["contents"] = new_content
+            put_user_data(i["id"], data)
+        else:
+            print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " has "
+                   "not been changed (up-to-date).")
+            continue
+
+    return ("Job\'s done.")
+
+
+def check_metadata(_=None):
+    """Get metadata of all environments and act based on the data written."""
+
+    try:
+        import yaml
+    except ImportError:
+        sys.stderr.write("You do not have the 'yaml' module installed. ",
+                         "Please see http://pyyaml.org/wiki/",
+                         "PyYAMLDocumentation for more information.")
+        exit(1)
+
+    env_list = _json.loads(env_full())
+
+    date = _datetime.datetime.utcnow()
+    time = date.hour
+
+    time = 2
+
+    for i in env_list:
+        # Check values of shutdown_delay and shutdown_interval and act based on
+        # them (shut down environment, count down delay, etc.)
+
+        print ("Start time: " + str(date.hour) + ":" + str(date.minute) + "\n")
+
+        data = yaml.load(get_user_data(i["id"]))
+        try:
+            contents = yaml.load(data["contents"])
+        except yaml.scanner.ScannerError:
+            with open("/tmp/metadata_log.txt", "a") as file:
+                file.write("Invalid YAML in " + i["name"] + " - ID: "
+                           "" + i["id"] + "! Sending error report.\n\n")
+            continue
+
+        # Check if there are any un-templated environments (no shutdown_delay
+        # or shutdown_interval).
+        if ("shutdown_interval" not in data["contents"] or
+                "shutdown_delay" not in data["contents"]):
+            with open("/tmp/metadata_log.txt", "a") as file:
+                file.write("In " + i["name"] + " - ID: "
+                           "" + i["id"] + ": Missing shutdown_interval and/or "
+                           "shutdown_delay. Run update process to fix.\n\n")
+            continue
+
+        try:
+            int(contents["shutdown_interval"])
+        except ValueError:
+            interval = contents["shutdown_interval"]
+            data["contents"] = data["contents"].replace("shutdown_interval: " + interval, "shutdown_interval: 2")
+            put_user_data(i["id"], data)
+            contents = yaml.load(data["contents"])
+
+        try:
+            int(contents["shutdown_delay"])
+        except ValueError:
+            delay = contents["shutdown_delay"]
+            data["contents"] = data["contents"].replace("shutdown_delay: " + delay, "shutdown_delay: 0")
+            put_user_data(i["id"], data)
+            contents = yaml.load(data["contents"])
+
+        # Is it shutdown time?
+        if int(contents["shutdown_interval"]) == time:
+            # If delay is 0, shut it down.
+            if int(contents["shutdown_delay"]) == 0:
+                with open("/tmp/metadata_log.txt", "a") as file:
+                    file.write("Shutting down " + i["name"] + " - ID: " + i["id"] + ".\n\n")
+                    continue
+            # If delay is 0, shut it down.
+            elif int(contents["shutdown_delay"]) <= 30:
+                with open("/tmp/metadata_log.txt", "a") as file:
+                    file.write("Decrementing shutdown delay of " + ""
+                               "" + i["name"] + " - ID: " + i["id"] + ".\n\n")
+                delay = int(contents["shutdown_delay"])
+                data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: " + str(delay - 1))
+                put_user_data(i["id"], data)
+                continue
+
+        # If it is not shutdown time or neither of the above checks passed,
+        # do these checks.
+
+        # If delay is a negative number, change delay to 0 and do not shut down.
+        if int(contents["shutdown_delay"]) < 0:
+            with open("/tmp/metadata_log.txt", "a") as file:
+                file.write("Negative delay value found in " + i["name"] + ""
+                           " - ID: " + i["id"] + ". Restoring to 0.\n\n")
+            delay = int(contents["shutdown_delay"])
+            data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: 0")
+            put_user_data(i["id"], data)
+            continue
+        # Else, if delay > 30, change to 30.
+        elif int(contents["shutdown_delay"]) > 30:
+            with open("/tmp/metadata_log.txt", "a") as file:
+                file.write("Invalid delay value found in " + i["name"] + ""
+                           " - ID: " + i["id"] + ". Restoring to 30.\n\n")
+            delay = int(contents["shutdown_delay"])
+            data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: 30")
+            put_user_data(i["id"], data)
+            continue
+
+    return ("Job\'s done.")
 
 
 def vm_detail(vm_id):
