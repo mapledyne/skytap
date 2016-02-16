@@ -89,13 +89,13 @@ def check_metadata(_=None):
     date = _datetime.datetime.utcnow()
     time = date.hour
 
-    time = 2
-
     for i in env_list:
         # Check values of shutdown_delay and shutdown_interval and act based on
         # them (shut down environment, count down delay, etc.)
 
-        print ("Start time: " + str(date.hour) + ":" + str(date.minute) + "\n")
+        with open("/tmp/metadata_log.txt", "a") as file:
+            file.write("Start time: " + str(date.hour) + ":"
+                       "" + str(date.minute) + "\n")
 
         data = yaml.load(get_user_data(i["id"]))
         try:
