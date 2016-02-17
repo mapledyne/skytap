@@ -10,19 +10,47 @@ import json as _json
 import skynet_api as _api
 
 
-def put_user_data(id, content='none'):
-    """Get info on metadata for specific environment."""
+def _log(content='', function=''):
+    """Write to Skynet file in /var/log with partial syslog format."""
+    t = _datetime.datetime.now()
+
+    month = t.strftime("%b")
+    day = t.strftime("%d")
+    time = t.strftime("%X")
+
+    msg = ("" + month + " " + day + " " + time + " skynet:" + function + " "
+           "" + content)
+    with open("~/skynet/skylog.txt", "a") as file:
+        file.write(msg)
+
+    return ("New data written to log.")
+
+
+def put_metadata(id, content='none'):
+    """Get info on metadata for specific environment. Takes 2 parameters."""
     return _api.rest('/v2/configurations/' + id + '/user_data.json', 'PUT',
                      data=content)
 
 
-def get_user_data(id):
+def get_metadata(id):
     """Get info on metadata for specific environment."""
     return _api.rest('/v2/configurations/' + id + '/user_data.json')
 
 
+def purge_metadata(_=None):
+    """Purge metadata from all environments."""
+    env_list = _json.loads(env_full())
+
+    content = {"contents": ""}
+
+    for i in env_list:
+        put_metadata(i["id"], content)
+
+    return "Job\'s done."
+
+
 def init_metadata(_=None):
-    """Initialize shutdown_delay and shutdown_interval for metadata."""
+    """Initialize shutdown_delay and shutdown_time for metadata."""
     try:
         import yaml
     except ImportError:
@@ -34,16 +62,19 @@ def init_metadata(_=None):
     env_list = _json.loads(env_full())
 
     for i in env_list:
-        data = yaml.load(get_user_data(i["id"]))
+        data = yaml.load(get_metadata(i["id"]))
 
         # If there's no metadata, create the template.
         if not data["contents"]:
             print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " "
                    "is empty. Writing template...")
-            data["contents"] = ("shutdown_interval: 2 # Ex.: \"2\" = 2 A.M. \n"
+            data["contents"] = ("# Invalid entries will be reset.\n"
+                                "# See related Confluence metadata page for "
+                                "help.\n"
+                                "shutdown_time: 3 # Ex.: \"3\" = 3 A.M. UTC\n"
                                 "shutdown_delay: 0 # Number of days remaining "
-                                "before shutdown\n")
-            put_user_data(i["id"], data)
+                                "before shutdown, max 31\n")
+            put_metadata(i["id"], data)
             continue
 
         # This will store updated content
@@ -51,12 +82,12 @@ def init_metadata(_=None):
 
         contents = data["contents"]
 
-        if "shutdown_interval" not in contents:
-            new_content += ("shutdown_interval: 2 # Ex.: \"2\" = 2 A.M.\n")
+        if "shutdown_time" not in contents:
+            new_content += ("shutdown_time: 3 # Ex.: \"3\" = 3 A.M. UTC\n")
 
         if "shutdown_delay" not in contents:
             new_content += ("shutdown_delay: 0 # Number of days remaining "
-                            "before shutdown\n")
+                            "before shutdown, max 31\n")
 
         new_content += ("" + contents)
 
@@ -64,7 +95,7 @@ def init_metadata(_=None):
             print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " has "
                    "existing data. Appending template...")
             data["contents"] = new_content
-            put_user_data(i["id"], data)
+            put_metadata(i["id"], data)
         else:
             print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " has "
                    "not been changed (up-to-date).")
@@ -89,64 +120,83 @@ def check_metadata(_=None):
     date = _datetime.datetime.utcnow()
     time = date.hour
 
+    function = "check_metadata"
+
+    msg = ("Start time: " + str(date.hour) + ":" + str(date.minute) + "\n")
+    _log(msg, function)
+
     for i in env_list:
-        # Check values of shutdown_delay and shutdown_interval and act based on
+        # Check values of shutdown_delay and shutdown_time and act based on
         # them (shut down environment, count down delay, etc.)
-
-        with open("/tmp/metadata_log.txt", "a") as file:
-            file.write("Start time: " + str(date.hour) + ":"
-                       "" + str(date.minute) + "\n")
-
-        data = yaml.load(get_user_data(i["id"]))
+        data = yaml.load(get_metadata(i["id"]))
         try:
             contents = yaml.load(data["contents"])
         except yaml.scanner.ScannerError:
-            with open("/tmp/metadata_log.txt", "a") as file:
-                file.write("Invalid YAML in " + i["name"] + " - ID: "
-                           "" + i["id"] + "! Sending error report.\n\n")
+            msg = ("Invalid YAML in " + i["name"] + " - ID: "
+                   "" + i["id"] + "! Sending error report.\n\n")
+            _log(msg, function)
             continue
 
-        # Check if there are any un-templated environments (no shutdown_delay
-        # or shutdown_interval).
-        if ("shutdown_interval" not in data["contents"] or
+        # Check if this is an un-templated environment (no shutdown_delay or
+        # shutdown_time).
+        if ("shutdown_time" not in data["contents"] or
                 "shutdown_delay" not in data["contents"]):
-            with open("/tmp/metadata_log.txt", "a") as file:
-                file.write("In " + i["name"] + " - ID: "
-                           "" + i["id"] + ": Missing shutdown_interval and/or "
-                           "shutdown_delay. Run update process to fix.\n\n")
+            msg = ("In " + i["name"] + " - ID: " + i["id"] + ": Missing "
+                   "shutdown_time and/or shutdown_delay. Run update process"
+                   " to fix.\n\n")
+            _log(msg, function)
             continue
 
-        try:
-            int(contents["shutdown_interval"])
-        except ValueError:
-            interval = contents["shutdown_interval"]
-            data["contents"] = data["contents"].replace("shutdown_interval: " + interval, "shutdown_interval: 2")
-            put_user_data(i["id"], data)
-            contents = yaml.load(data["contents"])
+        # "-" in shutdown_time means permanent exclusion.
+        if contents["shutdown_time"] == "-":
+            msg = ("Permanent exclusion for " + i["name"] + " - ID: "
+                   "" + i["id"] + " found. Skipping...\n\n")
+            _log(msg, function)
+            continue
 
+        # Is shutdown_time valid?
+        try:
+            # Check if shutdown_time is not a valid time
+            if (int(contents["shutdown_time"]) > 23 or
+                    int(contents["shutdown_time"] < 0)):
+                new_content = "shutdown_time: " + sd_time, "shutdown_time: 3"
+                data["contents"] = data["contents"].replace(new_content)
+                put_metadata(i["id"], data)
+        except ValueError:
+            sd_time = contents["shutdown_time"]
+            new_content = "shutdown_time: " + sd_time, "shutdown_time: 3"
+            data["contents"] = data["contents"].replace(new_content)
+            put_metadata(i["id"], data)
+
+        # Is shutdown_delay valid?
         try:
             int(contents["shutdown_delay"])
         except ValueError:
             delay = contents["shutdown_delay"]
-            data["contents"] = data["contents"].replace("shutdown_delay: " + delay, "shutdown_delay: 0")
-            put_user_data(i["id"], data)
-            contents = yaml.load(data["contents"])
+            new_content = "shutdown_delay: " + delay, "shutdown_delay: 0"
+            data["contents"] = data["contents"].replace(new_content)
+            put_metadata(i["id"], data)
+
+        # This will load the current contents after the changes made above.
+        contents = yaml.load(data["contents"])
 
         # Is it shutdown time?
-        if int(contents["shutdown_interval"]) == time:
+        if int(contents["shutdown_time"]) == time:
             # If delay is 0, shut it down.
             if int(contents["shutdown_delay"]) == 0:
-                with open("/tmp/metadata_log.txt", "a") as file:
-                    file.write("Shutting down " + i["name"] + " - ID: " + i["id"] + ".\n\n")
-                    continue
-            # If delay is 0, shut it down.
-            elif int(contents["shutdown_delay"]) <= 30:
-                with open("/tmp/metadata_log.txt", "a") as file:
-                    file.write("Decrementing shutdown delay of " + ""
-                               "" + i["name"] + " - ID: " + i["id"] + ".\n\n")
+                msg = ("Shutting down " + i["name"] + " - ID: "
+                       "" + i["id"] + ".\n\n")
+                _log(msg, function)
+                continue
+            # If delay above 0 and equal to/under 31, decrement by 1.
+            elif (int(contents["shutdown_delay"]) <= 31 and
+                    int(contents["shutdown_delay"]) > 0):
+                msg = ("Decrementing shutdown delay of " + ""
+                       "" + i["name"] + " - ID: " + i["id"] + ".\n\n")
+                _log(msg, function)
                 delay = int(contents["shutdown_delay"])
                 data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: " + str(delay - 1))
-                put_user_data(i["id"], data)
+                put_metadata(i["id"], data)
                 continue
 
         # If it is not shutdown time or neither of the above checks passed,
@@ -154,21 +204,21 @@ def check_metadata(_=None):
 
         # If delay is a negative number, change delay to 0 and do not shut down.
         if int(contents["shutdown_delay"]) < 0:
-            with open("/tmp/metadata_log.txt", "a") as file:
-                file.write("Negative delay value found in " + i["name"] + ""
-                           " - ID: " + i["id"] + ". Restoring to 0.\n\n")
+            msg = ("Negative delay value found in " + i["name"] + ""
+                   " - ID: " + i["id"] + ". Restoring to 0.\n\n")
+            _log(msg, function)
             delay = int(contents["shutdown_delay"])
             data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: 0")
-            put_user_data(i["id"], data)
+            put_metadata(i["id"], data)
             continue
-        # Else, if delay > 30, change to 30.
-        elif int(contents["shutdown_delay"]) > 30:
-            with open("/tmp/metadata_log.txt", "a") as file:
-                file.write("Invalid delay value found in " + i["name"] + ""
-                           " - ID: " + i["id"] + ". Restoring to 30.\n\n")
+        # Else, if delay > 31, change to 31.
+        elif int(contents["shutdown_delay"]) > 31:
+            msg = ("Invalid delay value found in " + i["name"] + ""
+                   " - ID: " + i["id"] + ". Restoring to 31.\n\n")
+            _log(msg, function)
             delay = int(contents["shutdown_delay"])
-            data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: 30")
-            put_user_data(i["id"], data)
+            data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: 31")
+            put_metadata(i["id"], data)
             continue
 
     return ("Job\'s done.")
