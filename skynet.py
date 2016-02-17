@@ -189,7 +189,7 @@ if __name__ == '__main__':
         usage(" ".join(args.help))
     try:
         f = getattr(actions, args.action)
-        print(f(args.user))
-
     except AttributeError:
         usage(args.action)
+
+    print(f(args.user))

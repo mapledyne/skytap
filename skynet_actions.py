@@ -315,11 +315,11 @@ def env(_=None):
         "1111664"
     ]
     """
-    json_output = _json.loads(users())
+    json_output = _api.rest("/v2/configurations?scope=company")
     envs = []
-    for j in json_output:
-        envs = envs + user_env(j.get('id'))
-    return _json.dumps(envs)
+    for j in _json.loads(json_output):
+        envs.append(j['id'])
+    return _json.dumps(envs, indent=4)
 
 
 def env_full(_=None):
@@ -347,11 +347,7 @@ def env_full(_=None):
       }
     ]
     """
-    json_output = _json.loads(users())
-    envs = []
-    for j in json_output:
-        envs = envs + user_env_full(j.get('id'))
-    return _json.dumps(envs)
+    return _api.rest("/v2/configurations?scope=company")
 
 
 def user_env(user_id):
@@ -471,81 +467,13 @@ def vms(environment):
           "name": "Load Balance",
           "runstate": "running",
           "hardware": {
-            "cpus": 2,
-            "supports_multicore": false,
-            "cpus_per_socket": 1,
-            "ram": 2048,
-            "svms": 2,
-            "guestOS": "centos-64",
-            "max_cpus": 12,
-            "min_ram": 256,
-            "max_ram": 131072,
-            "vnc_keymap": null,
-            "uuid": null,
-            "disks": [
-              {
-                "id": "disk-2661512-6214440-scsi-0-0",
-                "size": 25600,
-                "type": "SCSI",
-                "controller": "0",
-                "lun": "0"
-              },
-              {
-                "id": "disk-2661512-6214440-scsi-0-1",
-                "size": 25600,
-                "type": "SCSI",
-                "controller": "0",
-                "lun": "1"
-              }
-            ],
-            "storage": 51200,
-            "upgradable": true,
-            "instance_type": null,
-            "time_sync_enabled": true,
-            "copy_paste_enabled": true,
-            "nested_virtualization": false
+          ... hardware info ...
           },
           "error": false,
           "asset_id": null,
           "interfaces": [
             {
-              "id": "nic-2661512-6214440-0",
-              "ip": "192.168.1.1",
-              "hostname": "lb",
-              "mac": "00:50:56:03:ad:fc",
-              "services_count": 1,
-              "services": [
-                {
-                  "id": "8446",
-                  "internal_port": 8446,
-                  "external_ip": "services-uswest.skytap.com",
-                  "external_port": 25594
-                }
-              ],
-              "public_ips_count": 0,
-              "public_ips": [],
-              "vm_id": "6142798",
-              "vm_name": "Load Balance",
-              "status": "Running",
-              "nat_addresses": {
-                "network_nat_addresses": [
-                  {
-                    "network_id": 1153576,
-                    "ip_address": "192.168.80.147"
-                  }
-                ],
-                "vpn_nat_addresses": [
-                  {
-                    "vpn_id": "vpn-661182",
-                    "ip_address": "172.16.0.153"
-                  }
-                ]
-              },
-              "network_id": "2825244",
-              "network_name": "Default",
-              "network_type": "automatic",
-              "network_subnet": "192.168.1.0/24",
-              "nic_type": "e1000"
+            ... interface info ...
             }
           ],
           "notes": [],

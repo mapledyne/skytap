@@ -1,4 +1,5 @@
 """Functions needed to access the skynet api."""
+import json
 import sys
 
 try:
@@ -16,6 +17,9 @@ token = ""
 user = ""
 base_url = ""
 control_dir = ""
+last_headers = None
+last_status = 0
+last_range = 0
 
 
 def load_file(fname):
@@ -25,53 +29,82 @@ def load_file(fname):
 
 
 def rest(url, req='get', data=None):
-    """Main function to be called from this module.
+    """Call the REST API, returning all results.
 
-    send a request using method 'req' and to the url. the _rest() function
-    will add the base_url to this, so 'url' should be something like '/ips'.
+    This calls the actual REST API, then checks the returning headers in
+    case there is a range returned, implying that the full range wasn't
+    returned originally. If there's a range, then make a second call asking for
+    everything.
+
+    This defeats the pagination that Skytap uses in their v2 API, but is useful
+    for us given how we use the API.
     """
-    return _rest(req, base_url + url, data)
+    first_call = _rest(req, base_url + url, data)
+    if last_range == 0:
+        return first_call
+
+    new_url = url
+    if "?" not in new_url:
+        new_url += "?"
+    else:
+        new_url += "&"
+    new_url += "count=" + str(last_range) + "&offset=0"
+
+    return _rest(req, base_url + new_url, data)
 
 
 def _rest(req, url, data=None):
     """Send a rest rest request to the server."""
-#     if len(argv) < 4:
-#         rest_usage()
-
-    if 'HTTPS' not in url.upper():
-        print("Secure connection required: Please use HTTPS or https")
-        return ""
-
-    cmd = req.upper()
-    if cmd not in cmds.keys():
-        return ""
-
-    status, body = cmds[cmd](url, data)
-    if int(status) == 200:
-        # json_output = json.loads(body)
-        # print json.dumps(json_output, indent = 4)
-        return body
-    else:
-        print("Oops!  Error: status: %s\n%s\n" % (status, body))
-
-
-def _api_get(url, _=None):
-    url, name, passwd = url, user, token
+    global last_status, last_headers, last_range
 
     requisite_headers = {'Accept': 'application/json',
                          'Content-Type': 'application/json'}
-    auth = (name, passwd)
+
+    auth = (user, token)
+
+    if 'HTTPS' not in url.upper():
+        return "Secure connection required: Please use HTTPS or https"
+
+    cmd = req.upper()
+    if cmd not in cmds.keys():
+        return "Command type (" + cmd + ") not recognized."
+
+#    status, body = cmds[cmd](url, data)
+    response = cmds[cmd](url,
+                         headers=requisite_headers,
+                         auth=auth,
+                         params=data)
+
+    last_status = response.status_code
+    last_headers = response.headers
+    last_range = 0
+    if "content-range" in last_headers:
+        last_range = last_headers["content-range"].split("/")[1]
+
+    if int(response.status_code) != 200:
+        return "Oops!  Error: status: %s\n%s\n" % (last_status, response.text)
+
+    return json.dumps(json.loads(response.text), indent=4)
+
+
+def _api_get(url, _=None):
+    global last_status, last_headers, last_range
+
+    auth = (user, token)
 
     response = requests.get(url, headers=requisite_headers, auth=auth)
 
+    last_status = response.status_code
+    last_headers = response.headers
+    last_range = 0
+    if "content-range" in last_headers:
+        last_range = last_headers["content-range"].split("/")[1]
     return response.status_code, response.text
 
 
 def _api_put(url, data):
     url, name, passwd = url, user, token
 
-    requisite_headers = {'Accept': 'application/json',
-                         'Content-Type': 'application/json'}
     auth = (name, passwd)
 
     response = requests.put(url, headers=requisite_headers,
@@ -83,8 +116,6 @@ def _api_put(url, data):
 def _api_post(url, data=None):
     url, name, passwd = url, user, token
 
-    requisite_headers = {'Accept': 'application/json',
-                         'Content-Type': 'application/json'}
     auth = (name, passwd)
 
     response = requests.post(url, headers=requisite_headers,
@@ -96,8 +127,6 @@ def _api_post(url, data=None):
 def _api_del(url, _=None):
     url, name, passwd = url, user, token
 
-    requisite_headers = {'Accept': 'application/json',
-                         'Content-Type': 'application/json'}
     auth = (name, passwd)
 
     response = requests.delete(url, headers=requisite_headers, auth=auth)
@@ -105,8 +134,8 @@ def _api_del(url, _=None):
     return response.status_code, response.text
 
 cmds = {
-    "GET": _api_get,
-    "PUT": _api_put,
-    "POST": _api_post,
-    "DELETE": _api_del
+    "GET": requests.get,
+    "PUT": requests.put,
+    "POST": requests.post,
+    "DELETE": requests.delete
 }
