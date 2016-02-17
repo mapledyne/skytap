@@ -20,7 +20,7 @@ def _log(content='', function=''):
 
     msg = ("" + month + " " + day + " " + time + " skynet:" + function + " "
            "" + content)
-    with open("~/skynet/skylog.txt", "a") as file:
+    with open("skylog.txt", "a") as file:
         file.write(msg)
 
     return ("New data written to log.")
@@ -122,7 +122,7 @@ def check_metadata(_=None):
 
     function = "check_metadata"
 
-    msg = ("Start time: " + str(date.hour) + ":" + str(date.minute) + "\n")
+    msg = ("Start time: " + str(date.hour) + ":" + str(date.minute) + " UTC\n")
     _log(msg, function)
 
     for i in env_list:
