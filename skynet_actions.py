@@ -119,8 +119,6 @@ def init_metadata(_=None):
 
         # If there's no metadata, create the template.
         if not data["contents"]:
-            print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " "
-                   "is empty. Writing template...")
             data["contents"] = ("# Invalid entries will be reset.\n"
                                 "# See related Confluence metadata page for "
                                 "help.\n"
@@ -145,13 +143,13 @@ def init_metadata(_=None):
         new_content += ("" + contents)
 
         if data["contents"] != new_content:
-            print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " has "
-                   "existing data. Appending template...")
+            #print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " has "
+            #       "existing data. Appending template...")
             data["contents"] = new_content
             put_metadata(i["id"], data)
         else:
-            print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " has "
-                   "not been changed (up-to-date).")
+            #print ("Metadata for " + i["name"] + " - ID: " + i["id"] + " has "
+            #       "not been changed (up-to-date).")
             continue
 
 
@@ -188,8 +186,8 @@ def check_metadata(_=None):
 
             data = yaml.load(get_metadata(i["id"]))
 
-            contents = yaml.load(data["contents"])
-        except yaml.scanner.ScannerError:
+            contents = yaml.safe_load["contents"]
+        except (yaml.scanner.ScannerError, yaml.parser.ParserError):
             msg = ("Invalid YAML in " + i["name"] + " - ID: "
                    "" + i["id"] + "! Sending error report.\n")
             _log(msg, function)
