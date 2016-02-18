@@ -288,7 +288,7 @@ def check_metadata(_=None):
     _log("Invalid metadata instances caught: " + str(invalid_count), function)
 
 
-def update_metadata():
+def update_metadata(_=None):
     """Run metadata processes in intended order (to be run every hour)."""
     init_metadata()
     check_metadata()
