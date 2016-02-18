@@ -28,6 +28,10 @@ def _log(content='', function=''):
 
 def suspend_one(id):
     """Suspend an environment."""
+    function = "suspend_one"
+    msg = ("Shutting down environment - ID: " + id)
+    _log(msg, function)
+
     data = {'runstate': 'suspended'}
     return _api.rest('/configurations/' + id + '.json', 'PUT',
                      data=data)
@@ -189,6 +193,7 @@ def check_metadata(_=None):
 
         # Check if this is an un-templated environment (no shutdown_delay or
         # shutdown_time).
+        # If you run update_metadata, this error should never be encountered.
         if (not contents or "shutdown_time" not in data["contents"] or
                 "shutdown_delay" not in data["contents"]):
             msg = ("In " + i["name"] + " - ID: " + i["id"] + ": Missing "
@@ -238,17 +243,11 @@ def check_metadata(_=None):
         if int(contents["shutdown_time"]) == time:
             # If delay is 0, shut it down.
             if int(contents["shutdown_delay"]) == 0:
-                msg = ("Shutting down " + i["name"] + " - ID: "
-                       "" + i["id"] + ".\n")
                 suspend_one(i["id"])
-                _log(msg, function)
                 continue
             # If delay above 0 and equal to/under 31, decrement by 1.
             elif (int(contents["shutdown_delay"]) <= 31 and
                     int(contents["shutdown_delay"]) > 0):
-                msg = ("Decrementing shutdown delay of " + ""
-                       "" + i["name"] + " - ID: " + i["id"] + ".\n")
-                _log(msg, function)
                 delay = int(contents["shutdown_delay"])
                 data["contents"] = data["contents"].replace("shutdown_delay: "
                                                             "" + str(delay),
@@ -262,9 +261,6 @@ def check_metadata(_=None):
 
         # If delay is a negative number, change delay to 0 and do not shut down.
         if int(contents["shutdown_delay"]) < 0:
-            msg = ("Negative delay value found in " + i["name"] + ""
-                   " - ID: " + i["id"] + ". Restoring to 0.\n")
-            _log(msg, function)
             delay = int(contents["shutdown_delay"])
             data["contents"] = data["contents"].replace("shutdown_delay: "
                                                         "" + str(delay),
@@ -273,9 +269,6 @@ def check_metadata(_=None):
             continue
         # Else, if delay > 31, change to 31.
         elif int(contents["shutdown_delay"]) > 31:
-            msg = ("Invalid delay value found in " + i["name"] + ""
-                   " - ID: " + i["id"] + ". Restoring to 31.\n")
-            _log(msg, function)
             delay = int(contents["shutdown_delay"])
             data["contents"] = data["contents"].replace("shutdown_delay: "
                                                         "" + str(delay),
@@ -289,6 +282,7 @@ def update_metadata():
     init_metadata()
     check_metadata()
     return ("Job\'s done.")
+
 
 def vm_detail(vm_id):
     """Get the detailed information from a VM id."""
