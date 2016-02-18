@@ -186,7 +186,7 @@ def check_metadata(_=None):
 
             data = yaml.load(get_metadata(i["id"]))
 
-            contents = yaml.safe_load["contents"]
+            contents = yaml.safe_load("contents")
         except (yaml.scanner.ScannerError, yaml.parser.ParserError):
             msg = ("Invalid YAML in " + i["name"] + " - ID: "
                    "" + i["id"] + "! Sending error report.\n")
