@@ -20,7 +20,7 @@ You'll get back a JSON for the request, something like:
         "login_name": "kermit.frog@fulcrum.net",
         "first_name": "Kermit",
         "last_name": "The Frog",
-        "title": "",
+        "title": "Master of Ceremonies",
         "email": "kermit.frog@fulcrum.net",
         "created_at": "2012-01-02T12:43:05-08:00",
         "deleted": false
@@ -38,7 +38,22 @@ Or get help on an action by using:
 
 ## Installation
 
-Put all the files in a directory, then copy the `config_template.yml` file and rename the new file `config.yml`. There are a few variables you need to put in there to get the system configured, like the API key. Comments are in the file.
+Put all the files in a directory. Edit the config.yml to if there are changes to behavior you'd like.
+
+The config will also pull variables from your environment variables, matching anything in the config.yml. This allows you to specify your Skytap API token via the environment variable "SKYTAP_TOKEN" instead of putting it in the config file (it will replace the "token" variable from the config). It's very recommended you expose the user ("SKYTAP_USER") and token in this way, instead of putting those values in the config.yml file.
+
+The easiest way to do this is to create a `.skytap` file in your home (`~/.skytap`) and source the file from your `.bash_profile` or similar file.
+
+For instance, add a line in your `~/.bash_profile`:
+
+    source ~/.skytap
+
+Then, create a new file called `~/.skytap` with the following:
+
+    export SKYTAP_USER=kermit.frog@fulcrum.net
+    export SKYTAP_TOKEN=22afe22616dab53a6773733be273fe7a663b4
+
+This will protect your user and token information from someone reading the config file separately, and make it easier to share your config or script changes without fear of exposing your API token.
 
 ## New actions
 
