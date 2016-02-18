@@ -173,6 +173,10 @@ def check_metadata(_=None):
 
     function = "check_metadata"
 
+    perm_exclusions_count = 0
+    shut_down_count = 0
+    invalid_count = 0
+
     msg = (" ---- START: " + str(date.hour) + ":" + str(date.minute) + " UTC\n")
     _log(msg, function)
 
@@ -189,6 +193,7 @@ def check_metadata(_=None):
             msg = ("Invalid YAML in " + i["name"] + " - ID: "
                    "" + i["id"] + "! Sending error report.\n")
             _log(msg, function)
+            invalid_count += 1
             continue
 
         # Check if this is an un-templated environment (no shutdown_delay or
@@ -207,6 +212,7 @@ def check_metadata(_=None):
             msg = ("Permanent exclusion for " + i["name"] + " - ID: "
                    "" + i["id"] + " found. Skipping...\n")
             _log(msg, function)
+            perm_exclusions_count += 1
             continue
 
         # Is shutdown_time valid?
@@ -244,6 +250,7 @@ def check_metadata(_=None):
             # If delay is 0, shut it down.
             if int(contents["shutdown_delay"]) == 0:
                 suspend_one(i["id"])
+                shut_down_count += 1
                 continue
             # If delay above 0 and equal to/under 31, decrement by 1.
             elif (int(contents["shutdown_delay"]) <= 31 and
@@ -275,6 +282,10 @@ def check_metadata(_=None):
                                                         "shutdown_delay: 31")
             put_metadata(i["id"], data)
             continue
+
+    _log("Environments suspended: " + str(shut_down_count), function)
+    _log("Permanent exclusions found: " + str(perm_exclusions_count), function)
+    _log("Invalid metadata instances caught: " + str(invalid_count), function)
 
 
 def update_metadata():
