@@ -1,5 +1,6 @@
 """Functions needed to access the skynet api."""
 import json
+from skynet_config import config
 import sys
 
 try:
@@ -13,13 +14,16 @@ except ImportError:
 
 requests.packages.urllib3.disable_warnings()
 
-token = ""
-user = ""
-base_url = ""
-control_dir = ""
 last_headers = None
 last_status = 0
 last_range = 0
+
+cmds = {
+    "GET": requests.get,
+    "PUT": requests.put,
+    "POST": requests.post,
+    "DELETE": requests.delete
+}
 
 
 def load_file(fname):
@@ -39,7 +43,7 @@ def rest(url, req='get', data=None):
     This defeats the pagination that Skytap uses in their v2 API, but is useful
     for us given how we use the API.
     """
-    first_call = _rest(req, base_url + url, data)
+    first_call = _rest(req, config.base_url + url, data)
     if last_range == 0:
         return first_call
 
@@ -50,7 +54,7 @@ def rest(url, req='get', data=None):
         new_url += "&"
     new_url += "count=" + str(last_range) + "&offset=0"
 
-    return _rest(req, base_url + new_url, data)
+    return _rest(req, config.base_url + new_url, data)
 
 
 def _rest(req, url, data=None):
@@ -60,8 +64,7 @@ def _rest(req, url, data=None):
     requisite_headers = {'Accept': 'application/json',
                          'Content-Type': 'application/json'}
 
-    auth = (user, token)
-
+    auth = (config.user, config.token)
     if 'HTTPS' not in url.upper():
         return "Secure connection required: Please use HTTPS or https"
 
@@ -85,57 +88,3 @@ def _rest(req, url, data=None):
         return "Oops!  Error: status: %s\n%s\n" % (last_status, response.text)
 
     return json.dumps(json.loads(response.text), indent=4)
-
-
-def _api_get(url, _=None):
-    global last_status, last_headers, last_range
-
-    auth = (user, token)
-
-    response = requests.get(url, headers=requisite_headers, auth=auth)
-
-    last_status = response.status_code
-    last_headers = response.headers
-    last_range = 0
-    if "content-range" in last_headers:
-        last_range = last_headers["content-range"].split("/")[1]
-    return response.status_code, response.text
-
-
-def _api_put(url, data):
-    url, name, passwd = url, user, token
-
-    auth = (name, passwd)
-
-    response = requests.put(url, headers=requisite_headers,
-                            auth=auth, params=data)
-
-    return response.status_code, response.text
-
-
-def _api_post(url, data=None):
-    url, name, passwd = url, user, token
-
-    auth = (name, passwd)
-
-    response = requests.post(url, headers=requisite_headers,
-                             auth=auth, data=data)
-
-    return response.status_code, response.text
-
-
-def _api_del(url, _=None):
-    url, name, passwd = url, user, token
-
-    auth = (name, passwd)
-
-    response = requests.delete(url, headers=requisite_headers, auth=auth)
-
-    return response.status_code, response.text
-
-cmds = {
-    "GET": requests.get,
-    "PUT": requests.put,
-    "POST": requests.post,
-    "DELETE": requests.delete
-}

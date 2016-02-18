@@ -9,6 +9,7 @@ import textwrap
 
 import skynet_actions as actions
 import skynet_api as api
+from skynet_config import config
 
 try:
     import yaml
@@ -41,13 +42,6 @@ except IOError:
                      "and then try again.\nFor reference, check config_" +
                      "template.yml and follow the listed guidelines.\n")
     exit(1)
-
-api.base_url = config_data["base_url"]
-api.user = config_data["user"]
-api.token = config_data["token"]
-api.control_dir = config_data["control_dir"]
-
-working_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 
 def rest_usage():
