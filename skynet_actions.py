@@ -26,6 +26,13 @@ def _log(content='', function=''):
     return ("New data written to log.")
 
 
+def suspend_one(id):
+    """Suspend an environment."""
+    data = {'runstate': 'suspended'}
+    return _api.rest('/configurations/' + id + '.json', 'PUT',
+                     data=data)
+
+
 def put_metadata(id, content='none'):
     """Get info on metadata for specific environment. Takes 2 parameters."""
     return _api.rest('/v2/configurations/' + id + '/user_data.json', 'PUT',
@@ -43,10 +50,52 @@ def purge_metadata(_=None):
 
     content = {"contents": ""}
 
-    for i in env_list:
-        put_metadata(i["id"], content)
+    print ("Are you sure you want to do this? All metadata will be erased.")
+    print ("Uncomment the code in purge_metadata if you want to continue.")
 
-    return "Job\'s done."
+    # for i in env_list:
+    #     put_metadata(i["id"], content)
+
+    return ("Job\'s done.")
+
+
+def check_comments_metadata(id):
+    """Check comments from environment metadata and fix them if necessary."""
+    try:
+        import yaml
+    except ImportError:
+        sys.stderr.write("You do not have the 'yaml' module installed. ",
+                         "Please see http://pyyaml.org/wiki/",
+                         "PyYAMLDocumentation for more information.")
+        exit(1)
+
+    contents = yaml.load(get_metadata(id))["contents"]
+
+    lines = contents.split("\n")
+
+    new_content = ""
+
+    comments = ["# Invalid entries will be reset.",
+                "# See related Confluence metadata page for help.",
+                "# Ex.: \"3\" = 3 A.M. UTC",
+                "# Number of days remaining before shutdown, max 31"]
+
+    for i in range(len(comments)):
+        if not lines[i].endswith(comments[i]):
+            new_content += ("" + lines[i].rsplit("#")[0] + comments[i] + "\n")
+        else:
+            new_content += ("" + lines[i] + "\n")
+
+    for i in range(len(comments), len(lines)):
+        new_content += ("" + lines[i] + "\n")
+
+    new_content = new_content[:-1]
+
+    if contents != new_content:
+        data = {"contents": new_content}
+        put_metadata(id, data)
+
+    return new_content
 
 
 def init_metadata(_=None):
@@ -101,8 +150,6 @@ def init_metadata(_=None):
                    "not been changed (up-to-date).")
             continue
 
-    return ("Job\'s done.")
-
 
 def check_metadata(_=None):
     """Get metadata of all environments and act based on the data written."""
@@ -122,24 +169,27 @@ def check_metadata(_=None):
 
     function = "check_metadata"
 
-    msg = ("Start time: " + str(date.hour) + ":" + str(date.minute) + " UTC\n")
+    msg = (" ---- START: " + str(date.hour) + ":" + str(date.minute) + " UTC\n")
     _log(msg, function)
 
     for i in env_list:
         # Check values of shutdown_delay and shutdown_time and act based on
         # them (shut down environment, count down delay, etc.)
-        data = yaml.load(get_metadata(i["id"]))
         try:
+            check_comments_metadata(i["id"])
+
+            data = yaml.load(get_metadata(i["id"]))
+
             contents = yaml.load(data["contents"])
         except yaml.scanner.ScannerError:
             msg = ("Invalid YAML in " + i["name"] + " - ID: "
-                   "" + i["id"] + "! Sending error report.\n\n")
+                   "" + i["id"] + "! Sending error report.\n")
             _log(msg, function)
             continue
 
         # Check if this is an un-templated environment (no shutdown_delay or
         # shutdown_time).
-        if ("shutdown_time" not in data["contents"] or
+        if (not contents or "shutdown_time" not in data["contents"] or
                 "shutdown_delay" not in data["contents"]):
             msg = ("In " + i["name"] + " - ID: " + i["id"] + ": Missing "
                    "shutdown_time and/or shutdown_delay. Run update process"
@@ -148,9 +198,9 @@ def check_metadata(_=None):
             continue
 
         # "-" in shutdown_time means permanent exclusion.
-        if contents["shutdown_time"] == "-":
+        if not contents["shutdown_time"]:
             msg = ("Permanent exclusion for " + i["name"] + " - ID: "
-                   "" + i["id"] + " found. Skipping...\n\n")
+                   "" + i["id"] + " found. Skipping...\n")
             _log(msg, function)
             continue
 
@@ -159,13 +209,16 @@ def check_metadata(_=None):
             # Check if shutdown_time is not a valid time
             if (int(contents["shutdown_time"]) > 23 or
                     int(contents["shutdown_time"] < 0)):
-                new_content = "shutdown_time: " + sd_time, "shutdown_time: 3"
-                data["contents"] = data["contents"].replace(new_content)
+                sd_time = str(contents["shutdown_time"])
+                data["contents"] = data["contents"].replace("shutdown_time: "
+                                                            "" + sd_time,
+                                                            "shutdown_time: 3")
                 put_metadata(i["id"], data)
         except ValueError:
-            sd_time = contents["shutdown_time"]
-            new_content = "shutdown_time: " + sd_time, "shutdown_time: 3"
-            data["contents"] = data["contents"].replace(new_content)
+            sd_time = str(contents["shutdown_time"])
+            data["contents"] = data["contents"].replace("shutdown_time: "
+                                                        "" + sd_time,
+                                                        "shutdown_time: 3")
             put_metadata(i["id"], data)
 
         # Is shutdown_delay valid?
@@ -173,8 +226,9 @@ def check_metadata(_=None):
             int(contents["shutdown_delay"])
         except ValueError:
             delay = contents["shutdown_delay"]
-            new_content = "shutdown_delay: " + delay, "shutdown_delay: 0"
-            data["contents"] = data["contents"].replace(new_content)
+            data["contents"] = data["contents"].replace("shutdown_delay: "
+                                                        "" + delay,
+                                                        "shutdown_delay: 0")
             put_metadata(i["id"], data)
 
         # This will load the current contents after the changes made above.
@@ -185,17 +239,21 @@ def check_metadata(_=None):
             # If delay is 0, shut it down.
             if int(contents["shutdown_delay"]) == 0:
                 msg = ("Shutting down " + i["name"] + " - ID: "
-                       "" + i["id"] + ".\n\n")
+                       "" + i["id"] + ".\n")
+                suspend_one(i["id"])
                 _log(msg, function)
                 continue
             # If delay above 0 and equal to/under 31, decrement by 1.
             elif (int(contents["shutdown_delay"]) <= 31 and
                     int(contents["shutdown_delay"]) > 0):
                 msg = ("Decrementing shutdown delay of " + ""
-                       "" + i["name"] + " - ID: " + i["id"] + ".\n\n")
+                       "" + i["name"] + " - ID: " + i["id"] + ".\n")
                 _log(msg, function)
                 delay = int(contents["shutdown_delay"])
-                data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: " + str(delay - 1))
+                data["contents"] = data["contents"].replace("shutdown_delay: "
+                                                            "" + str(delay),
+                                                            "shutdown_delay: "
+                                                            "" + str(delay - 1))
                 put_metadata(i["id"], data)
                 continue
 
@@ -205,24 +263,32 @@ def check_metadata(_=None):
         # If delay is a negative number, change delay to 0 and do not shut down.
         if int(contents["shutdown_delay"]) < 0:
             msg = ("Negative delay value found in " + i["name"] + ""
-                   " - ID: " + i["id"] + ". Restoring to 0.\n\n")
+                   " - ID: " + i["id"] + ". Restoring to 0.\n")
             _log(msg, function)
             delay = int(contents["shutdown_delay"])
-            data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: 0")
+            data["contents"] = data["contents"].replace("shutdown_delay: "
+                                                        "" + str(delay),
+                                                        "shutdown_delay: 0")
             put_metadata(i["id"], data)
             continue
         # Else, if delay > 31, change to 31.
         elif int(contents["shutdown_delay"]) > 31:
             msg = ("Invalid delay value found in " + i["name"] + ""
-                   " - ID: " + i["id"] + ". Restoring to 31.\n\n")
+                   " - ID: " + i["id"] + ". Restoring to 31.\n")
             _log(msg, function)
             delay = int(contents["shutdown_delay"])
-            data["contents"] = data["contents"].replace("shutdown_delay: " + str(delay), "shutdown_delay: 31")
+            data["contents"] = data["contents"].replace("shutdown_delay: "
+                                                        "" + str(delay),
+                                                        "shutdown_delay: 31")
             put_metadata(i["id"], data)
             continue
 
-    return ("Job\'s done.")
 
+def update_metadata():
+    """Run metadata processes in intended order (to be run every hour)."""
+    init_metadata()
+    check_metadata()
+    return ("Job\'s done.")
 
 def vm_detail(vm_id):
     """Get the detailed information from a VM id."""
