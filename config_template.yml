@@ -12,3 +12,4 @@ token:          <api_token>                                             # API To
 
 working_dir:    <path to skynet.py>                                     # this is the path to the skynet.py file
 control_dir:    <path to skytap-control repository>                     # this is the path to the skytap-control directory
+log_level:      20                                # For the logger. Valid values are 0 (all messages) to 50 (critical messages only). 

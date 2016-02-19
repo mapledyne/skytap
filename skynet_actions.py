@@ -6,8 +6,29 @@ function is the name of the action as exposed to the user.
 """
 
 import datetime as _datetime
+from functools import wraps
 import json as _json
+import logging as _logging
 import skynet_api as _api
+from skynet_config import config as _config
+
+try:  # Python 2.7+
+    from logging import NullHandler as _NullHandler
+except ImportError:
+    class _NullHandler(logging.Handler):
+        def emit(self, record):
+            pass
+
+_logging.getLogger(__name__).addHandler(_NullHandler())
+_logger = _logging.getLogger()
+_handler = _logging.StreamHandler()
+_formatter = _logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+_handler.setFormatter(_formatter)
+_logger.addHandler(_handler)
+_logger.setLevel(_config.log_level)
+_logging.getLogger("requests").setLevel(_logging.WARNING)
+if (_config.log_level < _logging.INFO):
+    _logging.getLogger("requests").setLevel(_config.log_level)
 
 
 def _log(content='', function=''):
@@ -26,6 +47,15 @@ def _log(content='', function=''):
     return ("New data written to log.")
 
 
+def _log_action(func):
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        _logger.info('Running action: ' + func.__name__ + '(' + args[0] + ')')
+        return func(*args, **kwargs)
+    return decorator
+
+
+@_log_action
 def suspend_one(id):
     """Suspend an environment."""
     function = "suspend_one"
@@ -37,17 +67,20 @@ def suspend_one(id):
                      data=data)
 
 
+@_log_action
 def put_metadata(id, content='none'):
     """Get info on metadata for specific environment. Takes 2 parameters."""
     return _api.rest('/v2/configurations/' + id + '/user_data.json', 'PUT',
                      data=content)
 
 
+@_log_action
 def get_metadata(id):
     """Get info on metadata for specific environment."""
     return _api.rest('/v2/configurations/' + id + '/user_data.json')
 
 
+@_log_action
 def purge_metadata(_=None):
     """Purge metadata from all environments."""
     env_list = _json.loads(env_full())
@@ -63,6 +96,7 @@ def purge_metadata(_=None):
     return ("Job\'s done.")
 
 
+@_log_action
 def check_comments_metadata(id):
     """Check comments from environment metadata and fix them if necessary."""
     try:
@@ -102,6 +136,7 @@ def check_comments_metadata(id):
     return new_content
 
 
+@_log_action
 def init_metadata(_=None):
     """Initialize shutdown_delay and shutdown_time for metadata."""
     try:
@@ -153,6 +188,7 @@ def init_metadata(_=None):
             continue
 
 
+@_log_action
 def check_metadata(_=None):
     """Get metadata of all environments and act based on the data written."""
 
@@ -293,6 +329,7 @@ def check_metadata(_=None):
     _log("Invalid metadata instances caught: " + str(invalid_count), function)
 
 
+@_log_action
 def update_metadata(_=None):
     """Run metadata processes in intended order (to be run every hour)."""
     init_metadata()
@@ -300,26 +337,31 @@ def update_metadata(_=None):
     return ("Job\'s done.")
 
 
+@_log_action
 def vm_detail(vm_id):
     """Get the detailed information from a VM id."""
     return _api.rest('/vms/' + vm_id)
 
 
+@_log_action
 def projects(_):
     """Get info on the projects and environments in them."""
     return _api.rest('/v2/projects?count=100&offset=0')
 
 
+@_log_action
 def project(project_id):
     """Get info on the specifed project id."""
     return _api.rest('/v2/projects/' + project_id)
 
 
+@_log_action
 def project_full(project_id):
     """Get configuration info on the specifed project id."""
     return _api.rest('/v2/projects/' + project_id + '/configurations/')
 
 
+@_log_action
 def exclusions(_):
     """Get list of exclusions from the exclusions file.
 
@@ -344,6 +386,7 @@ def exclusions(_):
     return unicode_exclusions
 
 
+@_log_action
 def suspend(_):
     """Suspend the appropriate configurations.
 
@@ -365,6 +408,7 @@ def suspend(_):
                   'PUT', data=data)
 
 
+@_log_action
 def vpns(_=None):
     """Get list of all VPNs.
 
@@ -373,6 +417,7 @@ def vpns(_=None):
     return _api.rest('/vpns.json')
 
 
+@_log_action
 def vpn(vpn_id):
     """Get list of one VPN detail set.
 
@@ -381,6 +426,7 @@ def vpn(vpn_id):
     return _api.rest('/vpns/' + vpn_id)
 
 
+@_log_action
 def env(_=None):
     """Return a simple list of environments (configurations).
 
@@ -398,6 +444,7 @@ def env(_=None):
     return _json.dumps(envs, indent=4)
 
 
+@_log_action
 def env_full(_=None):
     """Return a detailed list of environments.
 
@@ -426,6 +473,7 @@ def env_full(_=None):
     return _api.rest("/v2/configurations?scope=company")
 
 
+@_log_action
 def user_env(user_id):
     """Get a list of environments associated with a particular user."""
     body = _api.rest('/users/' + user_id)
@@ -437,6 +485,7 @@ def user_env(user_id):
     return env_list
 
 
+@_log_action
 def user_env_full(user_id):
     """Get detailed environment details.
 
@@ -448,6 +497,7 @@ def user_env_full(user_id):
     return conf
 
 
+@_log_action
 def users(_=None):
     """Get the basic user list.
 
@@ -469,6 +519,7 @@ def users(_=None):
     return _api.rest('/users')
 
 
+@_log_action
 def quotas(_=None):
     """Get Skytap quotas and basic info on the Skytap service.
 
@@ -491,6 +542,7 @@ def quotas(_=None):
     return _api.rest('/company/quotas')
 
 
+@_log_action
 def ips(_=None):
     """Get all public IPs assigned by Skytap.
 
@@ -522,6 +574,7 @@ def ips(_=None):
     return _api.rest('/ips')
 
 
+@_log_action
 def vms(environment):
     """Get a list of VMs for a given environment.
 
