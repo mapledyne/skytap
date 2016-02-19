@@ -58,9 +58,6 @@ def _log_action(func):
 @_log_action
 def suspend_one(id):
     """Suspend an environment."""
-    function = "suspend_one"
-    msg = ("Shutting down environment - ID: " + id)
-    _log(msg, function)
 
     data = {'runstate': 'suspended'}
     return _api.rest('/configurations/' + id + '.json', 'PUT',
