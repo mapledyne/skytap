@@ -178,14 +178,18 @@ def check_metadata(_=None):
     msg = (" ---- START: " + str(date.hour) + ":" + str(date.minute) + " UTC\n")
     _log(msg, function)
 
+    # For every environment:
     for i in env_list:
         # Check values of shutdown_delay and shutdown_time and act based on
         # them (shut down environment, count down delay, etc.)
         try:
+            # Restore comments to normal if they have been modified.
             check_comments_metadata(i["id"])
 
+            # Load the contents YAML
             data = yaml.load(get_metadata(i["id"]))
 
+            # Load "contents" from contents YAML (metadata in YAML form)
             contents = yaml.safe_load(data["contents"])
         except (yaml.scanner.ScannerError, yaml.parser.ParserError):
             msg = ("Invalid YAML in " + i["name"] + " - ID: "
@@ -205,7 +209,8 @@ def check_metadata(_=None):
             _log(msg, function)
             continue
 
-        # "-" in shutdown_time means permanent exclusion.
+        # If "shutdown_time" has no value (but the string is still in contents)
+        # then acknowledge as a permanent exclusion and do nothing.
         if not contents["shutdown_time"]:
             msg = ("Permanent exclusion for " + i["name"] + " - ID: "
                    "" + i["id"] + " found. Skipping...\n")
@@ -218,12 +223,14 @@ def check_metadata(_=None):
             # Check if shutdown_time is not a valid time
             if (int(contents["shutdown_time"]) > 23 or
                     int(contents["shutdown_time"] < 0)):
+                # Replace the shutdown_time string with the default.
                 sd_time = str(contents["shutdown_time"])
                 data["contents"] = data["contents"].replace("shutdown_time: "
                                                             "" + sd_time,
                                                             "shutdown_time: 3")
                 put_metadata(i["id"], data)
         except ValueError:
+            # The value is not an int: replace with default
             sd_time = str(contents["shutdown_time"])
             data["contents"] = data["contents"].replace("shutdown_time: "
                                                         "" + sd_time,
@@ -234,6 +241,7 @@ def check_metadata(_=None):
         try:
             int(contents["shutdown_delay"])
         except ValueError:
+            # The value is not an int; replace with default
             delay = contents["shutdown_delay"]
             data["contents"] = data["contents"].replace("shutdown_delay: "
                                                         "" + delay,
@@ -245,7 +253,7 @@ def check_metadata(_=None):
 
         # Is it shutdown time?
         if int(contents["shutdown_time"]) == time:
-            # If delay is 0, shut it down.
+            # If delay is 0, time's up; shut it down.
             if int(contents["shutdown_delay"]) == 0:
                 suspend_one(i["id"])
                 shut_down_count += 1
@@ -262,8 +270,7 @@ def check_metadata(_=None):
                 continue
 
         # If it is not shutdown time or neither of the above checks passed,
-        # do these checks.
-
+        # do these checks:
         # If delay is a negative number, change delay to 0 and do not shut down.
         if int(contents["shutdown_delay"]) < 0:
             delay = int(contents["shutdown_delay"])
