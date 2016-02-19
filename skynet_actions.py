@@ -6,7 +6,7 @@ function is the name of the action as exposed to the user.
 """
 
 import datetime as _datetime
-from functools import wraps
+from functools import wraps as _wraps
 import json as _json
 import logging as _logging
 import skynet_api as _api
@@ -48,7 +48,7 @@ def _log(content='', function=''):
 
 
 def _log_action(func):
-    @wraps(func)
+    @_wraps(func)
     def decorator(*args, **kwargs):
         _logger.info('Running action: ' + func.__name__ + '(' + args[0] + ')')
         return func(*args, **kwargs)
