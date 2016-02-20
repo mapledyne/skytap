@@ -93,7 +93,7 @@ class ApiClient(object):
             new_url += "?"
         else:
             new_url += "&"
-        new_url += "count=" + str(last_range) + "&offset=0"
+        new_url += "count=" + str(self.last_range) + "&offset=0"
 
         return self._rest(req, self.base_url + new_url, data)
 

@@ -49,25 +49,24 @@ class Config(object):
                             }
 
         self.config_path = config_path
-        try:
+        if os.path.isfile(self.config_path):
             with open(self.config_path) as f:
                 config_yaml = yaml.safe_load(f)
-        except IOError:
-            logging.warning('No config file found (searched for: ' +
+            for key in config_yaml:
+                self.config_data[key] = config_yaml[key]
+        else:
+            logging.debug('No config file found (searched for: ' +
                             config_path + ').')
-
-        for key in config_yaml:
-            self.config_data[key] = config_yaml[key]
 
         for key in self.config_data:
             env_val = "SKYTAP_" + key.upper()
             if env_val in os.environ:
                 self.config_data[key] = os.environ[env_val]
 
-        logger.setLevel(self.log_level)
+        logger.setLevel(int(self.log_level))
         logging.getLogger("requests").setLevel(logging.WARNING)
-        if (self.log_level < logging.INFO):
-            logging.getLogger("requests").setLevel(self.log_level)
+        if (int(self.log_level) < logging.INFO):
+            logging.getLogger("requests").setLevel(int(self.log_level))
 
     def __getattr__(self, key):
         """Make the config values accessible.
