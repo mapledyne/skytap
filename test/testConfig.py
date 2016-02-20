@@ -12,7 +12,7 @@ class TestConfig(unittest.TestCase):
     def setUp(self):
         self.config = Config()
 
-    def test_basic_api_check(self):
+    def test_basic_config_check(self):
         self.assertTrue(len(self.config.user) > 0, 'Skytap user missing. ' +
                         'Define SKYTAP_USER env variable.')
         self.assertTrue(len(self.config.token) > 0, 'Skytap token missing. ' +
