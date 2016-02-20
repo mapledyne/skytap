@@ -1,3 +1,4 @@
+from collections import Iterator
 from skytap.framework.ApiClient import ApiClient
 import json
 
@@ -5,6 +6,7 @@ class SkytapGroup(ApiClient):
     def __init__(self):
         super(SkytapGroup, self).__init__()
         self.data = {}
+        self.itercount = 0
 
     def load_list_from_api(self, url, target):
         self.data = {}
@@ -32,10 +34,14 @@ class SkytapGroup(ApiClient):
         return self.data[key]
 
     def __iter__(self):
-        return iter(self.data)
+        return self
 
     def next(self):
-        return next(self.data)
+        if self.itercount >= len(self.data):
+            raise StopIteration
+        n = self.data.keys()[self.itercount]
+        self.itercount += 1
+        return self.data[n]
 
     def keys(self):
         return self.data.keys()

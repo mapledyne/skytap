@@ -11,10 +11,9 @@ requests.packages.urllib3.disable_warnings()
 class ApiClient(object):
 
     def __init__(self):
-        config = Config()
-        self.base_url = config.base_url
-        self.api_user = config.user
-        self.api_token = config.token
+        self.base_url = Config.base_url
+        self.api_user = Config.user
+        self.api_token = Config.token
 
         if not self.base_url:
             raise ValueError('Invalid base_url')

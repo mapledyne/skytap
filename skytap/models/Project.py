@@ -9,3 +9,7 @@ class Project(SkytapResource):
 
     def _calculate_custom_data(self):
         self.users = Users(self.users)
+        for user in self.users:
+            if user.url == self.owner_url:
+                self.owner_name = user.name
+                break

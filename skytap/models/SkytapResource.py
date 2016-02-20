@@ -39,7 +39,7 @@ class SkytapResource(object):
         return int(self) < int(other)
 
     def __hash__(self):
-        return hash(data)
+        return hash(self.data)
 
     def __eq__(self, other):
         return hash(self) == hash(other)

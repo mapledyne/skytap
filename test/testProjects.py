@@ -18,8 +18,11 @@ class TestProjects(unittest.TestCase):
                         'Project list is empty.')
         # Iterate over the list.
         for p in self.projects:
-            a_project = str(self.projects[p])  # test string conversion
+            self.project_check(p)  # test string conversion
 
-        # Get a random projet to get this and do ... something with it to check.
-        one_prj = self.projects[random.choice(list(self.projects.keys()))]
-        print one_prj.details()
+    def project_check(self, prj):
+        self.assertTrue(prj.id > 0, 'no project ID found.')
+        self.assertTrue(len(prj.name) > 0, prj.id + ': no name found.')
+        self.assertTrue(prj.user_count > 0, prj.name + ': no users found.')
+#        self.assertTrue(prj.configuration_count > 0, prj.name + ': no environments found.')
+        self.assertTrue(len(prj.details()), prj.name + ': no details found.')

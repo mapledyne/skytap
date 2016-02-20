@@ -10,15 +10,16 @@ from skytap.framework.Config import Config
 class TestConfig(unittest.TestCase):
 
     def setUp(self):
-        self.config = Config()
+        pass
 
     def test_basic_config_check(self):
-        self.assertTrue(len(self.config.user) > 0, 'Skytap user missing. ' +
+        self.assertTrue(len(Config) > 0, 'No config values found.')
+        self.assertTrue(len(Config.user) > 0, 'Skytap user missing. ' +
                         'Define SKYTAP_USER env variable.')
-        self.assertTrue(len(self.config.token) > 0, 'Skytap token missing. ' +
+        self.assertTrue(len(Config.token) > 0, 'Skytap token missing. ' +
                         'Define SKYTAP_TOKEN env variable.')
-        self.assertTrue(len(self.config.base_url) > 0, 'Skytap base_url ' +
+        self.assertTrue(len(Config.base_url) > 0, 'Skytap base_url ' +
                         'missing. Define SKYTAP_BASE_URL env variable.')
 
         with self.assertRaises(AttributeError):
-            place_holder = self.this_value_should_not_exist
+            place_holder = Config.this_value_should_not_exist

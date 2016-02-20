@@ -16,16 +16,13 @@ class TestUsers(unittest.TestCase):
     def test_basic_user_check(self):
         self.assertTrue(len(self.users) > 0,
                         'User list is empty.')
-        # Iterate over the list.
+
         for u in self.users:
-            a_user = str(self.users[u])  # test string conversion
+            self.user_check(u)
 
-        # Get a random user to get this and do ... something with it to check.
-        one_user = self.users[random.choice(list(self.users.keys()))]
-        print one_user.details()
+        self.assertTrue(self.users.count_admins() > 0)
 
-        # Assert if 0:
-        print "US-West: " + str(self.users.count_in_region("US-West"))
-
-        # Assert if 0:
-        print "Admin count: " + str(self.users.count_admins())
+    def user_check(self, user):
+        self.assertTrue(user.id > 0, 'No user ID found')
+        self.assertTrue(len(user.details()) > 0, user.name + ': No details found.')
+        self.assertTrue(len(str(user)) > 0, user.name + ': No string conversion found.')
