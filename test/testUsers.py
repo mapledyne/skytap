@@ -4,7 +4,7 @@ import sys
 import unittest
 
 sys.path.append('..')
-from skytap.Users import Users
+from skytap.Users import Users  # nopep8
 
 
 class TestUsers(unittest.TestCase):

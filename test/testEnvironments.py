@@ -4,7 +4,7 @@ import sys
 import unittest
 
 sys.path.append('..')
-from skytap.Environments import Environments
+from skytap.Environments import Environments  # nopep8
 
 
 class TestEnvironments(unittest.TestCase):

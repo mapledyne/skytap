@@ -4,7 +4,7 @@ import sys
 import unittest
 
 sys.path.append('..')
-from skytap.framework.Config import Config
+from skytap.framework.Config import Config  # nopep8
 
 
 class TestConfig(unittest.TestCase):

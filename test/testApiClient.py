@@ -4,7 +4,7 @@ import sys
 import unittest
 
 sys.path.append('..')
-from skytap.framework.ApiClient import ApiClient
+from skytap.framework.ApiClient import ApiClient  # nopep8
 
 
 class TestApiClient(unittest.TestCase):
