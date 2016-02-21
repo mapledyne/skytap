@@ -74,7 +74,7 @@ class ApiClient(object):
                       if value is not None]
         return '?' + "&".join(param_list)
 
-    def rest(self, url, req='get', data=None):
+    def rest(self, url, params={}, req='get', data=None):
         """Call the REST API, returning all results.
 
         This calls the actual REST API, then checks the returning headers in
@@ -85,20 +85,16 @@ class ApiClient(object):
         This defeats the pagination that Skytap uses in their v2 API, but is
         useful for us given how we use the API.
         """
-        first_call = self._rest(req, self.base_url + url, data)
+        first_call = self._rest(req, self.base_url + url, params, data)
         if self.last_range == 0:
             return first_call
 
-        new_url = url
-        if "?" not in new_url:
-            new_url += "?"
-        else:
-            new_url += "&"
-        new_url += "count=" + str(self.last_range) + "&offset=0"
+        params['offset'] = 0
+        params['count'] = self.last_range
 
-        return self._rest(req, self.base_url + new_url, data)
+        return self._rest(req, self.base_url + url, params, data)
 
-    def _rest(self, req, url, data=None):
+    def _rest(self, req, url, params={}, data=None):
         """Send a rest rest request to the server."""
 
         if 'HTTPS' not in url.upper():
@@ -107,6 +103,8 @@ class ApiClient(object):
         cmd = req.upper()
         if cmd not in self.cmds.keys():
             return "Command type (" + cmd + ") not recognized."
+
+        url += self._dict_to_query_params(params)
 
     #    status, body = cmds[cmd](url, data)
         response = self.cmds[cmd](url,

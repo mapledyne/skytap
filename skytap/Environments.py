@@ -6,7 +6,9 @@ import json
 class Environments(SkytapGroup):
     def __init__(self):
         super(Environments, self).__init__()
-        self.load_list_from_api('/v2/configurations', Environment)
+        self.load_list_from_api('/v2/configurations',
+                                Environment,
+                                {'scope': 'company'})
 
     def vm_count(self):
         count = 0

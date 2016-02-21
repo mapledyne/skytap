@@ -9,8 +9,8 @@ class SkytapGroup(ApiClient):
         self.data = {}
         self.itercount = 0
 
-    def load_list_from_api(self, url, target):
-        self.load_list_from_json(self.rest(url), target)
+    def load_list_from_api(self, url, target, params):
+        self.load_list_from_json(self.rest(url, params), target)
 
     def load_list_from_json(self, json_list, target):
         self.data = {}
