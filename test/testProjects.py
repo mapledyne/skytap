@@ -15,9 +15,9 @@ class TestProjects(unittest.TestCase):
     def test_basic_project_check(self):
         self.assertTrue(len(self.projects) > 0,
                         'Project list is empty.')
-        # Iterate over the list.
+
         for p in self.projects:
-            self.project_check(p)  # test string conversion
+            self.project_check(p)
 
     def project_check(self, prj):
         self.assertTrue(prj.id > 0, 'no project ID found.')

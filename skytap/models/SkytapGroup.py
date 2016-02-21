@@ -21,7 +21,15 @@ class SkytapGroup(ApiClient):
         else:
             raise TypeError
         for j in self.json:
-            self.data[int(j['id'])] = target(j)
+            # prefer an int for the ID since that's the most common and
+            # easiest to work with, but some things (quotas) have string
+            # ids, so we want to leave those alone. A given resource/group
+            # will have to handle non-int keys differently if there's a
+            # case where that's a problem.
+            try:
+                self.data[int(j['id'])] = target(j)
+            except ValueError:
+                self.data[j['id']] = target(j)
 
     def __len__(self):
         return len(self.data)
@@ -49,4 +57,4 @@ class SkytapGroup(ApiClient):
         return self.data.keys()
 
     def __contains__(self, key):
-        return self.data.contains(key)
+        return key in self.data

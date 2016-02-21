@@ -32,10 +32,10 @@ class ApiClient(object):
         self.last_range = 0
 
         self.cmds = {
-            "GET": requests.get,
-            "PUT": requests.put,
-            "POST": requests.post,
-            "DELETE": requests.delete
+            'GET': requests.get,
+            'PUT': requests.put,
+            'POST': requests.post,
+            'DELETE': requests.delete
         }
 
         self.headers = {
@@ -45,7 +45,7 @@ class ApiClient(object):
 
     def _check_response(self, resp, attempts=1):
         if resp is None:
-            raise ValueError("A response wasn't received")
+            raise ValueError('A response wasn\'t received')
 
         if 200 <= resp.status_code < 300:
             return True
@@ -57,12 +57,14 @@ class ApiClient(object):
 
         if resp.status_code == 423:  # "Busy"
             if 'Retry-After' in resp.headers:
-                time.sleep(int(resp.headers['Retry-After']))
+                time.sleep(int(resp.headers['Retry-After']) + 1)
             else:
                 time.sleep(10)  # Skytap's recommendation for a default
             return False
 
         # Assume we're going to retry with exponential backoff
+        # Should only get here on a 429 "too many requests" but it's
+        # not clear from Skytap what their limits are on when we should retry.
         time.sleep(2 ** (attempts - 1))
 
         return False

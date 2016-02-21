@@ -47,3 +47,6 @@ class SkytapResource(object):
 
     def __eq__(self, other):
         return hash(self) == hash(other)
+
+    def __contains__(self, key):
+        return key in self.data
