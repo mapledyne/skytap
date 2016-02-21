@@ -2,7 +2,6 @@ import json
 import os
 import sys
 import unittest
-import random
 
 sys.path.append('..')
 from skytap.Users import Users
@@ -24,5 +23,7 @@ class TestUsers(unittest.TestCase):
 
     def user_check(self, user):
         self.assertTrue(user.id > 0, 'No user ID found')
-        self.assertTrue(len(user.details()) > 0, user.name + ': No details found.')
-        self.assertTrue(len(str(user)) > 0, user.name + ': No string conversion found.')
+        self.assertTrue(len(user.details()) > 0,
+                        user.name + ': No details found.')
+        self.assertTrue(len(str(user)) > 0,
+                        user.name + ': No string conversion found.')

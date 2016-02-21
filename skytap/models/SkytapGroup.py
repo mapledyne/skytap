@@ -2,6 +2,7 @@ from collections import Iterator
 from skytap.framework.ApiClient import ApiClient
 import json
 
+
 class SkytapGroup(ApiClient):
     def __init__(self):
         super(SkytapGroup, self).__init__()
@@ -9,17 +10,18 @@ class SkytapGroup(ApiClient):
         self.itercount = 0
 
     def load_list_from_api(self, url, target):
-        self.data = {}
-        if (len(self.data) == 0):
-            list_json = json.loads(self.rest(url))
-            for j in list_json:
-                self.data[int(j['id'])] = target(j)
+        self.load_list_from_json(self.rest(url), target)
 
     def load_list_from_json(self, json_list, target):
         self.data = {}
-        if (len(self.data) == 0):
-            for j in json_list:
-                self.data[int(j['id'])] = target(j)
+        if isinstance(json_list, str):
+            self.json = json.loads(json_list)
+        elif isinstance(json_list, list):
+            self.json = json_list
+        else:
+            raise TypeError
+        for j in self.json:
+            self.data[int(j['id'])] = target(j)
 
     def __len__(self):
         return len(self.data)

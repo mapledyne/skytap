@@ -1,5 +1,6 @@
 import json
 
+
 class SkytapResource(object):
     def __init__(self, initial_json):
         self.data = {}
@@ -25,6 +26,9 @@ class SkytapResource(object):
         for x in self.data:
             det += str(x) + ": " + str(self.data[x]) + '\n'
         return det
+
+    def json(self):
+        return json.dumps(self.data, indent=4)
 
     def __str__(self):
         return '[' + self.id + '] ' + self.name

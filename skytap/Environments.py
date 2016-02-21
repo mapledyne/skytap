@@ -1,5 +1,7 @@
 from skytap.models.Environment import Environment
 from skytap.models.SkytapGroup import SkytapGroup
+import json
+
 
 class Environments(SkytapGroup):
     def __init__(self):
@@ -17,3 +19,7 @@ class Environments(SkytapGroup):
         for e in self.data:
             count += self.data[e].svms
         return count
+
+if __name__ == '__main__':
+    envs = Environments()
+    print json.dumps(envs.json, indent=4)

@@ -50,7 +50,9 @@ class ApiClient(object):
         if 200 <= resp.status_code < 300:
             return True
 
-        # TODO: this should also handle 423 returns ("busy") which have a retry-after timer.
+        # TODO: this should also handle 423 returns ("busy")
+        # which have a retry-after timer.
+
         # If we made it this far, we need to handle an exception
         if attempts >= self.max_attempts or resp.status_code != 429:
             raise OktaError(json.loads(resp.text))

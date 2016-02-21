@@ -2,7 +2,6 @@ import json
 import os
 import sys
 import unittest
-import random
 
 sys.path.append('..')
 from skytap.Projects import Projects
@@ -24,5 +23,4 @@ class TestProjects(unittest.TestCase):
         self.assertTrue(prj.id > 0, 'no project ID found.')
         self.assertTrue(len(prj.name) > 0, prj.id + ': no name found.')
         self.assertTrue(prj.user_count > 0, prj.name + ': no users found.')
-#        self.assertTrue(prj.configuration_count > 0, prj.name + ': no environments found.')
         self.assertTrue(len(prj.details()), prj.name + ': no details found.')
