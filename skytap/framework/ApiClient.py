@@ -92,14 +92,17 @@ class ApiClient(object):
         This defeats the pagination that Skytap uses in their v2 API, but is
         useful for us given how we use the API.
         """
-        first_call = self._rest(req, self.base_url + url, params, data)
+        if not url.upper().startswith('HTTP'):
+            url = self.base_url + url
+
+        first_call = self._rest(req, url, params, data)
         if self.last_range == 0:
             return first_call
 
         params['offset'] = 0
         params['count'] = self.last_range
 
-        return self._rest(req, self.base_url + url, params, data)
+        return self._rest(req, url, params, data)
 
     def _rest(self, req, url, params={}, data=None, attempts=0):
         """Send a rest rest request to the server."""

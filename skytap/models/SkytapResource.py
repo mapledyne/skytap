@@ -1,3 +1,4 @@
+from skytap.framework.ApiClient import ApiClient
 import json
 
 
@@ -7,6 +8,13 @@ class SkytapResource(object):
         for k, v in initial_json.iteritems():
             self.data[k] = v
         self._calculate_custom_data()
+
+    def refresh(self):
+        if 'url' not in self.data:
+            return KeyError
+        api = ApiClient()
+        env_json = api.rest(self.url)
+        self.__init__(json.loads(env_json))
 
     def _calculate_custom_data(self):
         pass
