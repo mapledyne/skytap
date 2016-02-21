@@ -22,6 +22,12 @@ class Environments(SkytapGroup):
             count += self.data[e].svms
         return count
 
+    def storage(self):
+        count = 0
+        for e in self.data:
+            count += self.data[e].storage
+        return count
+
 if __name__ == '__main__':
     envs = Environments()
     print json.dumps(envs.json, indent=4)

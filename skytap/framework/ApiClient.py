@@ -50,12 +50,17 @@ class ApiClient(object):
         if 200 <= resp.status_code < 300:
             return True
 
-        # TODO: this should also handle 423 returns ("busy")
-        # which have a retry-after timer.
-
         # If we made it this far, we need to handle an exception
-        if attempts >= self.max_attempts or resp.status_code != 429:
-            raise OktaError(json.loads(resp.text))
+        if attempts >= self.max_attempts or (resp.status_code != 429 and
+                                             resp.status_code != 423):
+            raise Exception(json.loads(resp.text))
+
+        if resp.status_code == 423:  # "Busy"
+            if 'Retry-After' in resp.headers:
+                time.sleep(int(resp.headers['Retry-After']))
+            else:
+                time.sleep(10)  # Skytap's recommendation for a default
+            return False
 
         # Assume we're going to retry with exponential backoff
         time.sleep(2 ** (attempts - 1))
@@ -94,7 +99,7 @@ class ApiClient(object):
 
         return self._rest(req, self.base_url + url, params, data)
 
-    def _rest(self, req, url, params={}, data=None):
+    def _rest(self, req, url, params={}, data=None, attempts=0):
         """Send a rest rest request to the server."""
 
         if 'HTTPS' not in url.upper():
@@ -102,11 +107,10 @@ class ApiClient(object):
 
         cmd = req.upper()
         if cmd not in self.cmds.keys():
-            return "Command type (" + cmd + ") not recognized."
+            raise ValueError("Command type (" + cmd + ") not recognized.")
 
         url += self._dict_to_query_params(params)
 
-    #    status, body = cmds[cmd](url, data)
         response = self.cmds[cmd](url,
                                   headers=self.headers,
                                   auth=self.auth,
@@ -118,8 +122,8 @@ class ApiClient(object):
         if "content-range" in self.last_headers:
             self.last_range = self.last_headers["content-range"].split("/")[1]
 
-        if int(response.status_code) != 200:
-            return "Oops!  Error: status: %s\n%s\n" % (last_status,
-                                                       response.text)
-
-        return json.dumps(json.loads(response.text), indent=4)
+        attempts += 1
+        if self._check_response(response, attempts):
+            return json.dumps(json.loads(response.text), indent=4)
+        else:
+            return self._rest(req, url, params, data, attempts)
