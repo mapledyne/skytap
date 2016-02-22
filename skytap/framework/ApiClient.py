@@ -129,6 +129,9 @@ class ApiClient(object):
 
         attempts += 1
         if self._check_response(response, attempts):
-            return json.dumps(json.loads(response.text), indent=4)
+            try:
+                return json.dumps(json.loads(response.text), indent=4)
+            except ValueError:
+                return response.text
         else:
             return self._rest(req, url, params, data, attempts)

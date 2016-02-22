@@ -3,7 +3,7 @@ from skytap.framework.ApiClient import ApiClient
 import json
 
 
-class SkytapGroup(ApiClient):
+class SkytapGroup(ApiClient, Iterator):
     def __init__(self):
         super(SkytapGroup, self).__init__()
         self.data = {}
@@ -42,9 +42,6 @@ class SkytapGroup(ApiClient):
 
     def __getitem__(self, key):
         return self.data[key]
-
-    def __iter__(self):
-        return self
 
     def next(self):
         if self.itercount >= len(self.data):
