@@ -12,6 +12,15 @@ except ImportError:
         def emit(self, record):
             pass
 
+initial_config = {'user': '',           # Should only be defined in env vars.
+                  'token': '',          # Should only be defined in env vars.
+                  'log_level': 30,      # 0 - 50. Debug=10, Info=20, Warn=30
+                  'base_url': 'https://cloud.skytap.com',
+                  'max_http_attempts': 4,
+                  'retry_wait': 10,     # Skytap recommends waiting 10 sec.
+                  'add_note_on_state_change': True
+                  }
+
 
 class ConfigType(type):
 
@@ -102,11 +111,7 @@ class Config(object):
     # Some very basic defaults. This will allow the module to work by
     # just creating the SKYTAP_TOKEN and SKYTAP_USER env variables
     # for most things you'd want to do.
-    config_data = {'user': '',
-                   'token': '',
-                   'log_level': 30,
-                   'base_url': 'https://cloud.skytap.com'
-                   }
+    config_data = initial_config
 
 # Load config values and set up the class.
 
@@ -114,6 +119,10 @@ for key in Config:
     env_val = "SKYTAP_" + key.upper()
     if env_val in os.environ:
         Config.config_data[key] = os.environ[env_val]
+
+if Config.base_url != 'https://cloud.skytap.com':
+    logging.warning('Base URL is not Skytap\'s recommended value. ' +
+                    'This very likely will break things.')
 
 # Set up the logging system:
 

@@ -10,6 +10,7 @@ requests.packages.urllib3.disable_warnings()
 
 
 class ApiClient(object):
+
     """Wrap the calls to the Skytap API."""
 
     def __init__(self):
@@ -18,7 +19,6 @@ class ApiClient(object):
         Also does some basic sanity checking on the config to make sure we
         have what we need to be able to access the skytap API.
         """
-
         if not Config.base_url:
             raise ValueError('Invalid base_url')
 
@@ -30,7 +30,6 @@ class ApiClient(object):
 
         self.auth = (Config.user, Config.token)
 
-        self.max_attempts = 4
         self.last_headers = None
         self.last_status = 0
         self.last_range = 0
@@ -48,6 +47,15 @@ class ApiClient(object):
         }
 
     def _check_response(self, resp, attempts=1):
+        """Return true if the rseponse a good/reasonable one.
+
+        If the HTTP status code is in the 200s, return True,
+        otherwise try to determine what happened. If we're asked to retry,
+        politely wait the appropraite amount of time and retry, otherwise,
+        wait the retry_wait amount of time.
+
+        Fail (return False) if we've exceeded our retry amount.
+        """
         if resp is None:
             raise ValueError('A response wasn\'t received')
 
@@ -55,15 +63,15 @@ class ApiClient(object):
             return True
 
         # If we made it this far, we need to handle an exception
-        if attempts >= self.max_attempts or (resp.status_code != 429 and
-                                             resp.status_code != 423):
+        if attempts >= Config.max_http_attempts or (resp.status_code != 429 and
+                                                    resp.status_code != 423):
             raise Exception(json.loads(resp.text))
 
         if resp.status_code == 423:  # "Busy"
             if 'Retry-After' in resp.headers:
                 time.sleep(int(resp.headers['Retry-After']) + 1)
             else:
-                time.sleep(10)  # Skytap's recommendation for a default
+                time.sleep(Config.retry_wait)
             return False
 
         # Assume we're going to retry with exponential backoff
@@ -75,6 +83,10 @@ class ApiClient(object):
 
     @staticmethod
     def _dict_to_query_params(d):
+        """Return proper query string to add to a url.
+
+        Turns {'count': 5, 'offset': 2} into '?count=5&offset=2'.
+        """
         if d is None or len(d) == 0:
             return ''
 
@@ -110,10 +122,6 @@ class ApiClient(object):
 
     def _rest(self, req, url, params={}, data=None, attempts=0):
         """Send a rest rest request to the server."""
-
-        if 'HTTPS' not in url.upper():
-            return "Secure connection required: Please use HTTPS or https"
-
         cmd = req.upper()
         if cmd not in self.cmds.keys():
             raise ValueError("Command type (" + cmd + ") not recognized.")

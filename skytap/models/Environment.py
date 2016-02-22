@@ -1,3 +1,4 @@
+"""Support for an Environment resource in Skytap."""
 import json
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
@@ -7,15 +8,29 @@ import time
 
 
 class Environment(SkytapResource, Suspendable):
+
+    """One Skytap environment."""
+
     def __init__(self, env_json):
+        """Init is mainly handled by the parent class."""
         super(Environment, self).__init__(env_json)
 
     def _calculate_custom_data(self):
+        """Add custom data.
+
+        Specifically, boolean values to more easily determine state, allowing
+        things like 'if env.running:' to be used.
+        """
         self.running = self.runstate == 'running'
         self.busy = self.runstate == 'busy'
         self.suspended = self.runstate == 'suspended'
 
     def __getattr__(self, key):
+        """Load values for anything that doesn't get loaded by default.
+
+        For user_data and notes, a secondary API call is needed. Only make that
+        call when the info is requested.
+        """
         if key == 'user_data':
             if key in self.data:
                 return self.data[key]

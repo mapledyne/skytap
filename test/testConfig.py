@@ -20,6 +20,7 @@ class TestConfig(unittest.TestCase):
                         'Define SKYTAP_TOKEN env variable.')
         self.assertTrue(len(Config.base_url) > 0, 'Skytap base_url ' +
                         'missing. Define SKYTAP_BASE_URL env variable.')
-
+        self.assertTrue(Config.base_url == 'https://cloud.skytap.com',
+                        'Base_url should always be http://cloud.skytap.com.')
         with self.assertRaises(AttributeError):
             place_holder = Config.this_value_should_not_exist

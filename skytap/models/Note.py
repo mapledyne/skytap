@@ -1,5 +1,7 @@
-from skytap.models.SkytapResource import SkytapResource
+import datetime
 import json
+import skytap.framework.Utils as Utils
+from skytap.models.SkytapResource import SkytapResource
 
 
 class Note(SkytapResource):
