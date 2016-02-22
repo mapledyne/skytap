@@ -28,8 +28,11 @@ class Notes(SkytapGroup):
 
     def delete_all(self):
         keys = self.data.keys()
+        count = len(keys)
         for key in keys:
             self.delete(self.data[key])
+        self.refresh()
+        return count
 
     def refresh(self):
         if len(self.url) == 0:
