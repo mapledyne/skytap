@@ -1,6 +1,6 @@
+import json
 from datetime import timedelta
 from skytap.models.SkytapResource import SkytapResource
-import json
 
 
 class Quota(SkytapResource):
@@ -12,3 +12,7 @@ class Quota(SkytapResource):
             self.data['pct'] = self.usage / self.limit
         if self.units == 'hours':
             self.time = timedelta(hours=self.usage)
+        self.data['name'] = self.id
+
+    def __str__(self):
+        return "[" + self.id + "] " + str(self.usage) + " " + self.units

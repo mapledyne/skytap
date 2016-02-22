@@ -1,5 +1,5 @@
-from skytap.models.SkytapResource import SkytapResource
 import json
+from skytap.models.SkytapResource import SkytapResource
 
 
 class User(SkytapResource):

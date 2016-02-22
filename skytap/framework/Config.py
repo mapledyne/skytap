@@ -1,8 +1,9 @@
-"""Handle the config file and such for the Skynet system."""
+"""Handle the config file and such for the Skytap system."""
+import logging
 import os
+import six
 import sys
 import yaml
-import logging
 
 try:  # Python 2.7+
     from logging import NullHandler
@@ -11,15 +12,16 @@ except ImportError:
         def emit(self, record):
             pass
 
-logging.getLogger(__name__).addHandler(NullHandler())
-logger = logging.getLogger()
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
 
 class ConfigType(type):
+
+    """A meta class for Config.
+
+    This allows magic methods to be used on the Config class, making things
+    like 'Config.token' work as well as len(Config) even when Config is a class
+    and not an object. This makes for cleaner use in other classes.
+    """
+
     def __getattr__(cls, key):
         """Make the config values accessible.
 
@@ -27,6 +29,8 @@ class ConfigType(type):
         Config.user
         """
         if key not in cls.config_data:
+            logging.error("Tried to access config value '" +
+                          str(key) + "', which doesn't exist.")
             raise AttributeError
         return cls.config_data[key]
 
@@ -35,7 +39,7 @@ class ConfigType(type):
         return len(cls.config_data)
 
     def __str__(cls):
-        """A string represntation of the config, YAML formatted, and prettified.
+        """A string representation of the config, YAML formatted, and prettified.
 
         Token is excluded from this, so this can be safely printed for
         debugging.
@@ -45,7 +49,7 @@ class ConfigType(type):
         return yaml.dump(temp_config, default_flow_style=False)
 
     def __repr__(cls):
-        """A string represntation of the config, YAML formatted.
+        """A string representation of the config, YAML formatted.
 
         Token is excluded from this, so this can be safely printed for
         debugging.
@@ -68,16 +72,20 @@ class ConfigType(type):
         """Return False if there are no config items."""
         return len(cls.config_data) > 0
 
-
     def __contains__(cls, item):
         """Allow checks for items in the config list."""
         return item in cls.config_data
 
     def __iter__(cls):
-        """Allow 'for x in config'."""
+        """Allow 'for x in config'.
+
+        Ultimately, this passes the 'how to iterate' problem down to the
+        config_data object and lets that object handle the actual iteration.
+        """
         return iter(cls.config_data)
 
 
+@six.add_metaclass(ConfigType)
 class Config(object):
 
     """Contain all of our config values into this object.
@@ -90,23 +98,31 @@ class Config(object):
     See comments in the config.yml file for specifics on what the variables
     do, and which ones should be in the environment variables instead.
     """
-    __metaclass__ = ConfigType
+
     # Some very basic defaults. This will allow the module to work by
     # just creating the SKYTAP_TOKEN and SKYTAP_USER env variables
     # for most things you'd want to do.
     config_data = {'user': '',
-                        'token': '',
-                        'log_level': 30,
-                        'base_url': 'https://cloud.skytap.com'
-                        }
-
+                   'token': '',
+                   'log_level': 30,
+                   'base_url': 'https://cloud.skytap.com'
+                   }
 
 # Load config values and set up the class.
 
-for key in Config.config_data:
+for key in Config:
     env_val = "SKYTAP_" + key.upper()
     if env_val in os.environ:
         Config.config_data[key] = os.environ[env_val]
+
+# Set up the logging system:
+
+logging.getLogger(__name__).addHandler(NullHandler())
+logger = logging.getLogger()
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')  # nopep8
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 # Change the log level of the requests object, if appropriate.
 logger.setLevel(int(Config.log_level))

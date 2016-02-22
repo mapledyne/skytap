@@ -1,8 +1,8 @@
-from skytap.models.SkytapResource import SkytapResource
+import json
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 from skytap.models.Notes import Notes
-import json
+from skytap.models.SkytapResource import SkytapResource
 import time
 
 

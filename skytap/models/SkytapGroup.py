@@ -1,6 +1,6 @@
 from collections import Iterator
-from skytap.framework.ApiClient import ApiClient
 import json
+from skytap.framework.ApiClient import ApiClient
 
 
 class SkytapGroup(ApiClient, Iterator):

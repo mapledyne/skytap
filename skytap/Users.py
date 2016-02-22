@@ -11,14 +11,14 @@ class Users(SkytapGroup):
         else:
             self.load_list_from_json(json_list, User)
 
-    def count_in_region(self, region):
+    def in_region(self, region):
         count = 0
         for u in self.data:
             if self[u].default_region == region:
                 count += 1
         return count
 
-    def count_admins(self):
+    def admins(self):
         count = 0
         for u in self.data:
             if self[u].admin:
@@ -27,4 +27,4 @@ class Users(SkytapGroup):
 
 if __name__ == '__main__':
     users = Users()
-    print json.dumps(users.json, indent=4)
+    print(json.dumps(users.json, indent=4))

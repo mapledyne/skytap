@@ -1,5 +1,5 @@
-from skytap.framework.ApiClient import ApiClient
 import json
+from skytap.framework.ApiClient import ApiClient
 
 
 class SkytapResource(object):

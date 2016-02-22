@@ -1,4 +1,5 @@
 from skytap.framework.ApiClient import ApiClient
+import time
 
 
 class Suspendable(object):
@@ -44,7 +45,7 @@ class Suspendable(object):
 
         self.refresh()
         counter = 0
-        while not self.runstate == state and counter < 10:
+        while not self.runstate == state and counter < 12:
             time.sleep(10)
             self.refresh()
         if self.runstate == state:

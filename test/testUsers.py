@@ -19,7 +19,7 @@ class TestUsers(unittest.TestCase):
         for u in self.users:
             self.user_check(u)
 
-        self.assertTrue(self.users.count_admins() > 0)
+        self.assertTrue(self.users.admins() > 0)
 
     def user_check(self, user):
         self.assertTrue(user.id > 0, 'No user ID found')

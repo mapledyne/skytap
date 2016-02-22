@@ -1,7 +1,7 @@
+import json
+from skytap.framework.ApiClient import ApiClient
 from skytap.models.Note import Note
 from skytap.models.SkytapGroup import SkytapGroup
-from skytap.framework.ApiClient import ApiClient
-import json
 
 
 class Notes(SkytapGroup):

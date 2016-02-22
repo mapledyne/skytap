@@ -1,5 +1,6 @@
 """Functions needed to access the skynet api."""
 import json
+import logging
 import requests
 import six
 from skytap.framework.Config import Config
@@ -9,22 +10,25 @@ requests.packages.urllib3.disable_warnings()
 
 
 class ApiClient(object):
+    """Wrap the calls to the Skytap API."""
 
     def __init__(self):
-        self.base_url = Config.base_url
-        self.api_user = Config.user
-        self.api_token = Config.token
+        """Initial setup of things.
 
-        if not self.base_url:
+        Also does some basic sanity checking on the config to make sure we
+        have what we need to be able to access the skytap API.
+        """
+
+        if not Config.base_url:
             raise ValueError('Invalid base_url')
 
-        if not self.api_user:
+        if not Config.user:
             raise ValueError('Invalid api_user')
 
-        if not self.api_token:
+        if not Config.token:
             raise ValueError('Invalid api_token')
 
-        self.auth = (self.api_user, self.api_token)
+        self.auth = (Config.user, Config.token)
 
         self.max_attempts = 4
         self.last_headers = None
@@ -93,7 +97,7 @@ class ApiClient(object):
         useful for us given how we use the API.
         """
         if not url.upper().startswith('HTTP'):
-            url = self.base_url + url
+            url = Config.base_url + url
 
         first_call = self._rest(req, url, params, data)
         if self.last_range == 0:

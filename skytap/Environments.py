@@ -1,6 +1,6 @@
+import json
 from skytap.models.Environment import Environment
 from skytap.models.SkytapGroup import SkytapGroup
-import json
 
 
 class Environments(SkytapGroup):
@@ -30,4 +30,4 @@ class Environments(SkytapGroup):
 
 if __name__ == '__main__':
     envs = Environments()
-    print json.dumps(envs.json, indent=4)
+    print(json.dumps(envs.json, indent=4))
