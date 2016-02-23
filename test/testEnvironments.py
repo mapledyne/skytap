@@ -44,3 +44,11 @@ class TestEnvironments(unittest.TestCase):
             self.assertTrue(n.created_at <= n.updated_at,
                             str(env.id) + ": note [" + str(n.id)
                             + "] updated before it was created.")
+
+    def test_basic_vm_check(self):
+        """Run checks for VMs."""
+        for e in self.environments:
+            for v in e.vms:
+                self.assertTrue(v.id > 0, 'Env ' + str(env.id) + ': No VM id found.')  # nopep8
+                self.assertTrue(len(str(v)) > 0, 'VM ' + str(v.id) +
+                                ': No string conversion found.')

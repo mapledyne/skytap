@@ -24,6 +24,7 @@ An easy way to do this is to create a .skytap file in your home directory (~/.sk
     export SKYTAP_TOKEN=79824879aeb2b34534e112d23a3c
 
 Then you can source the file::
+
     source ~/.skytap
 
 to load the variables, or add that same command to your ~/.bash_profile or equivalent file.

@@ -1,30 +1,28 @@
-"""Support for an Environment resource in Skytap."""
+"""Support for a VM resource in Skytap."""
 import json
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
-from skytap.models.Vms import Vms
 
 
-class Environment(SkytapResource, Suspendable):
+class Vm(SkytapResource, Suspendable):
 
-    """One Skytap environment."""
+    """One Skytap VM."""
 
-    def __init__(self, env_json):
+    def __init__(self, vm_json):
         """Init is mainly handled by the parent class."""
-        super(Environment, self).__init__(env_json)
+        super(Vm, self).__init__(vm_json)
 
     def _calculate_custom_data(self):
         """Add custom data.
 
         Specifically, boolean values to more easily determine state, allowing
-        things like 'if env.running:' to be used.
+        things like 'if vm.running:' to be used.
         """
         self.running = self.runstate == 'running'
         self.busy = self.runstate == 'busy'
         self.suspended = self.runstate == 'suspended'
-        self.vms = Vms(self.vms)
 
     def __getattr__(self, key):
         """Load values for anything that doesn't get loaded by default.
@@ -46,4 +44,4 @@ class Environment(SkytapResource, Suspendable):
             self.notes = Notes(notes_json, self.url)
             return self.notes
 
-        return super(Environment, self).__getattr__(key)
+        return super(Vm, self).__getattr__(key)
