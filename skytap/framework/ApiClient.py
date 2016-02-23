@@ -1,4 +1,4 @@
-"""Functions needed to access the skynet api."""
+"""Functions needed to access the skytap api."""
 import json
 import logging
 import requests
