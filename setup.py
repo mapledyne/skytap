@@ -8,7 +8,7 @@ setup(
     description='Skytap REST API access modules',
     author='Fulcrum Technologies',
     author_email='mknowles@fulcrum.net',
-    install_requires=['requests', 'six'],
+    install_requires=['requests'],
     url='https://github.com/FulcrumIT/skytap',
     download_url='https://github.com/FulcrumIT/skytap/tarball/v1.0.2',
     keywords=['skytap', 'cloud', 'client', 'rest', 'api', 'development'],
