@@ -18,7 +18,7 @@ Optionally, you can also add::
 
 This can be a number between 0-50 and corresponds to the logging module from Python. If you move the log level to "DEBUG" (10), you'll also see logging from the requests module that this module leverages, which will display the direct URL calls. This can be verbose, but helpful for troubleshooting.
 
-An easy way to do this is to create a .skytap file in your home directory (~/.sktap) with the varibles in there::
+An easy way to do this is to create a .skytap file in your home directory (~/.skytap) with the varibles in there::
 
     export SKYTAP_USER=kermit.frog@fulcrum.net
     export SKYTAP_TOKEN=79824879aeb2b34534e112d23a3c
@@ -27,7 +27,7 @@ Then you can source the file::
 
     source ~/.skytap
 
-to load the variables, or add that same command to your ~/.bash_profile or equivalent file.
+to load the variables, or add that same source command to your ~/.bash_profile or equivalent file to have it done automatically.
 
 Via the command line
 ~~~~~~~~~~~~~~~~~~~~
@@ -74,7 +74,7 @@ This can also help automate running and suspending VMs::
     import skytap
     envs = skytap.Environments()
 
-    envs[123456].suspend()  # or .suspend(true) if you want the script to wait.
+    envs[123456].suspend()  # or .suspend(True) if you want the script to wait.
 
 Doing this will, by default, add a note to the environment of it's action, so someone checking the environment can see why it's not running.
 

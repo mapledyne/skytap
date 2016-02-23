@@ -6,7 +6,7 @@ setup(
     description='Skytap REST API access modules',
     author='Fulcrum Technologies',
     author_email='mknowles@fulcrum.net',
-    install_requires=['requests']
+    install_requires=['requests'],
     url='https://github.com/FulcrumIT/skytap',
     download_url='https://github.com/FulcrumIT/skytap/tarball/1.0.0',
     keywords=['skytap', 'cloud', 'client', 'rest', 'api', 'development'],
@@ -15,7 +15,6 @@ setup(
         "Environment :: Console",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.3",
         "Intended Audience :: Developers",
         "Intended Audience :: Information Technology",
@@ -26,5 +25,5 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: System :: Systems Administration",
         "Topic :: Internet",
-        ],
+    ]
 )
