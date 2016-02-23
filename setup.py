@@ -4,13 +4,13 @@ from setuptools import setup
 setup(
     name='skytap',
     packages=find_packages(),
-    version='1.0.2',
+    version='1.0.3',
     description='Skytap REST API access modules',
     author='Fulcrum Technologies',
     author_email='mknowles@fulcrum.net',
-    install_requires=['requests'],
+    install_requires=['requests', 'six'],
     url='https://github.com/FulcrumIT/skytap',
-    download_url='https://github.com/FulcrumIT/skytap/tarball/v1.0.2',
+    download_url='https://github.com/FulcrumIT/skytap/tarball/v1.0.3',
     keywords=['skytap', 'cloud', 'client', 'rest', 'api', 'development'],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
