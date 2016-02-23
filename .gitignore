@@ -1,4 +1,5 @@
 *.pyc
-config.yml
 .DS_Store
-venv-skynet
+dist/
+MANIFEST
+config.yml
