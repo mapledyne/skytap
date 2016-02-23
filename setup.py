@@ -1,14 +1,16 @@
-from distutils.core import setup
+from setuptools import find_packages
+from setuptools import setup
+
 setup(
     name='skytap',
-    packages=['skytap'],
-    version='1.0.0',
+    packages=find_packages(),
+    version='1.0.2',
     description='Skytap REST API access modules',
     author='Fulcrum Technologies',
     author_email='mknowles@fulcrum.net',
-    install_requires=['requests'],
+    install_requires=['requests', 'six'],
     url='https://github.com/FulcrumIT/skytap',
-    download_url='https://github.com/FulcrumIT/skytap/tarball/1.0.0',
+    download_url='https://github.com/FulcrumIT/skytap/tarball/v1.0.2',
     keywords=['skytap', 'cloud', 'client', 'rest', 'api', 'development'],
     classifiers=[
         "Development Status :: 5 - Production/Stable",

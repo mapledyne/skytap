@@ -3,3 +3,4 @@
 dist/
 MANIFEST
 config.yml
+*.egg-info

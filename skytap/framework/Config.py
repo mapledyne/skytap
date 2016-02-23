@@ -3,7 +3,7 @@ import logging
 import os
 import six
 import sys
-import yaml
+import json
 
 try:  # Python 2.7+
     from logging import NullHandler
@@ -48,24 +48,24 @@ class ConfigType(type):
         return len(cls.config_data)
 
     def __str__(cls):
-        """A string representation of the config, YAML formatted, and prettified.
+        """A string representation of the config, JSON formatted, and prettified.
 
         Token is excluded from this, so this can be safely printed for
         debugging.
         """
         temp_config = cls.config_data.copy()
         temp_config["token"] = ''
-        return yaml.dump(temp_config, default_flow_style=False)
+        return json.dump(temp_config, indent=4)
 
     def __repr__(cls):
-        """A string representation of the config, YAML formatted.
+        """A string representation of the config, JSON formatted.
 
         Token is excluded from this, so this can be safely printed for
         debugging.
         """
         temp_config = cls.config_data.copy()
         temp_config["token"] = ''
-        return yaml.dump(temp_config)
+        return json.dump(temp_config)
 
     def __dir__(cls):
         """List only items in the config_data list.
