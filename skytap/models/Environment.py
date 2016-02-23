@@ -24,7 +24,7 @@ class Environment(SkytapResource, Suspendable):
         self.running = self.runstate == 'running'
         self.busy = self.runstate == 'busy'
         self.suspended = self.runstate == 'suspended'
-        self.vms = Vms(self.vms)
+        self.vms = Vms(self.vms, self.id)
 
     def __getattr__(self, key):
         """Load values for anything that doesn't get loaded by default.

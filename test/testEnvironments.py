@@ -39,16 +39,18 @@ class TestEnvironments(unittest.TestCase):
         notes = env.notes
         for n in notes:
             self.assertTrue(len(n.text) > 0,
-                            str(env.id) + ": note [" + str(n.id)
-                            + "] empty.")
+                            str(env.id) + ": note [" + str(n.id) +
+                            "] empty.")
             self.assertTrue(n.created_at <= n.updated_at,
-                            str(env.id) + ": note [" + str(n.id)
-                            + "] updated before it was created.")
+                            str(env.id) + ": note [" + str(n.id) +
+                            "] updated before it was created.")
 
     def test_basic_vm_check(self):
         """Run checks for VMs."""
         for e in self.environments:
             for v in e.vms:
-                self.assertTrue(v.id > 0, 'Env ' + str(env.id) + ': No VM id found.')  # nopep8
+                self.assertTrue(v.id > 0, 'Env ' + str(e.id) + ': No VM id found.')  # nopep8
                 self.assertTrue(len(str(v)) > 0, 'VM ' + str(v.id) +
                                 ': No string conversion found.')
+                self.assertTrue(len(v.url))
+                print v.details()

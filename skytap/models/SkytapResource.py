@@ -15,9 +15,15 @@ class SkytapResource(object):
             self.data[k] = v
         # Do some simple date conversion if the data is here.
         if 'created_at' in self.data:
-            self.data['created_at'] = Utils.convert_date(self.created_at)
+            try:
+                self.data['created_at'] = Utils.convert_date(self.created_at)
+            except ValueError:
+                pass
         if 'updated_at' in self.data:
-            self.data['updated_at'] = Utils.convert_date(self.updated_at)
+            try:
+                self.data['updated_at'] = Utils.convert_date(self.updated_at)
+            except ValueError:
+                pass
         self._calculate_custom_data()
 
     def refresh(self):
