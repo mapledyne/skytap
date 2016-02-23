@@ -1,9 +1,9 @@
 """Handle the config file and such for the Skytap system."""
+import json
 import logging
 import os
 import six
 import sys
-import json
 
 try:  # Python 2.7+
     from logging import NullHandler
@@ -123,6 +123,16 @@ for key in Config:
 if Config.base_url != 'https://cloud.skytap.com':
     logging.warning('Base URL is not Skytap\'s recommended value. ' +
                     'This very likely will break things.')
+
+if len(Config.token) == 0:
+    logging.error('No environment variable SKYTAP_TOKEN found. ' +
+                  'Set this variable and try again.')
+    exit(1)
+
+if len(Config.user) == 0:
+    logging.error('No environment variable SKYTAP_USER found. ' +
+                  'Set this variable and try again.')
+    exit(1)
 
 # Set up the logging system:
 
