@@ -16,14 +16,14 @@ class TestUserData(unittest.TestCase):
         """Build the environment set we want to test with.
 
         This can generate a lot of API calls, so in the typical case, it's
-        better not to "check all". Set notes_to_check to the limit to count.
+        better not to "check all". Set vms_to_check to the limit to count.
         """
         self.environments = Environments()
         self.vms_to_check = 10
 
     def test_basic_userdata(self):
         """Run some simple checks of UserData."""
-        note_count = 0
+        vm_count = 0
         for e in self.environments:
             self.check_userdata(e)
             for v in e.vms:
@@ -34,6 +34,5 @@ class TestUserData(unittest.TestCase):
 
     def check_userdata(self, parent):
         """Check one environment or VM userdata element and object."""
-        self.assertTrue(len(str(parent.user_data)) > 0, 'ID ' + str(parent.id) + ': No userdata found.')
         self.assertTrue(str(parent.user_data) == str(parent.user_data.contents), 'ID ' + str(parent.id) + ': Userdata mismatch.')
         self.assertTrue(parent.user_data.id == 0)

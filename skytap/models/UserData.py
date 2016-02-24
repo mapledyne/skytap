@@ -5,9 +5,11 @@ from skytap.models.SkytapResource import SkytapResource
 class UserData(SkytapResource):
     def __init__(self, contents):
         super(UserData, self).__init__(contents)
-        self.id = 0
 
-    def clean_value(key, value):
+    def __str__(self):
+        return self.contents
+
+    def clean_value(self, key, value):
         default_time = 3
         default_delay_min = 0
         default_delay_max = 31
@@ -54,13 +56,17 @@ class UserData(SkytapResource):
 
         return value
 
-    def get_values(content):
-        content = content.split("\n")
+    def get_values(self, contents):
+        contents = contents.split("\n")
 
         values = {}
 
-        for i in content:
+        for i in contents:
             tokens = i.split()
+
+            if len(tokens) < 2:
+                continue
+
             # Check for valid YAML formatting in first and second tokens in each
             # line, then add those values to dict.
             if (tokens[0].endswith(":") and "#" not in tokens[0] and
@@ -72,4 +78,7 @@ class UserData(SkytapResource):
         return values
 
     def _calculate_custom_data(self):
-        values = self.get_values(self.contents)
+        if self.contents:
+            values = self.get_values(self.contents)
+        else:
+            self.data["contents"] = ""

@@ -13,6 +13,9 @@ class SkytapResource(object):
         super(SkytapResource, self).__init__()
 
         self.data = {}
+
+        self.data["id"] = 0
+
         for k, v in initial_json.iteritems():
             self.data[k] = v
         # Do some simple date conversion if the data is here.
@@ -65,7 +68,7 @@ class SkytapResource(object):
 
     def __str__(self):
         """Build string conversion."""
-        return '[' + self.id + '] ' + self.name
+        return '[' + str(self.id) + '] ' + self.name
 
     def __int__(self):
         """Return id of object."""
