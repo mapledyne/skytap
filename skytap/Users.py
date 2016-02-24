@@ -2,6 +2,9 @@
 
 This roughly translates to the Skytap API call of /v2/users REST call,
 but gives us better access to the bits and pieces of the user.
+
+If accessed via the command line (``python -m skytap.Users()``) this will
+return the quotas from Skytap in a JSON format.
 """
 import json
 from skytap.models.SkytapGroup import SkytapGroup
