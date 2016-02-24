@@ -9,7 +9,7 @@ class UserData(SkytapResource):
     def __str__(self):
         return self.contents
 
-    def clean_value(self, key, value):
+    def _clean_value(self, key, value):
         default_time = 3
         default_delay_min = 0
         default_delay_max = 31
@@ -26,9 +26,6 @@ class UserData(SkytapResource):
             except ValueError:
                 # Not an int, revert to default
                 value = str(default_time)
-        else:
-            # shutdown_time does not exist, add it
-            value = str(default_time)
 
         # Check value for shutdown_delay and decide what to do with it
         if key == "shutdown_delay":
@@ -42,9 +39,6 @@ class UserData(SkytapResource):
             except ValueError:
                 # Delay is not a number, change to 0
                 value = str(default_delay_min)
-        else:
-            # shutdown_delay does not exist, add it
-            value = str(default_delay_min)
 
         # If this is valid, leave it alone. Otherwise, change the value to "-",
         # which triggers the variable itself to be removed.
@@ -56,12 +50,12 @@ class UserData(SkytapResource):
 
         return value
 
-    def get_values(self, contents):
-        contents = contents.split("\n")
+    def _get_values(self, contents):
+        lines = contents.split("\n")
 
         values = {}
 
-        for i in contents:
+        for i in lines:
             tokens = i.split()
 
             if len(tokens) < 2:
@@ -71,14 +65,14 @@ class UserData(SkytapResource):
             # line, then add those values to dict.
             if (tokens[0].endswith(":") and "#" not in tokens[0] and
                     len(tokens) > 1 and "#" not in tokens[1]):
-                    values[tokens[0][:-1]] = self.clean_value(tokens[0][:-1],
-                                                              tokens[1])
+                    values[tokens[0][:-1]] = self._clean_value(tokens[0][:-1],
+                                                               tokens[1])
                     self.data[tokens[0][:-1]] = values[tokens[0][:-1]]
 
         return values
 
     def _calculate_custom_data(self):
         if self.contents:
-            values = self.get_values(self.contents)
+            values = self._get_values(self.contents)
         else:
             self.data["contents"] = ""
