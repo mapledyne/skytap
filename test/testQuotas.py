@@ -25,6 +25,7 @@ class TestProjects(unittest.TestCase):
         self.assertTrue(len(quota.units) > 0, quota.id + ': no units found.')
         if quota.limit is not None:
             self.assertTrue(quota.usage <= quota.limit)
+            self.assertTrue(quota.pct == quota.usage / quota.limit)
         if quota.units == 'hours':
             self.assertTrue(quota.time.seconds > 0)
         self.assertTrue(len(str(quota)) > 0, quota.id + ': string conversion failed.')  # nopep8
