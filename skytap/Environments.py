@@ -11,18 +11,21 @@ class Environments(SkytapGroup):
                                 {'scope': 'company'})
 
     def vm_count(self):
+        """Count the total number of VMs."""
         count = 0
         for e in self.data:
             count += self.data[e].vm_count
         return count
 
     def svms(self):
+        """Count the total number of SVMs in use."""
         count = 0
         for e in self.data:
             count += self.data[e].svms
         return count
 
     def storage(self):
+        """Count the total amount of storage in use."""
         count = 0
         for e in self.data:
             count += self.data[e].storage

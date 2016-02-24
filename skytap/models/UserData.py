@@ -4,7 +4,7 @@ from skytap.models.SkytapResource import SkytapResource
 
 class UserData(SkytapResource):
     def __init__(self, contents):
-        super(UserData, self).__init__(contents.rstrip())
+        super(UserData, self).__init__(contents)
         self.id = 0
 
     def clean_value(key, value):
@@ -65,11 +65,11 @@ class UserData(SkytapResource):
             # line, then add those values to dict.
             if (tokens[0].endswith(":") and "#" not in tokens[0] and
                     len(tokens) > 1 and "#" not in tokens[1]):
-                    values[tokens[0][:-1]] = clean_value(tokens[0][:-1],
-                                                         tokens[1])
+                    values[tokens[0][:-1]] = self.clean_value(tokens[0][:-1],
+                                                              tokens[1])
                     self.data[tokens[0][:-1]] = values[tokens[0][:-1]]
 
         return values
 
     def _calculate_custom_data(self):
-        values = get_values(self.content)
+        values = self.get_values(self.contents)

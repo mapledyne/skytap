@@ -4,6 +4,7 @@ from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
+from skytap.models.UserData import UserData
 
 
 class Vm(SkytapResource, Suspendable):
@@ -20,9 +21,9 @@ class Vm(SkytapResource, Suspendable):
         Specifically, boolean values to more easily determine state, allowing
         things like 'if vm.running:' to be used.
         """
-        self.running = self.runstate == 'running'
-        self.busy = self.runstate == 'busy'
-        self.suspended = self.runstate == 'suspended'
+        self.data['running'] = self.runstate == 'running'
+        self.data['busy'] = self.runstate == 'busy'
+        self.data['suspended'] = self.runstate == 'suspended'
 
     def __getattr__(self, key):
         """Load values for anything that doesn't get loaded by default.
@@ -35,7 +36,7 @@ class Vm(SkytapResource, Suspendable):
                 return self.data[key]
             api = ApiClient()
             user_json = api.rest(self.url + '/user_data.json')
-            self.user_data = json.loads(user_json)['contents']
+            self.user_data = UserData(json.loads(user_json))
             return self.user_data
 
         if key == 'notes':

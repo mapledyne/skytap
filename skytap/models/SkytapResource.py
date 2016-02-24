@@ -10,6 +10,8 @@ class SkytapResource(object):
 
     def __init__(self, initial_json):
         """Build one Skytap Resource."""
+        super(SkytapResource, self).__init__()
+
         self.data = {}
         for k, v in initial_json.iteritems():
             self.data[k] = v

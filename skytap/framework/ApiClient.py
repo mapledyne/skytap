@@ -19,6 +19,8 @@ class ApiClient(object):
         Also does some basic sanity checking on the config to make sure we
         have what we need to be able to access the skytap API.
         """
+        super(ApiClient, self).__init__()
+
         if not Config.base_url:
             raise ValueError('Invalid base_url')
 
@@ -69,8 +71,11 @@ class ApiClient(object):
 
         if resp.status_code == 423:  # "Busy"
             if 'Retry-After' in resp.headers:
+                logging.info('Received HTTP 423. Retry-After set to ' +
+                              resp.headers['Retry-After'] + ' sec. Waiting to retry.')  # nopep8
                 time.sleep(int(resp.headers['Retry-After']) + 1)
             else:
+                logging.info('Received HTTP 429. Too many requests. Waiting to retry.')  # nopep8
                 time.sleep(Config.retry_wait)
             return False
 

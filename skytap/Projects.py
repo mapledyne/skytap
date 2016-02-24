@@ -1,6 +1,6 @@
+import json
 from skytap.models.Project import Project
 from skytap.models.SkytapGroup import SkytapGroup
-import json
 
 
 class Projects(SkytapGroup):
@@ -10,4 +10,4 @@ class Projects(SkytapGroup):
 
 if __name__ == '__main__':
     projects = Projects()
-    print json.dumps(projects.json, indent=4)
+    print(json.dumps(projects.json, indent=4))

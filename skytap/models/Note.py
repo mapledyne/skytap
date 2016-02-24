@@ -10,4 +10,4 @@ class Note(SkytapResource):
         super(Note, self).__init__(note_json)
 
     def __str__(self):
-        return '[' + self.id + '] ' + self.text
+        return self.text

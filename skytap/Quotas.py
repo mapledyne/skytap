@@ -11,5 +11,3 @@ class Quotas(SkytapGroup):
 if __name__ == '__main__':
     quotas = Quotas()
     print(json.dumps(quotas.json, indent=4))
-
-    print str(quotas)
