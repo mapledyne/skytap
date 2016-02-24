@@ -21,6 +21,6 @@ class TestProjects(unittest.TestCase):
 
     def project_check(self, prj):
         self.assertTrue(prj.id > 0, 'no project ID found.')
-        self.assertTrue(len(prj.name) > 0, prj.id + ': no name found.')
+        self.assertTrue(len(prj.name) > 0, str(prj.id) + ': no name found.')
         self.assertTrue(prj.user_count > 0, prj.name + ': no users found.')
         self.assertTrue(len(prj.details()), prj.name + ': no details found.')

@@ -13,9 +13,13 @@ class SkytapResource(object):
         super(SkytapResource, self).__init__()
 
         self.data = {}
+<<<<<<< Updated upstream
 
         self.data["id"] = 0
 
+=======
+        self.data['id'] = 0
+>>>>>>> Stashed changes
         for k, v in initial_json.iteritems():
             self.data[k] = v
         # Do some simple date conversion if the data is here.
@@ -29,6 +33,11 @@ class SkytapResource(object):
                 self.data['updated_at'] = Utils.convert_date(self.updated_at)
             except ValueError:
                 pass
+        try:
+            self.data['id'] = int(self.data['id'])
+        except ValueError:
+            pass
+
         self._calculate_custom_data()
 
     def refresh(self):
