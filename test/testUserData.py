@@ -23,6 +23,7 @@ class TestUserData(unittest.TestCase):
 
     def test_basic_userdata(self):
         """Run some simple checks of UserData."""
+        print self.environments[847465].barf
         vm_count = 0
         for e in self.environments:
             self.check_userdata(e)
@@ -36,3 +37,4 @@ class TestUserData(unittest.TestCase):
         """Check one environment or VM userdata element and object."""
         self.assertTrue(str(parent.user_data) == str(parent.user_data.contents), 'ID ' + str(parent.id) + ': Userdata mismatch.')
         self.assertTrue(parent.user_data.id == 0)
+        # test
