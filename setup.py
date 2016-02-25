@@ -8,6 +8,7 @@ setup(
     version='1.1.0',
     description='Skytap REST API access modules',
     author='Fulcrum Technologies',
+    test_suite='nose.collector',
     author_email='mknowles@fulcrum.net',
     install_requires=['requests', 'six'],
     url='https://github.com/FulcrumIT/skytap',

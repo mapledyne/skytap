@@ -4,3 +4,5 @@ dist/
 MANIFEST
 config.yml
 *.egg-info
+.coverage
+htmlcov/

@@ -38,8 +38,12 @@ class ConfigType(type):
         Config.user
         """
         if key not in cls.config_data:
-            logging.error("Tried to access config value '" +
-                          str(key) + "', which doesn't exist.")
+            # These are called during nose setup before logging is turned off
+            # during testing. Not the best, but tests look better with these
+            # supressed.
+            if key not in ['__test__', 'address', 'im_class', '__self__']:
+                logging.error("Tried to access config value '" +
+                              str(key) + "', which doesn't exist.")
             raise AttributeError
         return cls.config_data[key]
 

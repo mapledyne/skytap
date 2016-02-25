@@ -1,18 +1,18 @@
+"""Test Skytap general API client."""
 import json
-import os
 import sys
-import unittest
 
 sys.path.append('..')
 from skytap.framework.ApiClient import ApiClient  # nopep8
 
 
-class TestApiClient(unittest.TestCase):
+class TestApiClient():
 
     def setUp(self):
         self.api_client = ApiClient()
 
     def test_basic_api_check(self):
-        response = self.api_client.rest('/configurations')
+        """Some basic testing of the API client."""
+        response = self.api_client.rest('/v2/configurations')
         json_check = json.loads(response)
-        self.assertTrue(len(json_check) > 0, "No JSON returned.")
+        assert len(json_check) > 0, "JSON didn't result in any rows"
