@@ -21,8 +21,8 @@ class TestNotes(unittest.TestCase):
         self.environments = Environments()
         self.notes_to_check = 25
 
-    def test_basic_userdata(self):
-        """Run some simple checks of UserData."""
+    def test_basic_notes(self):
+        """Run some simple checks of notes."""
         note_count = 0
         for e in self.environments:
             note_count += 1

@@ -36,11 +36,3 @@ class TestEnvironments(unittest.TestCase):
                         env.name + ': No details found.')
         self.assertTrue(len(str(env)) > 0,
                         env.name + ': No string conversion found.')
-        notes = env.notes
-        for n in notes:
-            self.assertTrue(len(n.text) > 0,
-                            str(env.id) + ": note [" + str(n.id) +
-                            "] empty.")
-            self.assertTrue(n.created_at <= n.updated_at,
-                            str(env.id) + ": note [" + str(n.id) +
-                            "] updated before it was created.")
