@@ -1,9 +1,10 @@
-*.pyc
+__pycache__/
+*.py[cod]
 .DS_Store
 dist/
 MANIFEST
 config.yml
-*.egg-info
+*.egg-info/
 .coverage
 htmlcov/
 .coveralls.yml
