@@ -2,13 +2,12 @@
 import json
 import os
 import sys
-import unittest
 
 sys.path.append('..')
 from skytap.Environments import Environments  # nopep8
 
 
-class TestNotes(unittest.TestCase):
+class TestNotes(object):
 
     """Unittest class to test notes."""
 
@@ -41,11 +40,7 @@ class TestNotes(unittest.TestCase):
 
     def check_note(self, note):
         """Test one note."""
-        self.assertTrue(note.id > 0, 'No note ID found.')
-        self.assertTrue(len(note.text) > 0, "Note [" + str(note.id) +
-                        "] empty.")
-        self.assertTrue(note.text == str(note), "Note [" + str(note.id) +
-                        "] mismatching.")
-        self.assertTrue(note.created_at <= note.updated_at,
-                        "Note [" + str(note.id) +
-                        "] updated before it was created.")
+        assert note.id > 0, 'No note ID found.'
+        assert len(note.text) > 0, "Note [" + str(note.id) + "] empty."
+        assert note.text == str(note), "Note [" + str(note.id) + "] mismatching."
+        assert note.created_at <= note.updated_at, "Note [" + str(note.id) + "] updated before it was created."

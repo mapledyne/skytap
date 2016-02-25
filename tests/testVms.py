@@ -2,13 +2,12 @@
 import json
 import os
 import sys
-import unittest
 
 sys.path.append('..')
 from skytap.Environments import Environments  # nopep8
 
 
-class TestVms(unittest.TestCase):
+class TestVms(object):
 
     """Unittest class to test the VMs."""
 
@@ -29,7 +28,6 @@ class TestVms(unittest.TestCase):
                 if vm_count > self.vms_to_check:
                     return
                 vm_count += 1
-                self.assertTrue(v.id > 0, 'Env ' + str(e.id) + ': No VM id found.')  # nopep8
-                self.assertTrue(len(str(v)) > 0, 'VM ' + str(v.id) +
-                                ': No string conversion found.')
-                self.assertTrue(len(v.url))
+                assert v.id > 0, 'Env ' + str(e.id) + ': No VM id found.'
+                assert len(str(v)) > 0, 'VM ' + str(v.id) + ': No string conversion found.'
+                assert len(v.url)

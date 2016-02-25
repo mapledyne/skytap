@@ -8,7 +8,7 @@ import sys
 try:  # Python 2.7+
     from logging import NullHandler
 except ImportError:
-    class _NullHandler(logging.Handler):
+    class NullHandler(logging.Handler):
         def emit(self, record):
             pass
 

@@ -2,13 +2,12 @@
 import json
 import os
 import sys
-import unittest
 
 sys.path.append('..')
 from skytap.Environments import Environments  # nopep8
 
 
-class TestEnvironments(unittest.TestCase):
+class TestEnvironments(object):
 
     """Unittest class to test the Environments."""
 
@@ -16,23 +15,29 @@ class TestEnvironments(unittest.TestCase):
         """Build the environment set we want to test with."""
         self.environments = Environments()
 
-    def test_basic_environment_check(self):
-        """Run tests on the environment list as a whole."""
-        self.assertTrue(len(self.environments) > 0,
-                        'Environment list is empty.')
-        self.assertTrue(self.environments.svms() > 0)
-        self.assertTrue(self.environments.vm_count() > 0)
-        self.assertTrue(self.environments.svms() > self.environments.vm_count(),
-                        'SVM count should never be more than VM count.')
+    def test_do_some_environments_exist(self):
+        """Check to see if we have some environments returned."""
+        assert len(self.environments) > 0
 
-        # Iterate over the list.
+    def test_svm_count(self):
+        """Ensure our SVMs over 0."""
+        assert self.environments.svms() > 0
+
+    def test_vm_count(self):
+        """Ensure our VMs over 0."""
+        assert self.environments.vm_count() > 0
+
+    def test_svm_vs_vm_count(self):
+        """Make sure svm count is greater than vm count."""
+        assert self.environments.svms() >= self.environments.vm_count()
+
+    def test_environment_set(self):
+        """Run tests over the individual environments."""
         for e in self.environments:
             self.environment_check(e)
 
     def environment_check(self, env):
         """Run tests on an individual environment."""
-        self.assertTrue(env.id > 0, 'No environment ID found')
-        self.assertTrue(len(env.details()) > 0,
-                        env.name + ': No details found.')
-        self.assertTrue(len(str(env)) > 0,
-                        env.name + ': No string conversion found.')
+        assert env.id > 0, 'No environment ID found'
+        assert len(env.details()) > 0, env.name + ': No details found.'
+        assert len(str(env)) > 0, env.name + ': No string conversion found.'

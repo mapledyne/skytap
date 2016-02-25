@@ -2,13 +2,12 @@
 import json
 import os
 import sys
-import unittest
 
 sys.path.append('..')
 from skytap.Environments import Environments  # nopep8
 
 
-class TestUserData(unittest.TestCase):
+class TestUserData(object):
 
     """Unittest class to test the the user_data field of VMs and envs."""
 
@@ -34,5 +33,5 @@ class TestUserData(unittest.TestCase):
 
     def check_userdata(self, parent):
         """Check one environment or VM userdata element and object."""
-        self.assertTrue(str(parent.user_data) == str(parent.user_data.contents), 'ID ' + str(parent.id) + ': Userdata mismatch.')
-        self.assertTrue(parent.user_data.id == 0)
+        assert str(parent.user_data) == str(parent.user_data.contents), 'ID ' + str(parent.id) + ': Userdata mismatch.'
+        assert parent.user_data.id == 0
