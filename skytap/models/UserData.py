@@ -67,6 +67,12 @@ class UserData(SkytapResource):
                     len(tokens) > 1 and "#" not in tokens[1]):
                     values[tokens[0][:-1]] = self._clean_value(tokens[0][:-1],
                                                                tokens[1])
+                    # If variable is a number, make it integer
+                    try:
+                        values[tokens[0][:-1]] = int(values[tokens[0][:-1]])
+                    except ValueError:
+                        pass
+                               
                     self.data[tokens[0][:-1]] = values[tokens[0][:-1]]
 
         return values
