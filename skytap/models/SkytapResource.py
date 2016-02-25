@@ -14,8 +14,8 @@ class SkytapResource(object):
 
         self.data = {}
         self.data["id"] = 0
-        for k, v in initial_json.iteritems():
-            self.data[k] = v
+        for k in initial_json.keys():
+            self.data[k] = initial_json[k]
         # Do some simple date conversion if the data is here.
         if 'created_at' in self.data:
             try:

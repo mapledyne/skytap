@@ -20,7 +20,7 @@ class TestVpns(unittest.TestCase):
             self.vpn_check(v)
 
     def vpn_check(self, vpn):
-        self.assertTrue(vpn.id > 0, 'No vpn ID found')
+        self.assertTrue(len(vpn.id) > 0, 'No vpn ID found')
         self.assertTrue(len(vpn.details()) > 0,
                         vpn.name + ': No details found.')
         self.assertTrue(len(str(vpn)) > 0,

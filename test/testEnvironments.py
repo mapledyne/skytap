@@ -20,9 +20,9 @@ class TestEnvironments(unittest.TestCase):
         """Run tests on the environment list as a whole."""
         self.assertTrue(len(self.environments) > 0,
                         'Environment list is empty.')
-        self.assertTrue(self.environments.svms > 0)
-        self.assertTrue(self.environments.vm_count > 0)
-        self.assertTrue(self.environments.svms > self.environments.vm_count,
+        self.assertTrue(self.environments.svms() > 0)
+        self.assertTrue(self.environments.vm_count() > 0)
+        self.assertTrue(self.environments.svms() > self.environments.vm_count(),
                         'SVM count should never be more than VM count.')
 
         # Iterate over the list.

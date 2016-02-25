@@ -1,13 +1,13 @@
 import json
 import logging
-import sys
 import nose
+import sys
 
 sys.path.append('..')
 from skytap.framework.Config import Config  # nopep8
 
 
-class TestConfig():
+class TestConfig(object):
 
     def setUp(self):
         self.previous_level = logging.root.manager.disable
@@ -38,4 +38,5 @@ class TestConfig():
 
     @nose.tools.raises(AttributeError)
     def test_config_value_doesnt_exist(self):
+        """Test that an invalid config request raises an AttributeError."""
         place_holder = Config.this_value_should_not_exist

@@ -15,7 +15,7 @@ class Project(SkytapResource):
     def _calculate_custom_data(self):
         """Make the list of users into a Users list."""
         self.data['users'] = Users(self.users)
-        for user in self.users:
-            if user.url == self.owner_url:
-                self.owner_name = user.name
+        for key in self.users.keys():
+            if self.users[key].url == self.owner_url:
+                self.owner_name = self.users[key].name
                 break

@@ -28,6 +28,6 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: System :: Systems Administration",
-        "Topic :: Internet",
+        "Topic :: Internet"
     ]
 )

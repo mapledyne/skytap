@@ -1,9 +1,10 @@
 from collections import Iterator
 import json
+import six
 from skytap.framework.ApiClient import ApiClient
 
 
-class SkytapGroup(ApiClient, Iterator):
+class SkytapGroup(ApiClient, six.Iterator):
     def __init__(self):
         super(SkytapGroup, self).__init__()
         self.data = {}
@@ -43,10 +44,13 @@ class SkytapGroup(ApiClient, Iterator):
     def __getitem__(self, key):
         return self.data[key]
 
-    def next(self):
+    def __iter__(self):
+        return self
+
+    def __next__(self):
         if self.itercount >= len(self.data):
             raise StopIteration
-        n = self.data.keys()[self.itercount]
+        n = list(self.data)[self.itercount]
         self.itercount += 1
         return self.data[n]
 

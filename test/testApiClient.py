@@ -6,12 +6,12 @@ sys.path.append('..')
 from skytap.framework.ApiClient import ApiClient  # nopep8
 
 
-class TestApiClient():
+class TestApiClient(object):
 
     def setUp(self):
         self.api_client = ApiClient()
 
-    def test_basic_api_check(self):
+    def test_does_basic_call_return_json(self):
         """Some basic testing of the API client."""
         response = self.api_client.rest('/v2/configurations')
         json_check = json.loads(response)

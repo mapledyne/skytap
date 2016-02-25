@@ -6,3 +6,4 @@ config.yml
 *.egg-info
 .coverage
 htmlcov/
+.coveralls.yml

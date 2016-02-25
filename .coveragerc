@@ -1,3 +1,2 @@
 [report]
-omit = *Python*
-
+omit = *Python*, *python*
