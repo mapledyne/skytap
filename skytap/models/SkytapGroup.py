@@ -2,6 +2,7 @@ from collections import Iterator
 import json
 import six
 from skytap.framework.ApiClient import ApiClient
+import six
 
 
 class SkytapGroup(ApiClient, six.Iterator):

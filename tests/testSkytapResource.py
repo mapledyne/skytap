@@ -26,9 +26,31 @@ class TestSkytapGroup(object):
         self.resource = list(self.group)[0]
 
     def test_read_details(self):
-        """Do we get some details back?"""
+        """Ensure we get something from details()."""
         assert len(self.resource.details()) > 0
 
     def test_has_id(self):
         """Ensure we have an ID."""
         assert 'id' in self.resource
+
+    def test_int_conversion(self):
+        """Ensure we can convert to an int."""
+        assert self.resource.id == int(self.resource)
+
+    def test_hash(self):
+        """Test hashing functions."""
+        hsh = hash(self.resource)
+
+    def test_equality(self):
+        """Test equality."""
+        assert self.resource == self.resource
+
+    def test_gt_lt(self):
+        """Test greater and less than."""
+        assert self.resource > 0
+        assert self.resource < 1000000000
+
+    def test_contains(self):
+        """Make sure 'contains' works."""
+        assert 'id' in self.resource
+        assert 'this_should_not_exist' not in self.resource

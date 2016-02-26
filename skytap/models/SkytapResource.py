@@ -2,6 +2,7 @@
 import json
 from skytap.framework.ApiClient import ApiClient
 import skytap.framework.Utils as Utils
+import six
 
 
 class SkytapResource(object):
@@ -78,16 +79,24 @@ class SkytapResource(object):
         """
         det = ''
         for x in self.data:
-            det += str(x) + ": " + str(self.data[x]) + '\n'
+            try:
+                det += str(x) + ': ' + str(self.data[x]) + '\n'
+            except UnicodeEncodeError:
+                det += (unicode(x).encode('utf_8') +
+                        ': ' + unicode(self.data[x]).encode('utf_8') +
+                        '\n')
         return det
 
     def json(self):
         """Convert the object to JSON."""
         return json.dumps(self.data, indent=4)
 
-    def __str__(self):
+    def __unicode__(self):
         """Build string conversion."""
-        return '[' + str(self.id) + '] ' + self.name
+        return u'[' + str(self.id) + '] ' + self.name
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
 
     def __int__(self):
         """Return id of object."""
@@ -103,7 +112,7 @@ class SkytapResource(object):
 
     def __hash__(self):
         """Build a simple hash."""
-        return hash(self.data)
+        return hash(repr(self.data))
 
     def __eq__(self, other):
         """Compare objects."""
