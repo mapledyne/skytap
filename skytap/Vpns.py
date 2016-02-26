@@ -6,9 +6,9 @@ but gives us better access to the bits and pieces of the VPN.
 If accessed via the command line (``python -m skytap.Vpns()``) this will
 return the quotas from Skytap in a JSON format.
 """
-import json
 from skytap.models.SkytapGroup import SkytapGroup
 from skytap.models.Vpn import Vpn
+import sys
 
 
 class Vpns(SkytapGroup):
@@ -27,5 +27,4 @@ class Vpns(SkytapGroup):
         self.load_list_from_api('/v2/vpns', Vpn)
 
 if __name__ == '__main__':
-    vpns = Vpns()
-    print(json.dumps(vpns.json, indent=4))
+    Vpns().main(sys.argv)

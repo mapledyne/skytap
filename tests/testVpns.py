@@ -5,19 +5,27 @@ import sys
 sys.path.append('..')
 from skytap.Vpns import Vpns  # nopep8
 
+vpns = Vpns()
 
-class TestVpns(object):
 
-    def setUp(self):
-        self.vpns = Vpns()
+def test_vpn_count():
+    """Test VPN count."""
+    assert len(vpns) > 0, 'Vpn list is empty.'
 
-    def test_basic_vpn_check(self):
-        assert len(self.vpns) > 0, 'Vpn list is empty.'
 
-        for v in self.vpns:
-            self.vpn_check(v)
+def test_vpn_id():
+    """Ensure each VPN has an ID."""
+    for v in vpns:
+        assert len(v.id) > 0
 
-    def vpn_check(self, vpn):
-        assert len(vpn.id) > 0, 'No vpn ID found'
-        assert len(vpn.details()) > 0, vpn.name + ': No details found.'
-        assert len(str(vpn)) > 0, vpn.name + ': No string conversion found.'
+
+def test_vpn_details():
+    """Ensure that details() returns something."""
+    for v in vpns:
+        assert len(v.details()) > 0
+
+
+def test_vpn_string_conversion():
+    """Ensure string conversion works."""
+    for v in vpns:
+        assert len(str(v)) > 0

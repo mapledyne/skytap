@@ -18,39 +18,42 @@ class SkytapResourceToTest(SkytapResource):
     def __init__(self, test_json):
         super(SkytapResourceToTest, self).__init__(test_json)
 
+group = SkytapGroupToTest()
+resource = list(group)[0]
 
-class TestSkytapGroup(object):
 
-    def setUp(self):
-        self.group = SkytapGroupToTest()
-        self.resource = list(self.group)[0]
+def test_read_details():
+    """Ensure we get something from details()."""
+    assert len(resource.details()) > 0
 
-    def test_read_details(self):
-        """Ensure we get something from details()."""
-        assert len(self.resource.details()) > 0
 
-    def test_has_id(self):
-        """Ensure we have an ID."""
-        assert 'id' in self.resource
+def test_has_id():
+    """Ensure we have an ID."""
+    assert 'id' in resource
 
-    def test_int_conversion(self):
-        """Ensure we can convert to an int."""
-        assert self.resource.id == int(self.resource)
 
-    def test_hash(self):
-        """Test hashing functions."""
-        hsh = hash(self.resource)
+def test_int_conversion():
+    """Ensure we can convert to an int."""
+    assert resource.id == int(resource)
 
-    def test_equality(self):
-        """Test equality."""
-        assert self.resource == self.resource
 
-    def test_gt_lt(self):
-        """Test greater and less than."""
-        assert self.resource > 0
-        assert self.resource < 1000000000
+def test_hash():
+    """Test hashing functions."""
+    hsh = hash(resource)
 
-    def test_contains(self):
-        """Make sure 'contains' works."""
-        assert 'id' in self.resource
-        assert 'this_should_not_exist' not in self.resource
+
+def test_equality():
+    """Test equality."""
+    assert resource == resource
+
+
+def test_gt_lt():
+    """Test greater and less than."""
+    assert resource > 0
+    assert resource < 1000000000
+
+
+def test_contains():
+    """Make sure 'contains' works."""
+    assert 'id' in resource
+    assert 'this_should_not_exist' not in resource

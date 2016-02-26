@@ -1,6 +1,6 @@
-import json
 from skytap.models.Project import Project
 from skytap.models.SkytapGroup import SkytapGroup
+import sys
 
 
 class Projects(SkytapGroup):
@@ -9,5 +9,4 @@ class Projects(SkytapGroup):
         self.load_list_from_api('/v2/projects', Project)
 
 if __name__ == '__main__':
-    projects = Projects()
-    print(json.dumps(projects.json, indent=4))
+    Projects().main(sys.argv)

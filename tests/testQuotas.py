@@ -5,25 +5,41 @@ import sys
 sys.path.append('..')
 from skytap.Quotas import Quotas  # nopep8
 
+quotas = Quotas()
 
-class TestProjects(object):
 
-    def setUp(self):
-        self.quotas = Quotas()
+def test_quota_count():
+    assert len(quotas) > 0
 
-    def test_basic_project_check(self):
-        assert len(self.quotas) > 0, 'Quota list is empty.'
 
-        for q in self.quotas:
-            self.quota_check(q)
+def test_quota_id():
+    for quota in quotas:
+        assert len(quota.id) > 0
 
-    def quota_check(self, quota):
-        assert len(quota.id) > 0, 'no quota ID found.'
-        assert quota.usage > 0, quota.id + ': no usage found.'
-        assert len(quota.units) > 0, quota.id + ': no units found.'
+
+def test_quota_usage():
+    for quota in quotas:
+        assert quota.usage > 0
+
+
+def test_quota_units():
+    for quota in quotas:
+        assert len(quota.units) > 0
+
+
+def test_quota_limit():
+    for quota in quotas:
         if quota.limit is not None:
             assert quota.usage <= quota.limit
             assert quota.pct == quota.usage / quota.limit
+
+
+def test_quota_time():
+    for quota in quotas:
         if quota.units == 'hours':
             assert quota.time.seconds > 0
-        assert len(str(quota)) > 0, quota.id + ': string conversion failed.'
+
+
+def test_quota_str_conversion():
+    for quota in quotas:
+        assert len(str(quota)) > 0

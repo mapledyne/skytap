@@ -2,8 +2,7 @@ from collections import Iterator
 import json
 import six
 from skytap.framework.ApiClient import ApiClient
-import six
-
+from skytap.framework.Json import SkytapJsonEncoder
 
 class SkytapGroup(ApiClient, six.Iterator):
     def __init__(self):
@@ -21,12 +20,12 @@ class SkytapGroup(ApiClient, six.Iterator):
         self.target = target
 
         if isinstance(json_list, str):
-            self.json = json.loads(json_list)
+            self.json_from_load = json.loads(json_list)
         elif isinstance(json_list, list):
-            self.json = json_list
+            self.json_from_load = json_list
         else:
             raise TypeError
-        for j in self.json:
+        for j in self.json_from_load:
             # prefer an int for the ID since that's the most common and
             # easiest to work with, but some things (quotas) have string
             # ids, so we want to leave those alone. A given resource/group
@@ -43,13 +42,43 @@ class SkytapGroup(ApiClient, six.Iterator):
                                 type(list(self.data)[0]),
                                 self.params)
 
+    def main(self, argv):
+        """What to do when called from the command line."""
+        obj_type = type(self.data[list(self.data)[0]])
+        obj_name = obj_type.__name__
+        obj_id_type = type(self.data[list(self.data)[0]].id)
+
+        if len(argv) > 1:
+            try:
+                thing = obj_id_type(argv[1])
+            except ValueError:
+                print('{"error": "' + obj_name + ' ID not valid."}')
+                return
+            if thing in self.data:
+                print(self[thing].json())
+            else:
+                print('{"error": "No ' + obj_name + ' with that ID found."}')
+            return
+
+        print(json.dumps(self.json(), indent=4))
+
+    def json(self):
+        """Convert our list into a json."""
+        json_return = []
+        for item in self.data:
+            json_return.append(json.loads(self.data[item].json()))
+        return json_return
+
     def __len__(self):
         return len(self.data)
 
     def __str__(self):
         data_str = ''
         for u in self.data:
-            data_str += str(self.data[u]) + '\n'
+            try:
+                data_str += str(self.data[u]) + '\n'
+            except UnicodeEncodeError:
+                data_str += (unicode(self.data[u]).encode('utf_8') + '\n')
         return data_str
 
     def __getitem__(self, key):

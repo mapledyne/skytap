@@ -5,21 +5,46 @@ import sys
 sys.path.append('..')
 from skytap.Users import Users  # nopep8
 
+users = Users()
 
-class TestUsers(object):
 
-    def setUp(self):
-        self.users = Users()
+def test_user_list():
+    """Ensure we have some users."""
+    assert len(users) > 0, 'User list is empty.'
 
-    def test_basic_user_check(self):
-        assert len(self.users) > 0, 'User list is empty.'
 
-        for u in self.users:
-            self.user_check(u)
+def test_user_admins():
+    """Ensure we have at least one admin."""
+    assert users.admins() > 0
 
-        assert self.users.admins() > 0
 
-    def user_check(self, user):
-        assert user.id > 0, 'No user ID found'
-        assert len(user.details()) > 0, user.name + ': No details found.'
-        assert len(str(user)) > 0, user.name + ': No string conversion found.'
+def test_user_id():
+    """Ensure user has id."""
+    for u in users:
+        assert u.id > 0
+
+
+def test_user_details():
+    """Ensure user has details()."""
+    for u in users:
+        assert len(u.details()) > 0
+
+
+def test_user_str_conversion():
+    """Ensure user string conversion works."""
+    for u in users:
+        assert len(str(u)) > 0
+
+
+def test_user_module_main():
+    users.main([])
+
+
+def test_user_main_good_user():
+    user = list(users.data)[0]
+    users.main([users[user].id])
+
+
+def test_user_main_bad_user():
+    user = 'not a user'
+    users.main([user])

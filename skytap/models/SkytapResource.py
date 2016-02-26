@@ -1,8 +1,9 @@
 """Base class for all Skytap Resources."""
 import json
-from skytap.framework.ApiClient import ApiClient
-import skytap.framework.Utils as Utils
 import six
+from skytap.framework.ApiClient import ApiClient
+from skytap.framework.Json import SkytapJsonEncoder
+import skytap.framework.Utils as Utils
 
 
 class SkytapResource(object):
@@ -89,14 +90,11 @@ class SkytapResource(object):
 
     def json(self):
         """Convert the object to JSON."""
-        return json.dumps(self.data, indent=4)
-
-    def __unicode__(self):
-        """Build string conversion."""
-        return u'[' + str(self.id) + '] ' + self.name
+        return json.dumps(self.data, indent=4, cls=SkytapJsonEncoder)
 
     def __str__(self):
-        return unicode(self).encode('utf-8')
+        """Build string conversion."""
+        return u'[' + str(self.id) + '] ' + self.name
 
     def __int__(self):
         """Return id of object."""

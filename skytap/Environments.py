@@ -6,9 +6,9 @@ but gives us better access to the bits and pieces of the environments.
 If accessed via the command line (``python -m skytap.Environments()``)
 this will return the environments from Skytap in a JSON format.
 """
-import json
 from skytap.models.Environment import Environment
 from skytap.models.SkytapGroup import SkytapGroup
+import sys
 
 
 class Environments(SkytapGroup):
@@ -64,5 +64,4 @@ class Environments(SkytapGroup):
         self.refresh()
 
 if __name__ == '__main__':
-    envs = Environments()
-    print(json.dumps(envs.json, indent=4))
+    Environments().main(sys.argv)

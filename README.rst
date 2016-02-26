@@ -53,6 +53,11 @@ You'll get back a JSON for the request, something like::
       }
     ]
 
+If you only want a one item returned instead of the full list, you can get that from the command line as well::
+
+    python -m skytap.Environments 12345
+    python -m skytap.Quotas svm_hours
+
 Via Python script
 ~~~~~~~~~~~~~~~~~
 
