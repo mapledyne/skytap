@@ -1,5 +1,6 @@
 """Support for a VM resource in Skytap."""
 import json
+import logging
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 from skytap.models.Notes import Notes
@@ -46,3 +47,15 @@ class Vm(SkytapResource, Suspendable):
             return self.notes
 
         return super(Vm, self).__getattr__(key)
+
+    def delete(self):
+        """Delete a VM.
+
+        In general, it'd seem wise not to do this very often.
+        """
+        logging.info('Deleting VM: ' + str(self.id) + '(' + self.name + ')')
+        api = ApiClient()
+        response = api.rest(self.url,
+                            {},
+                            'DELETE')
+        return response

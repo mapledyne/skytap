@@ -1,5 +1,6 @@
 """Support for an Environment resource in Skytap."""
 import json
+import logging
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 from skytap.models.Notes import Notes
@@ -48,3 +49,16 @@ class Environment(SkytapResource, Suspendable):
             return self.notes
 
         return super(Environment, self).__getattr__(key)
+
+    def delete(self):
+        """Delete the environment.
+
+        In general, it'd seem wise not to do this very often.
+        """
+        logging.info('Deleting environment: ' +
+                     str(self.id) + '(' + self.name + ')')
+        api = ApiClient()
+        response = api.rest(self.url_v1,
+                            {},
+                            'DELETE')
+        return response

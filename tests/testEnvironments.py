@@ -20,11 +20,11 @@ class TestEnvironments(object):
         assert len(self.environments) > 0
 
     def test_svm_count(self):
-        """Ensure our SVMs over 0."""
+        """Ensure our SVMs are over 0."""
         assert self.environments.svms() > 0
 
     def test_vm_count(self):
-        """Ensure our VMs over 0."""
+        """Ensure our VMs are over 0."""
         assert self.environments.vm_count() > 0
 
     def test_svm_vs_vm_count(self):

@@ -16,7 +16,7 @@ class Users(SkytapGroup):
     """Set of Skytap users.
 
     :Example:
-    >>> u = Users()
+    >>> u = skytap.Users()
     >>> print len(u)
     58
     """

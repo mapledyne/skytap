@@ -12,9 +12,13 @@ class SkytapGroup(ApiClient, six.Iterator):
 
     def load_list_from_api(self, url, target, params={}):
         self.load_list_from_json(self.rest(url, params), target)
+        self.params = params
+        self.url = url
 
     def load_list_from_json(self, json_list, target):
         self.data = {}
+        self.target = target
+
         if isinstance(json_list, str):
             self.json = json.loads(json_list)
         elif isinstance(json_list, list):
@@ -31,6 +35,12 @@ class SkytapGroup(ApiClient, six.Iterator):
                 self.data[int(j['id'])] = target(j)
             except ValueError:
                 self.data[j['id']] = target(j)
+
+    def refresh(self):
+        """Reload our data."""
+        self.load_list_from_api(self.url,
+                                type(list(self.data)[0]),
+                                self.params)
 
     def __len__(self):
         return len(self.data)
