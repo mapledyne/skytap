@@ -1,16 +1,34 @@
+"""Base object to handle groups of Skytap objects."""
 from collections import Iterator
 import json
 import six
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Json import SkytapJsonEncoder
 
+
 class SkytapGroup(ApiClient, six.Iterator):
+
+    """Base object for use with Skytap resource groups."""
+
     def __init__(self):
+        """Basic init."""
         super(SkytapGroup, self).__init__()
         self.data = {}
         self.itercount = 0
 
     def load_list_from_api(self, url, target, params={}):
+        """Load something from the Skytap API and fill this object.
+
+        :param url: The Skytap URL to load ('/v2/users').
+        :type url: str
+        :param target: The resource type to load ('User')
+        :type target: SkytapResource
+        :param params: Any URL parameters to add to URL.
+        :type url: dict
+
+        This should look like, in the child object:
+        >>> self.load_list_from_api('/v2/projects', Project)
+        """
         self.load_list_from_json(self.rest(url, params), target)
         self.params = params
         self.url = url
@@ -52,15 +70,13 @@ class SkytapGroup(ApiClient, six.Iterator):
             try:
                 thing = obj_id_type(argv[1])
             except ValueError:
-                print('{"error": "' + obj_name + ' ID not valid."}')
-                return
+                return '{"error": "' + obj_name + ' ID not valid."}'
             if thing in self.data:
-                print(self[thing].json())
+                return self[thing].json()
             else:
-                print('{"error": "No ' + obj_name + ' with that ID found."}')
-            return
+                return '{"error": "No ' + obj_name + ' with that ID found."}'
 
-        print(json.dumps(self.json(), indent=4))
+        return json.dumps(self.json(), indent=4)
 
     def json(self):
         """Convert our list into a json."""

@@ -48,4 +48,4 @@ class Templates(SkytapGroup):
         return count
 
 if __name__ == '__main__':
-    Templates().main(sys.argv)
+    print(Templates().main(sys.argv))

@@ -9,4 +9,4 @@ class Projects(SkytapGroup):
         self.load_list_from_api('/v2/projects', Project)
 
 if __name__ == '__main__':
-    Projects().main(sys.argv)
+    print(Projects().main(sys.argv))
