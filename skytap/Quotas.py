@@ -1,6 +1,6 @@
 """Support for Skytap API access to the company quotas.
 
-If accessed via the command line (``python -m skytap.Quotas()``) this will
+If accessed via the command line (``python -m skytap.Quotas``) this will
 return the quotas from Skytap in a JSON format.
 """
 from skytap.models.Quota import Quota
