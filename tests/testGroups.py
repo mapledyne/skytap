@@ -15,13 +15,15 @@ def test_group_list():
 
 def test_group_id():
     """Ensure user has id."""
-    for g in groups:
+    for l in list(groups.data):
+        g = groups[l]
         assert g.id > 0
 
 
 def test_user_details():
     """Ensure user has details()."""
-    for g in groups:
+    for l in list(groups.data):
+        g = groups[l]
         assert len(g.details()) > 0
 
 
@@ -33,16 +35,16 @@ def test_user_count_matches():
     """
     for l in list(groups.data):
         g = groups[l]
-        msg = ('Checking group: ' + g.name + ' ['
+        msg = ('Checking group ' + str(g.id) + ': ' + g.name + ' ['
                'Reported: ' + str(g.user_count) + ', '
                'Actual: ' + str(len(g.users)) + ']')
-        print(msg)
-        assert g.user_count == len(g.users)
+        assert g.user_count == len(g.users), msg
 
 
 def test_group_str_conversion():
     """Ensure user string conversion works."""
-    for g in groups:
+    for l in list(groups.data):
+        g = groups[l]
         assert len(str(g)) > 0
 
 

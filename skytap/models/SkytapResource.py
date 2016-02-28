@@ -94,7 +94,7 @@ class SkytapResource(object):
 
     def __str__(self):
         """Build string conversion."""
-        return u'[' + str(self.id) + '] ' + self.name
+        return self.name
 
     def __int__(self):
         """Return id of object."""

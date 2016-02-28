@@ -19,7 +19,7 @@ class SkytapResourceToTest(SkytapResource):
         super(SkytapResourceToTest, self).__init__(test_json)
 
 group = SkytapGroupToTest()
-resource = list(group)[0]
+resource = group.first()
 
 
 def test_read_details():

@@ -3,6 +3,12 @@
 from datetime import datetime
 from datetime import timedelta
 from datetime import tzinfo
+import json
+
+
+def error(err):
+    """Convert an error message into JSON."""
+    return json.dumps({"error": err})
 
 
 def convert_date(date_str):

@@ -4,6 +4,7 @@ import json
 import six
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Json import SkytapJsonEncoder
+import skytap.framework.Utils as Utils
 
 
 class SkytapGroup(ApiClient, six.Iterator):
@@ -54,6 +55,13 @@ class SkytapGroup(ApiClient, six.Iterator):
             except ValueError:
                 self.data[j['id']] = target(j)
 
+    def first(self):
+        """Return the first record in the list.
+
+        Mainly used to get a singlar arbitrary object for testing.
+        """
+        return self.data[list(self.data)[0]]
+
     def refresh(self):
         """Reload our data."""
         self.load_list_from_api(self.url,
@@ -70,11 +78,11 @@ class SkytapGroup(ApiClient, six.Iterator):
             try:
                 thing = obj_id_type(argv[1])
             except ValueError:
-                return '{"error": "' + obj_name + ' ID not valid."}'
+                return Utils.error(obj_name + ' ID not valid.')
             if thing in self.data:
                 return self[thing].json()
             else:
-                return '{"error": "No ' + obj_name + ' with that ID found."}'
+                return Utils.error('No ' + obj_name + ' with that ID found."}')
 
         return json.dumps(self.json(), indent=4)
 
