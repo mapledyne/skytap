@@ -35,4 +35,3 @@ class Groups(SkytapGroup):
 
 if __name__ == '__main__':
     print(Groups().main(sys.argv))
-    print(Groups().data[2942].users.json())
