@@ -41,4 +41,4 @@ class Users(SkytapGroup):
         return count
 
 if __name__ == '__main__':
-    print(Users().main(sys.argv))
+    print(Users().main(sys.argv[1:]))

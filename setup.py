@@ -9,7 +9,7 @@ setup(
     description='Skytap REST API access modules',
     author='Fulcrum Technologies',
     test_suite='nose.collector',
-    author_email='mknowles@fulcrum.net',
+    author_email='bwellington@fulcrum.net',
     maintainer='Michael Knowles',
     maintainer_email='mknowles@fulcrum.net',
     license='MIT',

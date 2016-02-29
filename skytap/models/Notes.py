@@ -24,7 +24,7 @@ class Notes(SkytapGroup):
         :type note: str
         :returns: The response from Skytap, typically the new note.
         """
-        logging.debug('Adding note: ' + note)
+        logging.info('Adding note: ' + note)
         api = ApiClient()
         data = {"text": note}
         response = api.rest(self.url, data, 'POST')
@@ -43,7 +43,7 @@ class Notes(SkytapGroup):
             return False
         if not isinstance(note, Note):
             raise TypeError
-        logging.debug('Deleting note ID: ' + str(note.id))
+        logging.info('Deleting note ID: ' + str(note.id))
         api = ApiClient()
         url = self.url.replace('.json', '/' + str(note.id))
         response = api.rest(url,

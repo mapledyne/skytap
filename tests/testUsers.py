@@ -43,11 +43,11 @@ def test_user_module_main():
 
 def test_user_main_good_user():
     user = list(users.data)[0]
-    ret = json.loads(users.main(['', users[user].id]))
+    ret = json.loads(users.main([users[user].id]))
     assert users[user].id == ret['id']
 
 
 def test_user_main_bad_user():
     user = 'not a user'
-    ret = json.loads(users.main(['', user]))
+    ret = json.loads(users.main([user]))
     assert 'error' in ret

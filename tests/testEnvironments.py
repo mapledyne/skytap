@@ -6,38 +6,61 @@ import sys
 sys.path.append('..')
 from skytap.Environments import Environments  # nopep8
 
+environments = Environments()
 
-class TestEnvironments(object):
 
-    """Unittest class to test the Environments."""
+def test_do_some_environments_exist():
+    """Check to see if we have some environments returned."""
+    assert len(environments) > 0
 
-    def setUp(self):
-        """Build the environment set we want to test with."""
-        self.environments = Environments()
 
-    def test_do_some_environments_exist(self):
-        """Check to see if we have some environments returned."""
-        assert len(self.environments) > 0
+def test_svm_count():
+    """Ensure our SVM count seems correct."""
+    assert environments.svms() > 0
+    count = 0
+    for l in list(environments.data):
+        e = environments[l]
+        count += e.svms
+    msg = ('SVM count mismatch. Environments says: ' +
+           str(environments.svms()) +
+           ', actual count: ' + str(count))
+    assert count == environments.svms(), msg
 
-    def test_svm_count(self):
-        """Ensure our SVMs are over 0."""
-        assert self.environments.svms() > 0
 
-    def test_vm_count(self):
-        """Ensure our VMs are over 0."""
-        assert self.environments.vm_count() > 0
+def test_vm_count():
+    """Ensure our VMs seem correct."""
+    assert environments.vm_count() > 0, 'Total VM count should be over 1.'
+    count = 0
+    for l in list(environments.data):
+        e = environments[l]
+        count += e.vm_count
+    msg = ('VM count mismatch. Environments says: ' +
+           str(environments.vm_count()) +
+           ', actual count: ' + str(count))
+    assert count == environments.vm_count(), msg
 
-    def test_svm_vs_vm_count(self):
-        """Make sure svm count is greater than vm count."""
-        assert self.environments.svms() >= self.environments.vm_count()
 
-    def test_environment_set(self):
-        """Run tests over the individual environments."""
-        for e in self.environments:
-            self.environment_check(e)
+def test_svm_vs_vm_count():
+    """Make sure svm count is greater than vm count."""
+    assert environments.svms() >= environments.vm_count()
 
-    def environment_check(self, env):
-        """Run tests on an individual environment."""
-        assert env.id > 0, 'No environment ID found'
-        assert len(env.details()) > 0, env.name + ': No details found.'
-        assert len(str(env)) > 0, env.name + ': No string conversion found.'
+
+def test_environment_id():
+    """Ensure environments have ids."""
+    for l in list(environments.data):
+        e = environments[l]
+        assert e.id > 0
+
+
+def test_environment_details():
+    """Ensure environments have details."""
+    for l in list(environments.data):
+        e = environments[l]
+        assert len(e.details()) > 0
+
+
+def test_environment_str_conversion():
+    """Ensure environment str converion works."""
+    for l in list(environments.data):
+        e = environments[l]
+        assert str(e) == e.name

@@ -64,4 +64,4 @@ class Environments(SkytapGroup):
         self.refresh()
 
 if __name__ == '__main__':
-    print(Environments().main(sys.argv))
+    print(Environments().main(sys.argv[1:]))

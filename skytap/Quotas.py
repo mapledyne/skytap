@@ -18,4 +18,4 @@ class Quotas(SkytapGroup):
         self.load_list_from_api('/v2/company/quotas', Quota)
 
 if __name__ == '__main__':
-    print(Quotas().main(sys.argv))
+    print(Quotas().main(sys.argv[1:]))

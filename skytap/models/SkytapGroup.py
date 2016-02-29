@@ -58,14 +58,14 @@ class SkytapGroup(ApiClient, six.Iterator):
     def first(self):
         """Return the first record in the list.
 
-        Mainly used to get a singlar arbitrary object for testing.
+        Mainly used to get a single arbitrary object for testing.
         """
         return self.data[list(self.data)[0]]
 
     def refresh(self):
         """Reload our data."""
         self.load_list_from_api(self.url,
-                                type(list(self.data)[0]),
+                                self.target,
                                 self.params)
 
     def main(self, argv):
@@ -74,15 +74,15 @@ class SkytapGroup(ApiClient, six.Iterator):
         obj_name = obj_type.__name__
         obj_id_type = type(self.data[list(self.data)[0]].id)
 
-        if len(argv) > 1:
+        if len(argv) > 0:
             try:
-                thing = obj_id_type(argv[1])
+                thing = obj_id_type(argv[0])
             except ValueError:
                 return Utils.error(obj_name + ' ID not valid.')
             if thing in self.data:
                 return self[thing].json()
             else:
-                return Utils.error('No ' + obj_name + ' with that ID found."}')
+                return Utils.error('No ' + obj_name + ' with that ID found.')
 
         return json.dumps(self.json(), indent=4)
 

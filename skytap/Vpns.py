@@ -27,4 +27,4 @@ class Vpns(SkytapGroup):
         self.load_list_from_api('/v2/vpns', Vpn)
 
 if __name__ == '__main__':
-    print(Vpns().main(sys.argv))
+    print(Vpns().main(sys.argv[1:]))
