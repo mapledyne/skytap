@@ -10,47 +10,21 @@ class UserData(SkytapResource):
         return self.contents
 
     def _clean_value(self, key, value):
-        default_time = 3
-        default_delay_min = 0
-        default_delay_max = 31
+        """Adjust values based on current form and return new form.
 
-        # Check value for shutdown_time and decide what to do with it
-        if key == "shutdown_time":
-            try:
-                if value == "-":
-                    # Permanent exclusion case
-                    pass
-                elif (int(value) < 0 or int(value) > 23):
-                    # Should be valid time
-                    value = str(default_time)
-            except ValueError:
-                # Not an int, revert to default
-                value = str(default_time)
+        Example case:
 
-        # Check value for shutdown_delay and decide what to do with it
-        if key == "shutdown_delay":
-            try:
-                if int(value) < default_delay_min:
-                    # Delay smaller than minimum, set to 0
-                    value = str(default_delay_min)
-                elif int(value) > default_delay_max:
-                    # Delay larger than maximum, set to 31
-                    value = str(default_delay_max)
-            except ValueError:
-                # Delay is not a number, change to 0
-                value = str(default_delay_min)
+        if key == "number_of_mario_brothers":
+            if value != "2":
+                value == "2"
 
-        # If this is valid, leave it alone. Otherwise, change the value to "-",
-        # which triggers the variable itself to be removed.
-        if key == "delete_environment":
-            try:
-                int(value)
-            except ValueError:
-                value = "error"
+        By default, this function will simply return the value as is.
+        """
 
         return value
 
     def _get_values(self, contents):
+        """Check userdata and set variables based on keys/values within."""
         lines = contents.split("\n")
 
         values = {}
@@ -72,7 +46,7 @@ class UserData(SkytapResource):
                         values[tokens[0][:-1]] = int(values[tokens[0][:-1]])
                     except ValueError:
                         pass
-                               
+
                     self.data[tokens[0][:-1]] = values[tokens[0][:-1]]
 
         return values
