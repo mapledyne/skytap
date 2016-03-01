@@ -75,6 +75,9 @@ def test_group_creation():
     assert groups[group].name == name
     user = Users().first()
     assert groups[group].add_user(user.id)
+    assert user.id in groups[group].users
+    assert groups[group].remove_user(user.id)
+    assert user not in groups[group].users
     assert groups.delete(groups[group])
     access_deleted_group(group)
 
