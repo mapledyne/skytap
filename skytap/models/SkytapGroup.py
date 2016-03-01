@@ -12,7 +12,6 @@ class SkytapGroup(ApiClient, six.Iterator):
     """Base object for use with Skytap resource groups."""
 
     def __init__(self):
-        """Basic init."""
         super(SkytapGroup, self).__init__()
         self.data = {}
         self.itercount = 0
