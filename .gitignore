@@ -8,3 +8,6 @@ config.yml
 .coverage
 htmlcov/
 .coveralls.yml
+_build/
+_static/
+_templates/

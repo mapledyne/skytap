@@ -11,8 +11,8 @@ class Quota(SkytapResource):
     def __init__(self, quota_json):
         """Build the quota object.
 
-        :param quota_json: The quota data.
-        :type quota_json: JSON
+        Args:
+            quota_json (list): The quota data.
         """
         super(Quota, self).__init__(quota_json)
 
@@ -25,7 +25,6 @@ class Quota(SkytapResource):
         self.data['name'] = self.id
 
     def __str__(self):
-        """Represent the quota as something hopefully sensible."""
         quota = self.id + " = " + str(self.usage)
         if self.units != 'integer':
             quota += "" + self.units

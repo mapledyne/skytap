@@ -101,16 +101,7 @@ class ConfigType(type):
 @six.add_metaclass(ConfigType)
 class Config(object):
 
-    """Contain all of our config values into this object.
-
-    Read from a standard config file (config.yml by default) and then
-    look for similar values in the environment to override the ones in
-    config.yml. This allows us to have an empty "token" value in the config
-    file, and instead use a "SKYTAP_TOKEN" environment variable.
-
-    See comments in the config.yml file for specifics on what the variables
-    do, and which ones should be in the environment variables instead.
-    """
+    """Contain all of our config values into this object."""
 
     # Some very basic defaults. This will allow the module to work by
     # just creating the SKYTAP_TOKEN and SKYTAP_USER env variables

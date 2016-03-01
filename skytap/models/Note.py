@@ -11,13 +11,7 @@ class Note(SkytapResource):
     """One note."""
 
     def __init__(self, note_json):
-        """Build the note from the incoming JSON."""
         super(Note, self).__init__(note_json)
 
     def __str__(self):
-        """Return just the note.
-
-        :returns: str -- the note contents.
-
-        """
         return self.text

@@ -11,7 +11,6 @@ class SkytapResource(object):
     """Represents one Skytap Resource - a VM, Environment, User, whatever."""
 
     def __init__(self, initial_json):
-        """Build one Skytap Resource."""
         super(SkytapResource, self).__init__()
 
         self.data = {}
@@ -93,29 +92,22 @@ class SkytapResource(object):
         return json.dumps(self.data, indent=4, cls=SkytapJsonEncoder)
 
     def __str__(self):
-        """Build string conversion."""
         return self.name
 
     def __int__(self):
-        """Return id of object."""
         return int(self.id)
 
     def __gt__(self, other):
-        """Handle greater-than requests."""
         return int(self) > int(other)
 
     def __lt__(self, other):
-        """Handle less-than requests."""
         return int(self) < int(other)
 
     def __hash__(self):
-        """Build a simple hash."""
         return hash(repr(self.data))
 
     def __eq__(self, other):
-        """Compare objects."""
         return hash(self) == hash(other)
 
     def __contains__(self, key):
-        """Return true if resource have a given value."""
         return key in self.data

@@ -20,9 +20,11 @@ class Notes(SkytapGroup):
     def add(self, note):
         """Add one note.
 
-        :param note: The note text to add.
-        :type note: str
-        :returns: The response from Skytap, typically the new note.
+        Args:
+            note (str): The note text to add.
+
+        Returns:
+            str: The response from Skytap, typically the new note.
         """
         logging.info('Adding note: ' + note)
         api = ApiClient()
@@ -34,10 +36,14 @@ class Notes(SkytapGroup):
     def delete(self, note):
         """Delete one note.
 
-        :param note: The note to delete.
-        :type note: Note
-        :returns: The response from Skytap.
-        :raises: TypeError
+        Args:
+            note (Note): The note to delete.
+
+        Returns:
+            str: The response from Skytap.
+
+        Raises:
+            TypeError: If note is not a Note object.
         """
         if note is None:
             return False
@@ -55,12 +61,15 @@ class Notes(SkytapGroup):
     def oldest(self):
         """Return the oldest note.
 
-        :returns: Note -- The oldest note.
+        Returns:
+            Note: The oldest note.
 
-        Used most often to delete the oldest note:
-        >>> notes = skytap.Environtment[12345].notes
-        >>> notes.delete(notes.oldest())
+        Used most often to delete the oldest note.
 
+        Example:
+            >>> notes = skytap.Environtments().first.notes
+            >>> print(notes.oldest().text)
+            >>> # notes.delete(notes.oldest())  # most common use case.
         """
         target = None
         for n in self.data:
@@ -74,7 +83,8 @@ class Notes(SkytapGroup):
     def newest(self):
         """Return the newest note.
 
-        :returns: Note -- The newest note.
+        Returns:
+            Note: The newest note.
         """
         target = None
         for n in self.data:
@@ -88,7 +98,8 @@ class Notes(SkytapGroup):
     def delete_all(self):
         """Delete all notes.
 
-        :returns: int -- count of deleted notes.
+        Returns:
+            int: count of deleted notes.
 
         Use with care!
         """
@@ -103,7 +114,9 @@ class Notes(SkytapGroup):
     def refresh(self):
         """Refresh the notes.
 
-        :raises: KeyError
+        Raises:
+            KeyError: if the Notes object doesn't
+                have a url attribute for some reason.
 
         Go back to Skytap and get the notes again. Useful when you've changed
         the notes and to make sure you're current.
