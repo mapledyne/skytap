@@ -63,11 +63,6 @@ class SkytapResource(object):
         self.__init__(json.loads(env_json))
 
     def __getattr__(self, key):
-        """Make the values accessible.
-
-        This allows all user values to be available via calls like:
-        user.id
-        """
         if key not in self.data:
             raise AttributeError
         return self.data[key]

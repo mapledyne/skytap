@@ -20,6 +20,9 @@ class SkytapGroup(ApiClient, six.Iterator):
     def load_list_from_api(self, url, target, params={}):
         """Load something from the Skytap API and fill this object.
 
+        .. note: This should rarely be called by anything but a child object,
+            typically in its __init__() method.
+
         Args:
             url (str): The Skytap URL to load ('/v2/users').
             target (SkytapResource): The resource type to load ('User')
@@ -35,6 +38,17 @@ class SkytapGroup(ApiClient, six.Iterator):
         self.url = url
 
     def load_list_from_json(self, json_list, target):
+        """Load items from a json list and fill this object.
+
+        Args:
+            json_list (list): The list to load the items from.
+            target (SkytapResource): The resource type to load ('User')
+
+        This should look like, in the child object::
+
+            self.load_list_from_json(json, Project)
+
+        """
         self.data = {}
         self.target = target
 
@@ -59,6 +73,13 @@ class SkytapGroup(ApiClient, six.Iterator):
         """Return the first record in the list.
 
         Mainly used to get a single arbitrary object for testing.
+
+        .. note: The selection of this list depends on how the objects
+            are returned from Skytap. This ordering should be considered
+            arbitrary and not reliable from one run to the next.
+
+        Returns:
+            SkytapResource: An object from the list.
         """
         return self.data[list(self.data)[0]]
 
@@ -68,13 +89,14 @@ class SkytapGroup(ApiClient, six.Iterator):
         This looks for matching ids if the search is a number, or searches
         the name if search is a string.
 
-        Example:
-            >>> envs = skytap.Environments().search('testing')
-
         Args:
             search (int or str): What to search for.
         Returns:
             List: Any environments matching the search criteria.
+
+        Example:
+            >>> envs = skytap.Environments().search('testing')
+
         """
         found = []
         for one in list(self.data):
@@ -85,7 +107,7 @@ class SkytapGroup(ApiClient, six.Iterator):
             except ValueError:
                 pass
             for field in self.search_fields:
-                if search.upper() in test.data[field].upper():
+                if str(search).upper() in test.data[field].upper():
                     found.append(test)
         return found
 
@@ -96,7 +118,30 @@ class SkytapGroup(ApiClient, six.Iterator):
                                 self.params)
 
     def main(self, argv):
-        """What to do when called from the command line."""
+        """What to do when called from the command line.
+
+        This function is usually accessed via the command line::
+
+            python -m skytap.Environments
+
+        but can be used to return quick sets of formatted JSON::
+
+            >>> print(skytap.Environments().main())
+
+        Anything passed to the function will be searched for::
+
+            python -m skytap.Users fozzy
+
+        and::
+
+            >>> print(skytap.Users().main('scooter'))
+
+        Args:
+            argv (list): Command line arguments
+
+        Returns:
+            str: Formatted JSON of the request.
+        """
         obj_type = type(self.data[list(self.data)[0]])
         obj_name = obj_type.__name__
         obj_id_type = type(self.data[list(self.data)[0]].id)
@@ -143,6 +188,7 @@ class SkytapGroup(ApiClient, six.Iterator):
         return self.data[n]
 
     def keys(self):
+        """Return the keys from the group list."""
         return self.data.keys()
 
     def __contains__(self, key):

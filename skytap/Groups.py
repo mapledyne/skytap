@@ -38,11 +38,17 @@ class Groups(SkytapGroup):
     def add(self, group, description=''):
         """Add one group.
 
-        :param group: The group name to add.
-        :type note: str
-        :param group: The group description to add.
-        :type note: str
-        :returns: The new group id from Skytap.
+        Args:
+            group (str): The group name to add.
+            description (str): The group description to add.
+
+        Returns:
+            int: The new group id from Skytap.
+
+        Example:
+            >>> groups = skytap.Groups()
+            >>> new_group = groups.add('muppets', 'felt covered friends')
+            >>> print(groups[new_group].name)
         """
         logging.info('Adding group: ' + group)
         api = ApiClient()
@@ -86,7 +92,6 @@ class Groups(SkytapGroup):
                             'DELETE')
         self.refresh()
         return True
-
 
 if __name__ == '__main__':
     print(Groups().main(sys.argv[1:]))

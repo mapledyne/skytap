@@ -32,22 +32,25 @@ Region::
 Accessing via Python
 ====================
 
-After you've installed `skytap` added `import skytap` to your script, you
-can access the Skytap environments by the `skytap.Environments` obejct.
+After you've installed ``skytap`` and added ``import skytap`` to your
+script, you can access the Skytap environments by the
+:class:`skytap.Environments` object.
 
 Example:
     >>> envs = skytap.Environments()
     >>> for e in envs:
     >>>     print(e.name)
 
-Each environment has many things you can do with it - see the `Environment`
-object for actions you can take on an individual environment.
+Each environment has many things you can do with it - see the
+:class:`skytap.models.Environment` object for actions you can take on an
+individual environment.
 
 On the full list of environments, you can also get a vm count, svm count,
 get global storage, and delete environments. Each action is documented, below.
 
-Environments can also perform any of the actions of other `SkytapGroup`
-objects. See the documentation on the `SkytapGroup` class for
+Environments can also perform any of the actions of other
+:class:`SkytapGroup` objects. See the documentation
+on the :class:`skytap.models.SkytapGroup` class for
 information there.
 """
 from skytap.models.Environment import Environment
@@ -73,6 +76,11 @@ class Environments(SkytapGroup):
 
         Returns:
             int: Number of VMs used across all environments.
+
+        Example:
+            >>> envs = skytap.Environments()
+            >>> print(envs.vm_count())
+            112
         """
         count = 0
         for e in self.data:
@@ -84,6 +92,11 @@ class Environments(SkytapGroup):
 
         Returns:
             int: Number of SVMs used across all environments.
+
+        Example:
+            >>> envs = skytap.Environments()
+            >>> print(envs.svms())
+            312
         """
         count = 0
         for e in self.data:
@@ -95,9 +108,14 @@ class Environments(SkytapGroup):
 
         Returns:
             int: Amount of storage used across all environments.
+
+        Example:
+            >>> envs = skytap.Environments()
+            >>> print(envs.storage()))
+            57229376
         """
         count = 0
-        for e in self.data:
+        for e in list(self.data):
             count += self.data[e].storage
         return count
 
@@ -110,11 +128,20 @@ class Environments(SkytapGroup):
         Args:
             env (Environment): The environment to delete.
 
+        Returns:
+            bool: True if the environment was deleted.
         Raises:
             KeyError: If ``env`` isn't in the Environments set.
+
+        Example:
+            >>> envs = skytap.Environments()
+            >>> target = envs[12345]
+            >>> envs.delete(target)
+            True
         """
+        target_id = env.id
         if isinstance(env, Environment):
-            if env.id not in self.data:
+            if target_id not in self.data:
                 raise KeyError
             env.delete()
         elif isinstance(env, int):
@@ -124,6 +151,7 @@ class Environments(SkytapGroup):
         else:
             raise KeyError
         self.refresh()
+        return target_id not in self.data
 
 if __name__ == '__main__':
     print(Environments().main(sys.argv[1:]))

@@ -6,7 +6,7 @@ import uuid
 
 sys.path.append('..')
 from skytap.Groups import Groups  # nopep8
-
+from skytap.Users import Users  # nopep8
 groups = Groups()
 
 
@@ -58,13 +58,13 @@ def test_group_module_main():
 def test_group_main_good_group():
     group = list(groups.data)[0]
     ret = json.loads(groups.main([groups[group].id]))
-    assert groups[group].id == ret['id']
+    assert groups[group].id == ret[0]['id']
 
 
 def test_group_main_bad_group():
     group = 'not a group'
     ret = json.loads(groups.main([group]))
-    assert 'error' in ret
+    assert len(ret) == 0
 
 
 def test_group_creation():
@@ -73,6 +73,8 @@ def test_group_creation():
     description = 'Group creation test.'
     group = groups.add(name, description)
     assert groups[group].name == name
+    user = Users().first()
+    assert groups[group].add_user(user.id)
     assert groups.delete(groups[group])
     access_deleted_group(group)
 
