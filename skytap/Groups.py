@@ -18,10 +18,10 @@ class Groups(SkytapGroup):
 
     """Set of Skytap groups.
 
-    :Example:
-    >>> g = skytap.Groups()
-    >>> print len(g)
-    12
+    Example:
+        >>> g = skytap.Groups()
+        >>> print len(g)
+        12
     """
 
     def __init__(self, json_list=None):
@@ -60,12 +60,19 @@ class Groups(SkytapGroup):
         return 0
 
     def delete(self, group):
-        """Delete one group.
+        """Delete a group.
 
-        :param group: The group to delete.
-        :type group: Group
-        :returns: True if group deleted.
-        :raises: TypeError
+        .. warning::
+            This is unrecoverable. Use with caution.
+
+        Args:
+            group (Group): The group to delete.
+
+        Returns:
+            bool: True if group deleted.
+
+        Raises:
+            TypeError: if group is not a Group
         """
         if group is None:
             return False

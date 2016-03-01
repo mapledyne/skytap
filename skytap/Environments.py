@@ -3,18 +3,52 @@
 This roughly translates to the Skytap API call of /v2/configurations REST call,
 but gives us better access to the bits and pieces of the environments.
 
+Accessing via command line
+==========================
+
 If accessed via the command line this will return the environments from
-Skytap in a JSON format.
+Skytap in a JSON format::
 
-Example:
-    ``python -m skytap.Environments``
+    python -m skytap.Environments
 
-Accessing via python is also easy.
+If you know the environment you want information on, you can also specify
+it directly. You can search by id or by a part of the environment name::
+
+    python -m skytap.Environments 12345
+    python -m skytap.Environments test
+
+Additionally, you can search on some other crieria of a group to get a set
+you're looking for.
+
+Runstate::
+
+    python -m skytap.Environments running  # or 'suspended',
+        'stopped', or 'busy'
+
+Region::
+
+    python -m skytap.Environments us-west
+
+Accessing via Python
+====================
+
+After you've installed `skytap` added `import skytap` to your script, you
+can access the Skytap environments by the `skytap.Environments` obejct.
 
 Example:
     >>> envs = skytap.Environments()
     >>> for e in envs:
     >>>     print(e.name)
+
+Each environment has many things you can do with it - see the `Environment`
+object for actions you can take on an individual environment.
+
+On the full list of environments, you can also get a vm count, svm count,
+get global storage, and delete environments. Each action is documented, below.
+
+Environments can also perform any of the actions of other `SkytapGroup`
+objects. See the documentation on the `SkytapGroup` class for
+information there.
 """
 from skytap.models.Environment import Environment
 from skytap.models.SkytapGroup import SkytapGroup
@@ -31,6 +65,8 @@ class Environments(SkytapGroup):
         self.load_list_from_api('/v2/configurations',
                                 Environment,
                                 {'scope': 'company'})
+        self.search_fields.append('runstate')
+        self.search_fields.append('region')
 
     def vm_count(self):
         """Count the total number of VMs.

@@ -15,19 +15,20 @@ class SkytapGroup(ApiClient, six.Iterator):
         super(SkytapGroup, self).__init__()
         self.data = {}
         self.itercount = 0
+        self.search_fields = ['name']
 
     def load_list_from_api(self, url, target, params={}):
         """Load something from the Skytap API and fill this object.
 
-        :param url: The Skytap URL to load ('/v2/users').
-        :type url: str
-        :param target: The resource type to load ('User')
-        :type target: SkytapResource
-        :param params: Any URL parameters to add to URL.
-        :type url: dict
+        Args:
+            url (str): The Skytap URL to load ('/v2/users').
+            target (SkytapResource): The resource type to load ('User')
+            params (dict): Any URL parameters to add to URL.
 
-        This should look like, in the child object:
-        >>> self.load_list_from_api('/v2/projects', Project)
+        This should look like, in the child object::
+
+            self.load_list_from_api('/v2/projects', Project)
+
         """
         self.load_list_from_json(self.rest(url, params), target)
         self.params = params
@@ -61,6 +62,33 @@ class SkytapGroup(ApiClient, six.Iterator):
         """
         return self.data[list(self.data)[0]]
 
+    def find(self, search):
+        """Return a list of objects, based on the search criteria.
+
+        This looks for matching ids if the search is a number, or searches
+        the name if search is a string.
+
+        Example:
+            >>> envs = skytap.Environments().search('testing')
+
+        Args:
+            search (int or str): What to search for.
+        Returns:
+            List: Any environments matching the search criteria.
+        """
+        found = []
+        for one in list(self.data):
+            test = self.data[one]
+            try:
+                if int(search) == test.id:
+                    found.append(test)
+            except ValueError:
+                pass
+            for field in self.search_fields:
+                if search.upper() in test.data[field].upper():
+                    found.append(test)
+        return found
+
     def refresh(self):
         """Reload our data."""
         self.load_list_from_api(self.url,
@@ -74,14 +102,11 @@ class SkytapGroup(ApiClient, six.Iterator):
         obj_id_type = type(self.data[list(self.data)[0]].id)
 
         if len(argv) > 0:
-            try:
-                thing = obj_id_type(argv[0])
-            except ValueError:
-                return Utils.error(obj_name + ' ID not valid.')
-            if thing in self.data:
-                return self[thing].json()
-            else:
-                return Utils.error('No ' + obj_name + ' with that ID found.')
+            found = self.find(argv[0])
+            json_return = []
+            for item in found:
+                json_return.append(json.loads(item.json()))
+            return json.dumps(json_return, indent=4)
 
         return json.dumps(self.json(), indent=4)
 
