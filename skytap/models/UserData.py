@@ -1,27 +1,130 @@
 import json
+import logging
+from skytap.framework.ApiClient import ApiClient
 from skytap.models.SkytapResource import SkytapResource
 
 
 class UserData(SkytapResource):
-    def __init__(self, contents):
+    def __init__(self, contents, env_url):
         super(UserData, self).__init__(contents)
+        self.url = env_url + '/user_data.json'
 
     def __str__(self):
         return self.contents
 
-    def _clean_value(self, key, value):
-        """Adjust values based on current form and return new form.
+    def add(self, key, value):
+        """Add value to environment's userdata.
 
-        Example case:
+        Args:
+            key (str): The name of the value's key.
+            value (str): The value to add.
 
-        if key == "number_of_mario_brothers":
-            if value != "2":
-                value == "2"
-
-        By default, this function will simply return the value as is.
+        Returns:
+            str: The response from Skytap, or 0.
         """
 
-        return value
+        add_key = True
+
+        lines = self.contents.split("\n")
+
+        for i in lines:
+            j = i.split()
+            if len(j) > 0 and j[0] == (key + ":"):
+                add_key = False
+
+        if add_key:
+            logging.info('Adding key \"' + key + '\" with value \"'
+                         '' + value + '\"')
+            api = ApiClient()
+            new_content = "" + self.contents + "\n" + key + ": " + value
+
+            if new_content.startswith("\n"):
+                new_content = new_content[1:]
+
+            data = {"contents": new_content}
+            response = api.rest(self.url, data, 'POST')
+            self.data[key] = value
+            self.refresh()
+            return response
+        else:
+            logging.info('Key \"' + key + '\" with value \"' + value + '\"'
+                         'already exists.')
+            return 0
+
+    def add_line(self, text, line):
+        """Add line to environment's userdata.
+
+        Args:
+            text (str): line of text to be added.
+            line (int): line number to add to. If too large, default to last.
+
+        Returns:
+            str: The response from Skytap.
+        """
+
+        lines = self.contents.split("\n")
+
+        new_content = ""
+
+        line_found = False
+        count = 0
+        for i in lines:
+            if line == count:
+                new_content += (text + "\n")
+
+                if i != "" and i != "\n":
+                    new_content += (i + "\n")
+
+                line_found = True
+            else:
+                new_content += (i + "\n")
+
+            count += 1
+
+        if not line_found:
+            new_content += (text + "\n")
+
+        logging.info('Adding line: \"' + text + '\" to line ' + str(line))
+        api = ApiClient()
+        data = {"contents": new_content}
+        response = api.rest(self.url, data, 'POST')
+        self.refresh()
+        return response
+
+    def delete(self, key):
+        """Delete key/value from environment's userdata.
+
+        Args:
+            key (str): The name of key to delete, along with value
+
+        Returns:
+            str: The response from Skytap, or 0.
+        """
+
+        new_content = ""
+
+        del_key = False
+
+        lines = self.contents.split("\n")
+
+        for i in lines:
+            j = i.split()
+            if len(j) > 0 and j[0] == (key + ":"):
+                del_key = True
+            else:
+                new_content += (i + "\n")
+
+        if del_key:
+            logging.info('Deleting key \"' + key + '\".')
+            api = ApiClient()
+            data = {"contents": "" + new_content}
+            response = api.rest(self.url, data, 'POST')
+            del data[key]
+            self.refresh()
+            return response
+        else:
+            logging.info('Key \"' + key + '\" already exists.')
+            return 0
 
     def _get_values(self, contents):
         """Check userdata and set variables based on keys/values within."""
@@ -39,13 +142,11 @@ class UserData(SkytapResource):
             # line, then add those values to dict.
             if (tokens[0].endswith(":") and "#" not in tokens[0] and
                     len(tokens) > 1 and "#" not in tokens[1]):
-                    values[tokens[0][:-1]] = self._clean_value(tokens[0][:-1],
-                                                               tokens[1])
                     # If variable is a number, make it integer
                     try:
-                        values[tokens[0][:-1]] = int(values[tokens[0][:-1]])
+                        values[tokens[0][:-1]] = int(tokens[1])
                     except ValueError:
-                        pass
+                        values[tokens[0][:-1]] = tokens[1]
 
                     self.data[tokens[0][:-1]] = values[tokens[0][:-1]]
 
