@@ -80,18 +80,19 @@ class Groups(SkytapGroup):
         Raises:
             TypeError: if group is not a Group
         """
-        if group is None:
-            return False
+        if isinstance(group, int):
+            if group not in self.data:
+                raise KeyError
+            group = self.data[group]
         if not isinstance(group, Group):
-            raise TypeError
-        logging.info('Deleting group: (id: ' + str(group.id) + ') ' +
-                     group.name)
-        api = ApiClient()
-        response = api.rest(group.url,
-                            {},
-                            'DELETE')
+            raise KeyError
+
+        target_id = group.id
+
+        group.delete()
         self.refresh()
-        return True
+
+        return target_id not in self.data
 
 if __name__ == '__main__':
     print(Groups().main(sys.argv[1:]))
