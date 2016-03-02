@@ -28,20 +28,17 @@ class UserData(SkytapResource):
         lines = self.contents.split("\n")
 
         for i in lines:
-            j = i.split()
-            if len(j) > 0 and j[0] == (key + ":"):
-                add_key = False
+            if i != "":
+                j = i.split()
+                if len(j) > 0 and j[0] == (key + ":"):
+                    add_key = False
 
         if add_key:
             logging.info('Adding key \"' + key + '\" with value \"'
                          '' + value + '\"')
             api = ApiClient()
-            new_content = "" + self.contents + "\n" + key + ": " + value
-
-            if new_content.startswith("\n"):
-                new_content = new_content[1:]
-
-            data = {"contents": new_content.lstrip()}
+            new_content = "" + key + ": " + value + "\n" + self.contents
+            data = {"contents": new_content}
             response = api.rest(self.url, data, 'POST')
             self.data[key] = value
             self.refresh()
@@ -68,16 +65,17 @@ class UserData(SkytapResource):
         lines = self.contents.split("\n")
 
         for i in lines:
-            j = i.split()
-            if len(j) > 0 and j[0] == (key + ":"):
-                del_key = True
-            elif i != "" and i != "\n":
-                new_content += (i + "\n")
+            if i != "":
+                j = i.split()
+                if len(j) > 0 and j[0] == (key + ":"):
+                    del_key = True
+                else:
+                    new_content += (i.strip() + "\n")
 
         if del_key:
             logging.info('Deleting key \"' + key + '\".')
             api = ApiClient()
-            data = {"contents": "" + new_content.lstrip()}
+            data = {"contents": "" + new_content}
             response = api.rest(self.url, data, 'POST')
             self.refresh()
             return response
@@ -108,23 +106,24 @@ class UserData(SkytapResource):
         line_found = False
         count = 0
         for i in lines:
-            if line == count:
-                new_content += (text + "\n")
+            if i != "":
+                if line == count:
+                    new_content += (text.strip() + "\n")
 
-                new_content += (i + "\n")
+                    new_content += (i.strip() + "\n")
 
-                line_found = True
-            elif i != "" and i != "\n":
-                new_content += (i + "\n")
+                    line_found = True
+                else:
+                    new_content += (i.strip() + "\n")
 
             count += 1
 
         if not line_found:
-            new_content += (text + "\n")
+            new_content += (text.strip() + "\n")
 
         logging.info('Adding line: \"' + text + '\"')
         api = ApiClient()
-        data = {"contents": new_content.lstrip()}
+        data = {"contents": new_content}
         response = api.rest(self.url, data, 'POST')
         self.refresh()
         return response
@@ -136,29 +135,21 @@ class UserData(SkytapResource):
             line (int): line number to delete.
 
         Returns:
-            str: The response from Skytap, or "{}".
+            str: The response from Skytap.
         """
 
-        try:
-            line = int(line)
-        except ValueError:
-            return "{}"  # Not an integer
+        line = str(line)
 
         lines = self.contents.split("\n")
 
         new_content = ""
 
         line_found = False
-        count = 0
         for i in lines:
-            if line != count:
-                    new_content += (i + "\n")
-                    line_found = True
-
-            count += 1
-
-        if not line_found:
-            return "{}"
+            if i != "":
+                if i.strip() != line.strip():
+                        new_content += (i.strip() + "\n")
+                        line_found = True
 
         logging.info('Removing line: \"' + str(line) + '\"')
         api = ApiClient()

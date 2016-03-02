@@ -27,16 +27,16 @@ def test_modify_user_data():
 
     e = environments.first()
     print('Testing environment: ' + str(e.id) + ': ' + e.name)
-    print e.user_data.add("rick", "sanchez")
+    print(e.user_data.add("rick", "sanchez"))
     e.refresh()
 
-    print e.user_data.add_line("Wubba lubba dub dub!", 0)
+    print(e.user_data.add_line("Wubba lubba dub dub!", 0))
     e.refresh()
 
-    assert e.user_data.data["rick"] == "sanchez"
+    assert(e.user_data.data["rick"] == "sanchez")
 
-    print e.user_data.delete("rick")
+    print(e.user_data.delete("rick"))
     e.refresh()
 
-    assert e.user_data.get_line(0) == "Wubba lubba dub dub!"
-    e.user_data.delete_line(0)
+    print(e.user_data.delete_line("Wubba lubba dub dub!"))
+    e.refresh()
