@@ -19,11 +19,11 @@ class SkytapResource(object):
             self.data[k] = initial_json[k]
         if 'url' in self.data:
             if '/v2/' in self.url:
-                self.url_v1 = self.url.replace('/v2/', '/')
-                self.url_v2 = self.url
+                self.data['url_v1'] = self.url.replace('/v2/', '/')
+                self.data['url_v2'] = self.url
             else:
-                self.url_v1 = self.url
-                self.url_v2 = None
+                self.data['url_v1'] = self.url
+                self.data['url_v2'] = None
         self._convert_data_elements()
         self._calculate_custom_data()
 

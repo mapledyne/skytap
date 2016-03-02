@@ -115,19 +115,20 @@ for key in Config:
     if env_val in os.environ:
         Config.config_data[key] = os.environ[env_val]
 
-if Config.base_url != 'https://cloud.skytap.com':
-    logging.warning('Base URL is not Skytap\'s recommended value. ' +
-                    'This very likely will break things.')
+if os.environ.get('READTHEDOCS', None) != 'True':
+    if Config.base_url != 'https://cloud.skytap.com':
+        logging.warning('Base URL is not Skytap\'s recommended value. ' +
+                        'This very likely will break things.')
 
-if len(Config.token) == 0:
-    logging.error('No environment variable SKYTAP_TOKEN found. ' +
-                  'Set this variable and try again.')
-    exit(1)
+    if len(Config.token) == 0:
+        logging.error('No environment variable SKYTAP_TOKEN found. ' +
+                      'Set this variable and try again.')
+        exit(1)
 
-if len(Config.user) == 0:
-    logging.error('No environment variable SKYTAP_USER found. ' +
-                  'Set this variable and try again.')
-    exit(1)
+    if len(Config.user) == 0:
+        logging.error('No environment variable SKYTAP_USER found. ' +
+                      'Set this variable and try again.')
+        exit(1)
 
 # Set up the logging system:
 
