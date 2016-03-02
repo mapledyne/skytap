@@ -5,7 +5,7 @@ from setuptools import setup
 setup(
     name='skytap',
     packages=find_packages(),
-    version='1.1.1',
+    version='1.2.0',
     description='Skytap REST API access modules',
     author='Fulcrum Technologies',
     test_suite='nose.collector',
@@ -15,7 +15,7 @@ setup(
     license='MIT',
     install_requires=['requests', 'six'],
     url='https://github.com/FulcrumIT/skytap',
-    download_url='https://github.com/FulcrumIT/skytap/tarball/v1.1.1',
+    download_url='https://github.com/FulcrumIT/skytap/tarball/v1.2.0',
     keywords=['skytap', 'cloud', 'client', 'rest', 'api', 'development'],
     classifiers=[
         "Development Status :: 5 - Production/Stable",

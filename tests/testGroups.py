@@ -74,11 +74,16 @@ def test_group_creation():
     group = groups.add(name, description)
     assert groups[group].name == name
     user = Users().first()
-    assert groups[group].add_user(user.id)
-    assert user.id in groups[group].users
-    assert groups[group].remove_user(user.id)
-    assert user not in groups[group].users
-    assert groups.delete(groups[group])
+    msg = 'User (' + user.name + ') not successfully added.'
+    assert groups[group].add_user(user.id), msg
+    msg = 'User (' + user.name + ') not found after added to group.'
+    assert user.id in groups[group].users, msg
+    msg = 'User (' + user.name + ') not successfully removed.'
+    assert groups[group].remove_user(user.id), msg
+    msg = 'User (' + user.name + ') still in group after being removed.'
+    assert user not in groups[group].users, msg
+    msg = 'User (' + user.name + ') not successfully deleted.'
+    assert groups.delete(groups[group]), msg
     access_deleted_group(group)
 
 

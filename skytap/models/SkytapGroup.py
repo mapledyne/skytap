@@ -17,6 +17,8 @@ class SkytapGroup(ApiClient, six.Iterator):
         self.itercount = 0
         self.search_fields = ['name']
 
+
+
     def load_list_from_api(self, url, target, params={}):
         """Load something from the Skytap API and fill this object.
 
@@ -36,6 +38,12 @@ class SkytapGroup(ApiClient, six.Iterator):
         self.load_list_from_json(self.rest(url, params), target)
         self.params = params
         self.url = url
+        if '/v2/' in self.url:
+            self.url_v1 = self.url.replace('/v2/', '/')
+            self.url_v2 = self.url
+        else:
+            self.url_v1 = self.url
+            self.url_v2 = None
 
     def load_list_from_json(self, json_list, target):
         """Load items from a json list and fill this object.

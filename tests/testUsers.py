@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import uuid
 
 sys.path.append('..')
 from skytap.Users import Users  # nopep8
@@ -36,18 +37,29 @@ def test_user_str_conversion():
         assert len(str(u)) > 0
 
 
+# def test_user_creation():
+#    """Create, modify, and delete a user."""
+#    transfer_to = 95750
+#    email = str(uuid.uuid4()) + '@example.com'
+#    user = users.add(email)
+#    assert users[user].email == email
+
+
 def test_user_module_main():
+    """Ensure we get something when running the main function."""
     ret = json.loads(users.main([]))
     assert len(ret) == len(users.data)
 
 
 def test_user_main_good_user():
+    """Ensure searching for a user id returns that ID."""
     user = list(users.data)[0]
     ret = json.loads(users.main([users[user].id]))
-    assert users[user].id == ret['id']
+    assert users[user].id == ret[0]['id']
 
 
 def test_user_main_bad_user():
+    """Ensure searching for a non-existant user doesn't find anything."""
     user = 'not a user'
     ret = json.loads(users.main([user]))
-    assert 'error' in ret
+    assert len(ret) == 0
