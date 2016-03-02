@@ -26,9 +26,6 @@ def test_modify_user_data():
     """Use add and delete functions to modify userdata."""
 
     for e in environments:
-        if e.id != 7085376:
-            continue
-
         print e.user_data.add("rick", "sanchez")
         e.refresh()
 
@@ -43,6 +40,4 @@ def test_modify_user_data():
         assert e.user_data.get_line(0) == "Wubba lubba dub dub!"
         e.user_data.delete_line(0)
 
-
-if __name__ == "__main__":
-    test_modify_user_data()
+        break
