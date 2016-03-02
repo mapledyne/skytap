@@ -20,7 +20,7 @@ class UserData(SkytapResource):
             value (str): The value to add.
 
         Returns:
-            str: The response from Skytap, or 0.
+            str: The response from Skytap, or "".
         """
 
         add_key = True
@@ -41,7 +41,7 @@ class UserData(SkytapResource):
             if new_content.startswith("\n"):
                 new_content = new_content[1:]
 
-            data = {"contents": new_content}
+            data = {"contents": new_content.lstrip()}
             response = api.rest(self.url, data, 'POST')
             self.data[key] = value
             self.refresh()
@@ -49,13 +49,47 @@ class UserData(SkytapResource):
         else:
             logging.info('Key \"' + key + '\" with value \"' + value + '\"'
                          'already exists.')
-            return 0
+            return ""
 
-    def add_line(self, text, line):
+    def delete(self, key):
+        """Delete key/value from environment's userdata.
+
+        Args:
+            key (str): The name of key to delete, along with value
+
+        Returns:
+            str: The response from Skytap, or "".
+        """
+
+        new_content = ""
+
+        del_key = False
+
+        lines = self.contents.split("\n")
+
+        for i in lines:
+            j = i.split()
+            if len(j) > 0 and j[0] == (key + ":"):
+                del_key = True
+            elif i != "" and i != "\n":
+                new_content += (i + "\n")
+
+        if del_key:
+            logging.info('Deleting key \"' + key + '\".')
+            api = ApiClient()
+            data = {"contents": "" + new_content.lstrip()}
+            response = api.rest(self.url, data, 'POST')
+            self.refresh()
+            return response
+        else:
+            logging.info('Key \"' + key + '\" already exists.')
+            return ""
+
+    def add_line(self, text, line=-1):
         """Add line to environment's userdata.
 
         Args:
-            text (str): line of text to be added.
+            text (str): line of text to be added. (Required)
             line (int): line number to add to. If too large, default to last.
 
         Returns:
@@ -72,11 +106,10 @@ class UserData(SkytapResource):
             if line == count:
                 new_content += (text + "\n")
 
-                if i != "" and i != "\n":
-                    new_content += (i + "\n")
+                new_content += (i + "\n")
 
                 line_found = True
-            else:
+            elif i != "" and i != "\n":
                 new_content += (i + "\n")
 
             count += 1
@@ -84,47 +117,66 @@ class UserData(SkytapResource):
         if not line_found:
             new_content += (text + "\n")
 
-        logging.info('Adding line: \"' + text + '\" to line ' + str(line))
+        logging.info('Adding line: \"' + text + '\"')
         api = ApiClient()
-        data = {"contents": new_content}
+        data = {"contents": new_content.lstrip()}
         response = api.rest(self.url, data, 'POST')
         self.refresh()
         return response
 
-    def delete(self, key):
-        """Delete key/value from environment's userdata.
+    def delete_line(self, line):
+        """Delete line from environment's userdata.
 
         Args:
-            key (str): The name of key to delete, along with value
+            line (int): line number to delete.
 
         Returns:
-            str: The response from Skytap, or 0.
+            str: The response from Skytap, or "".
         """
-
-        new_content = ""
-
-        del_key = False
 
         lines = self.contents.split("\n")
 
-        for i in lines:
-            j = i.split()
-            if len(j) > 0 and j[0] == (key + ":"):
-                del_key = True
-            else:
-                new_content += (i + "\n")
+        new_content = ""
 
-        if del_key:
-            logging.info('Deleting key \"' + key + '\".')
-            api = ApiClient()
-            data = {"contents": "" + new_content}
-            response = api.rest(self.url, data, 'POST')
-            del data[key]
-            self.refresh()
-            return response
-        else:
-            logging.info('Key \"' + key + '\" already exists.')
-            return 0
+        line_found = False
+        count = 0
+        for i in lines:
+            if line != count:
+                    new_content += (i + "\n")
+                    line_found = True
+
+            count += 1
+
+        if not line_found:
+            return ""
+
+        logging.info('Removing line: \"' + str(line) + '\"')
+        api = ApiClient()
+        data = {"contents": new_content.lstrip()}
+        response = api.rest(self.url, data, 'POST')
+        self.refresh()
+        return response
+
+    def get_line(self, line):
+        """Return content of line from environment's userdata.
+
+        Args:
+            line (int): line number to get.
+
+        Returns:
+            str: The content of the line.
+        """
+
+        lines = self.contents.split("\n")
+
+        line_found = False
+        count = 0
+        for i in lines:
+            if line == count:
+                    return i
+
+        if not line_found:
+            return ""
 
     def _get_values(self, contents):
         """Check userdata and set variables based on keys/values within."""
