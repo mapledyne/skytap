@@ -20,7 +20,7 @@ class UserData(SkytapResource):
             value (str): The value to add.
 
         Returns:
-            str: The response from Skytap, or "".
+            str: The response from Skytap, or "{}".
         """
 
         add_key = True
@@ -43,13 +43,12 @@ class UserData(SkytapResource):
 
             data = {"contents": new_content.lstrip()}
             response = api.rest(self.url, data, 'POST')
-            self.data[key] = value
             self.refresh()
             return response
         else:
             logging.info('Key \"' + key + '\" with value \"' + value + '\"'
                          'already exists.')
-            return ""
+            return "{}"
 
     def delete(self, key):
         """Delete key/value from environment's userdata.
@@ -58,7 +57,7 @@ class UserData(SkytapResource):
             key (str): The name of key to delete, along with value
 
         Returns:
-            str: The response from Skytap, or "".
+            str: The response from Skytap, or "{}".
         """
 
         new_content = ""
@@ -83,7 +82,7 @@ class UserData(SkytapResource):
             return response
         else:
             logging.info('Key \"' + key + '\" already exists.')
-            return ""
+            return "{}"
 
     def add_line(self, text, line=-1):
         """Add line to environment's userdata.
@@ -95,6 +94,11 @@ class UserData(SkytapResource):
         Returns:
             str: The response from Skytap.
         """
+
+        try:
+            line = int(line)
+        except ValueError:
+            return "{}"  # Not an integer
 
         lines = self.contents.split("\n")
 
@@ -131,8 +135,13 @@ class UserData(SkytapResource):
             line (int): line number to delete.
 
         Returns:
-            str: The response from Skytap, or "".
+            str: The response from Skytap, or "{}".
         """
+
+        try:
+            line = int(line)
+        except ValueError:
+            return "{}"  # Not an integer
 
         lines = self.contents.split("\n")
 
@@ -148,7 +157,7 @@ class UserData(SkytapResource):
             count += 1
 
         if not line_found:
-            return ""
+            return "{}"
 
         logging.info('Removing line: \"' + str(line) + '\"')
         api = ApiClient()
@@ -164,8 +173,13 @@ class UserData(SkytapResource):
             line (int): line number to get.
 
         Returns:
-            str: The content of the line.
+            str: The content of the line, or "".
         """
+
+        try:
+            line = int(line)
+        except ValueError:
+            return ""  # Not an integer
 
         lines = self.contents.split("\n")
 
