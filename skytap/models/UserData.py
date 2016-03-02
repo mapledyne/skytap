@@ -43,6 +43,7 @@ class UserData(SkytapResource):
 
             data = {"contents": new_content.lstrip()}
             response = api.rest(self.url, data, 'POST')
+            self.data[key] = value
             self.refresh()
             return response
         else:
