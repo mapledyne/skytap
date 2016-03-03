@@ -1,10 +1,4 @@
-skytap.models package
-=====================
-
-Submodules
-----------
-
-skytap.models.Environment module
+Environment module
 --------------------------------
 
 .. automodule:: skytap.models.Environment
@@ -12,7 +6,7 @@ skytap.models.Environment module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Group module
+Group module
 --------------------------
 
 .. automodule:: skytap.models.Group
@@ -20,7 +14,7 @@ skytap.models.Group module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Note module
+Note module
 -------------------------
 
 .. automodule:: skytap.models.Note
@@ -28,7 +22,7 @@ skytap.models.Note module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Notes module
+Notes module
 --------------------------
 
 .. automodule:: skytap.models.Notes
@@ -36,7 +30,7 @@ skytap.models.Notes module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Project module
+Project module
 ----------------------------
 
 .. automodule:: skytap.models.Project
@@ -44,7 +38,7 @@ skytap.models.Project module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Quota module
+Quota module
 --------------------------
 
 .. automodule:: skytap.models.Quota
@@ -52,7 +46,7 @@ skytap.models.Quota module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.SkytapGroup module
+SkytapGroup module
 --------------------------------
 
 .. automodule:: skytap.models.SkytapGroup
@@ -60,7 +54,7 @@ skytap.models.SkytapGroup module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.SkytapResource module
+SkytapResource module
 -----------------------------------
 
 .. automodule:: skytap.models.SkytapResource
@@ -68,7 +62,7 @@ skytap.models.SkytapResource module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Template module
+Template module
 -----------------------------
 
 .. automodule:: skytap.models.Template
@@ -76,7 +70,7 @@ skytap.models.Template module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.User module
+User module
 -------------------------
 
 .. automodule:: skytap.models.User
@@ -84,7 +78,7 @@ skytap.models.User module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.UserData module
+UserData module
 -----------------------------
 
 .. automodule:: skytap.models.UserData
@@ -92,7 +86,7 @@ skytap.models.UserData module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Vm module
+Vm module
 -----------------------
 
 .. automodule:: skytap.models.Vm
@@ -100,7 +94,7 @@ skytap.models.Vm module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Vms module
+Vms module
 ------------------------
 
 .. automodule:: skytap.models.Vms
@@ -108,19 +102,10 @@ skytap.models.Vms module
     :undoc-members:
     :show-inheritance:
 
-skytap.models.Vpn module
+Vpn module
 ------------------------
 
 .. automodule:: skytap.models.Vpn
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: skytap.models
     :members:
     :undoc-members:
     :show-inheritance:

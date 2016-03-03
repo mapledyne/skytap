@@ -1,10 +1,46 @@
-"""Skytap API object wrapping Skytap groups.
+"""Skytap API object wrapping Skytap Groups.
 
 This roughly translates to the Skytap API call of /v2/groups REST call,
-but gives us better access to the bits and pieces of the group.
+but gives us better access to the bits and pieces of the groups.
 
-If accessed via the command line (``python -m skytap.Groups``) this will
-return the groups from Skytap in a JSON format.
+Accessing via command line
+==========================
+
+If accessed via the command line this will return the environments from
+Skytap in a JSON format::
+
+    python -m skytap.Groups
+
+If you know the environment you want information on, you can also specify
+it directly. You can search by id or by a part of the environment name::
+
+    python -m skytap.Groups 12345
+    python -m skytap.Groups test
+
+
+Accessing via Python
+====================
+
+You can access the Skytap environments by the :class:`skytap.Groups` object.
+
+Example:
+    >>> groups = skytap.Groups()
+    >>> for g in groups:
+    ...     print(g.name)
+
+Each group has many things you can do with it - see the
+:class:`skytap.models.Group` object for actions you can take on an
+individual group.
+
+On the full list of groups, you can also do a few other things:
+
+    - :func:`add`: add a new group.
+    - :func:`delete`: delete a group.
+
+Environments can also perform any of the actions of other
+:class:`SkytapGroup` objects. See the documentation
+on the :class:`skytap.models.SkytapGroup` class for
+information there.
 """
 import json
 import logging
@@ -18,10 +54,13 @@ class Groups(SkytapGroup):
 
     """Set of Skytap groups.
 
+    Generally, access this through simply creating a
+    ``skytap.Groups()`` object.
+
     Example:
-        >>> g = skytap.Groups()
-        >>> print len(g)
-        12
+        >>> groups = skytap.Groups()
+        >>> for g in groups:
+        ...     print(g.name)
     """
 
     def __init__(self, json_list=None):

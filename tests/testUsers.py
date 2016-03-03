@@ -1,4 +1,5 @@
 import json
+import nose
 import os
 import sys
 import uuid
@@ -37,12 +38,21 @@ def test_user_str_conversion():
         assert len(str(u)) > 0
 
 
-# def test_user_creation():
-#    """Create, modify, and delete a user."""
-#    transfer_to = 95750
-#    email = str(uuid.uuid4()) + '@example.com'
-#    user = users.add(email)
-#    assert users[user].email == email
+def test_user_creation():
+    """Create, modify, and delete a user."""
+    transfer_to = users.first()
+    email = str(uuid.uuid4()) + '@example.com'
+    user = users.add(email)
+    assert user > 0
+    assert users[user].email == email
+
+    assert users.delete(user, transfer_to)
+    access_deleted_user(user)
+
+
+@nose.tools.raises(KeyError)
+def access_deleted_user(user):
+    det = users[user]
 
 
 def test_user_module_main():

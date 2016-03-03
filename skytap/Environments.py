@@ -39,7 +39,7 @@ script, you can access the Skytap environments by the
 Example:
     >>> envs = skytap.Environments()
     >>> for e in envs:
-    >>>     print(e.name)
+    ...     print(e.name)
 
 Each environment has many things you can do with it - see the
 :class:`skytap.models.Environment` object for actions you can take on an

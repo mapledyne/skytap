@@ -107,9 +107,9 @@ class Users(SkytapGroup):
         if not isinstance(transfer_user, User):
             raise KeyError
 
-        target_id = group.id
+        target_id = user.id
 
-        user.delete(tranfer_user)
+        user.delete(transfer_user)
         self.refresh()
 
         return target_id not in self.data

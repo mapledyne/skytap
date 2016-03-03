@@ -8,10 +8,7 @@ Subpackages
 
     skytap.models
 
-Submodules
-----------
-
-skytap.Environments module
+Environments module
 --------------------------
 
 .. automodule:: skytap.Environments
@@ -19,7 +16,7 @@ skytap.Environments module
     :undoc-members:
     :show-inheritance:
 
-skytap.Groups module
+Groups module
 --------------------
 
 .. automodule:: skytap.Groups
@@ -27,7 +24,7 @@ skytap.Groups module
     :undoc-members:
     :show-inheritance:
 
-skytap.Projects module
+Projects module
 ----------------------
 
 .. automodule:: skytap.Projects
@@ -35,7 +32,7 @@ skytap.Projects module
     :undoc-members:
     :show-inheritance:
 
-skytap.Quotas module
+Quotas module
 --------------------
 
 .. automodule:: skytap.Quotas
@@ -43,7 +40,7 @@ skytap.Quotas module
     :undoc-members:
     :show-inheritance:
 
-skytap.Templates module
+Templates module
 -----------------------
 
 .. automodule:: skytap.Templates
@@ -51,7 +48,7 @@ skytap.Templates module
     :undoc-members:
     :show-inheritance:
 
-skytap.Users module
+Users module
 -------------------
 
 .. automodule:: skytap.Users
@@ -59,19 +56,10 @@ skytap.Users module
     :undoc-members:
     :show-inheritance:
 
-skytap.Vpns module
+Vpns module
 ------------------
 
 .. automodule:: skytap.Vpns
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: skytap
     :members:
     :undoc-members:
     :show-inheritance:

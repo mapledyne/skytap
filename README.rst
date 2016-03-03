@@ -1,6 +1,6 @@
-==========
-Skytap API
-==========
+=======================
+Skytap REST API wrapper
+=======================
 
 Skytap is a set of modules that we use to manage aspects of our Skytap infrastructure here at `Fulcrum Technologies <http://fulcrum.net>`__.
 
