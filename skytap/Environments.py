@@ -3,8 +3,7 @@
 This roughly translates to the Skytap API call of /v2/configurations REST call,
 but gives us better access to the bits and pieces of the environments.
 
-Accessing via command line
-==========================
+**Accessing via command line**
 
 If accessed via the command line this will return the environments from
 Skytap in a JSON format::
@@ -29,17 +28,16 @@ Region::
 
     python -m skytap.Environments us-west
 
-Accessing via Python
-====================
+**Accessing via Python**
 
 After you've installed ``skytap`` and added ``import skytap`` to your
 script, you can access the Skytap environments by the
 :class:`skytap.Environments` object.
 
 Example:
-    >>> envs = skytap.Environments()
-    >>> for e in envs:
-    ...     print(e.name)
+    envs = skytap.Environments()
+    for e in envs:
+        print(e.name)
 
 Each environment has many things you can do with it - see the
 :class:`skytap.models.Environment` object for actions you can take on an
@@ -78,9 +76,8 @@ class Environments(SkytapGroup):
             int: Number of VMs used across all environments.
 
         Example:
-            >>> envs = skytap.Environments()
-            >>> print(envs.vm_count())
-            112
+            envs = skytap.Environments()
+            print(envs.vm_count())
         """
         count = 0
         for e in self.data:
@@ -94,9 +91,8 @@ class Environments(SkytapGroup):
             int: Number of SVMs used across all environments.
 
         Example:
-            >>> envs = skytap.Environments()
-            >>> print(envs.svms())
-            312
+            envs = skytap.Environments()
+            print(envs.svms())
         """
         count = 0
         for e in self.data:
@@ -110,9 +106,8 @@ class Environments(SkytapGroup):
             int: Amount of storage used across all environments.
 
         Example:
-            >>> envs = skytap.Environments()
-            >>> print(envs.storage()))
-            57229376
+            envs = skytap.Environments()
+            print(envs.storage()))
         """
         count = 0
         for e in list(self.data):
@@ -134,10 +129,9 @@ class Environments(SkytapGroup):
             KeyError: If ``env`` isn't in the Environments set.
 
         Example:
-            >>> envs = skytap.Environments()
-            >>> target = envs[12345]
-            >>> envs.delete(target)
-            True
+            envs = skytap.Environments()
+            target = envs[12345]
+            envs.delete(target)
         """
         target_id = env.id
         if isinstance(env, Environment):

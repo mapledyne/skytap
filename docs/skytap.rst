@@ -1,4 +1,4 @@
-skytap package
+Skytap
 ==============
 
 Subpackages

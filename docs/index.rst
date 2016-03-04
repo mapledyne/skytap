@@ -5,15 +5,22 @@
 
 .. include:: ../README.rst
 
-Contents:
+Objects
+-------
 
 .. toctree::
    :maxdepth: 2
 
-   skytap
+   index
+   environments
+   groups
+   projects
+   quotas
+   templates
+   users
+   vpns
+   skytap.models
 
-.. automodule:: skytap
-   :members:
 
 Indices and tables
 ==================

@@ -3,8 +3,7 @@
 This roughly translates to the Skytap API call of /v2/groups REST call,
 but gives us better access to the bits and pieces of the groups.
 
-Accessing via command line
-==========================
+**Accessing via command line**
 
 If accessed via the command line this will return the environments from
 Skytap in a JSON format::
@@ -18,15 +17,14 @@ it directly. You can search by id or by a part of the environment name::
     python -m skytap.Groups test
 
 
-Accessing via Python
-====================
+**Accessing via Python**
 
 You can access the Skytap environments by the :class:`skytap.Groups` object.
 
 Example:
-    >>> groups = skytap.Groups()
-    >>> for g in groups:
-    ...     print(g.name)
+    groups = skytap.Groups()
+    for g in groups:
+        print(g.name)
 
 Each group has many things you can do with it - see the
 :class:`skytap.models.Group` object for actions you can take on an
@@ -58,9 +56,9 @@ class Groups(SkytapGroup):
     ``skytap.Groups()`` object.
 
     Example:
-        >>> groups = skytap.Groups()
-        >>> for g in groups:
-        ...     print(g.name)
+        groups = skytap.Groups()
+        for g in groups:
+            print(g.name)
     """
 
     def __init__(self, json_list=None):
@@ -85,9 +83,9 @@ class Groups(SkytapGroup):
             int: The new group id from Skytap.
 
         Example:
-            >>> groups = skytap.Groups()
-            >>> new_group = groups.add('muppets', 'felt covered friends')
-            >>> print(groups[new_group].name)
+            groups = skytap.Groups()
+            new_group = groups.add('muppets', 'felt covered friends')
+            print(groups[new_group].name)
         """
         logging.info('Adding group: ' + group)
         api = ApiClient()
