@@ -17,8 +17,6 @@ class SkytapGroup(ApiClient, six.Iterator):
         self.itercount = 0
         self.search_fields = ['name']
 
-
-
     def load_list_from_api(self, url, target, params={}):
         """Load something from the Skytap API and fill this object.
 
@@ -27,7 +25,8 @@ class SkytapGroup(ApiClient, six.Iterator):
 
         Args:
             url (str): The Skytap URL to load ('/v2/users').
-            target (SkytapResource): The resource type to load ('User')
+            target: The :class:`~skytap.models.SkytapResource`
+                type to load (For example: 'User')
             params (dict): Any URL parameters to add to URL.
 
         This should look like, in the child object::
@@ -50,9 +49,12 @@ class SkytapGroup(ApiClient, six.Iterator):
 
         Args:
             json_list (list): The list to load the items from.
-            target (SkytapResource): The resource type to load ('User')
+            target: The :class:`~skytap.models.SkytapResource`
+                type to load (for example: 'User')
 
-        This should look like, in the child object::
+        This should look like, in the child object:
+
+        .. code-block: python
 
             self.load_list_from_json(json, Project)
 
@@ -87,7 +89,7 @@ class SkytapGroup(ApiClient, six.Iterator):
             arbitrary and not reliable from one run to the next.
 
         Returns:
-            SkytapResource: An object from the list.
+            ~skytap.models.SkytapResource: An object from the list.
         """
         return self.data[list(self.data)[0]]
 

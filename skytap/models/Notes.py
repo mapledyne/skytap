@@ -37,7 +37,7 @@ class Notes(SkytapGroup):
         """Delete one note.
 
         Args:
-            note (Note): The note to delete.
+            note: The :class:`~skytap.models.Note` to delete.
 
         Returns:
             str: The response from Skytap.
@@ -62,14 +62,17 @@ class Notes(SkytapGroup):
         """Return the oldest note.
 
         Returns:
-            Note: The oldest note.
+            ~skytap.models.Note: The oldest note.
 
         Used most often to delete the oldest note.
 
         Example:
-            >>> notes = skytap.Environtments().first.notes
-            >>> print(notes.oldest().text)
-            >>> # notes.delete(notes.oldest())  # most common use case.
+
+        .. code-block:: python
+
+            notes = skytap.Environtments().first.notes
+            print(notes.oldest().text)
+            # notes.delete(notes.oldest())  # most common use case.
         """
         target = None
         for n in self.data:
@@ -84,7 +87,7 @@ class Notes(SkytapGroup):
         """Return the newest note.
 
         Returns:
-            Note: The newest note.
+            ~skytap.models.Note: The newest note.
         """
         target = None
         for n in self.data:

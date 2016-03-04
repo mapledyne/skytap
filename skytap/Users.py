@@ -19,6 +19,8 @@ class Users(SkytapGroup):
     """Set of Skytap users.
 
     Example:
+
+    .. code-block:: python
         u = skytap.Users()
         print len(u)
     """
@@ -82,14 +84,17 @@ class Users(SkytapGroup):
             This is unrecoverable. Use with caution.
 
         Args:
-            user (User or int): The user to delete.
-            transfer_user (User or int): Transfer all assets to this user.
+            user: The user to delete (:class:`~skytap.models.User` or
+                :class:`int`).
+            transfer_user : Transfer all assets to this user
+                (:class:`~skytap.models.User` or :class:`int`).
 
         Returns:
             bool: True if user deleted.
 
         Raises:
-            TypeError: if user or transfer_user is not a User or int.
+            TypeError: if user or transfer_user is not a
+                :class:`~skytap.models.User` or :class:`int`.
             KeyError: If user or transfer_user isn't a user in the Users list.
         """
         if isinstance(user, int):

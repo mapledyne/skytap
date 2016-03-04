@@ -16,8 +16,8 @@ class Templates(SkytapGroup):
     """Set of Skytap templates.
 
     Example:
-    t = skytap.Templates()
-    print len(t)
+        t = skytap.Templates()
+        print len(t)
     """
 
     def __init__(self):

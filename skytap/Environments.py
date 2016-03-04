@@ -35,9 +35,12 @@ script, you can access the Skytap environments by the
 :class:`skytap.Environments` object.
 
 Example:
+
+.. code-block:: python
+
     envs = skytap.Environments()
     for e in envs:
-        print(e.name)
+        print (e.name)
 
 Each environment has many things you can do with it - see the
 :class:`skytap.models.Environment` object for actions you can take on an
@@ -89,6 +92,9 @@ class Environments(SkytapGroup):
             int: Number of VMs used across all environments.
 
         Example:
+
+        .. code-block:: python
+
             envs = skytap.Environments()
             print(envs.vm_count())
         """
@@ -104,6 +110,9 @@ class Environments(SkytapGroup):
             int: Number of SVMs used across all environments.
 
         Example:
+
+        .. code-block:: python
+
             envs = skytap.Environments()
             print(envs.svms())
         """
@@ -119,6 +128,9 @@ class Environments(SkytapGroup):
             int: Amount of storage used across all environments.
 
         Example:
+
+        .. code-block:: python
+
             envs = skytap.Environments()
             print(envs.storage()))
         """
@@ -134,7 +146,7 @@ class Environments(SkytapGroup):
             This is unrecoverable. Use with **extreme** caution.
 
         Args:
-            env (Environment): The environment to delete.
+            env: The :class:`~skytap.models.Environment` to delete.
 
         Returns:
             bool: True if the environment was deleted.
@@ -142,6 +154,9 @@ class Environments(SkytapGroup):
             KeyError: If ``env`` isn't in the Environments set.
 
         Example:
+
+        .. code-block:: python
+
             envs = skytap.Environments()
             target = envs[12345]
             envs.delete(target)

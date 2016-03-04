@@ -5,13 +5,14 @@
 
 .. include:: ../README.rst
 
+
 Objects
 -------
 
 .. toctree::
    :maxdepth: 2
 
-   index
+   readme
    environments
    groups
    projects
@@ -21,9 +22,8 @@ Objects
    vpns
    skytap.models
 
-
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

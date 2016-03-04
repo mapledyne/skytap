@@ -22,6 +22,9 @@ it directly. You can search by id or by a part of the environment name::
 You can access the Skytap environments by the :class:`skytap.Groups` object.
 
 Example:
+
+.. code-block:: python
+
     groups = skytap.Groups()
     for g in groups:
         print(g.name)
@@ -53,9 +56,12 @@ class Groups(SkytapGroup):
     """Set of Skytap groups.
 
     Generally, access this through simply creating a
-    ``skytap.Groups()`` object.
+    :class:`skytap.Groups` object.
 
     Example:
+
+    .. code-block:: python
+
         groups = skytap.Groups()
         for g in groups:
             print(g.name)
@@ -83,6 +89,9 @@ class Groups(SkytapGroup):
             int: The new group id from Skytap.
 
         Example:
+
+        .. code-block:: python
+
             groups = skytap.Groups()
             new_group = groups.add('muppets', 'felt covered friends')
             print(groups[new_group].name)
@@ -109,13 +118,13 @@ class Groups(SkytapGroup):
             This is unrecoverable. Use with caution.
 
         Args:
-            group (Group): The group to delete.
+            group: The :class:`~skytap.models.Group` to delete.
 
         Returns:
             bool: True if group deleted.
 
         Raises:
-            TypeError: if group is not a Group
+            TypeError: if group is not a :class:`~skytap.models.Group`
         """
         if isinstance(group, int):
             if group not in self.data:
