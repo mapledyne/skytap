@@ -18,10 +18,9 @@ class Users(SkytapGroup):
 
     """Set of Skytap users.
 
-    :Example:
-    >>> u = skytap.Users()
-    >>> print len(u)
-    58
+    Example:
+        u = skytap.Users()
+        print len(u)
     """
 
     def __init__(self, json_list=None):
@@ -55,9 +54,9 @@ class Users(SkytapGroup):
             int: The new user id from Skytap.
 
         Example:
-            >>> users = skytap.Users()
-            >>> new_user = users.add('kermit.frog@fulcrum.net')
-            >>> print(users[new_user].login_name)
+            users = skytap.Users()
+            new_user = users.add('kermit.frog@fulcrum.net')
+            print(users[new_user].login_name)
         """
         logging.info('Adding user: ' + login_name)
         if email is None:

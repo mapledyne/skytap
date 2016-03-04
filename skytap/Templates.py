@@ -3,7 +3,7 @@
 This roughly translates to the Skytap API call of /v2/templates REST call,
 but gives us better access to the bits and pieces of the templates.
 
-If accessed via the command line (``python -m skytap.Templates()``) this will
+If accessed via the command line (``python -m skytap.Templates``) this will
 return the templates from Skytap in a JSON format.
 """
 from skytap.models.SkytapGroup import SkytapGroup
@@ -15,10 +15,9 @@ class Templates(SkytapGroup):
 
     """Set of Skytap templates.
 
-    :Example:
-    >>> t = skytap.Templates()
-    >>> print len(t)
-    12
+    Example:
+    t = skytap.Templates()
+    print len(t)
     """
 
     def __init__(self):
