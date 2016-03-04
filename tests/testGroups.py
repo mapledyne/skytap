@@ -82,7 +82,7 @@ def test_group_creation():
     assert groups[group].remove_user(user.id), msg
     msg = 'User (' + user.name + ') still in group after being removed.'
     assert user not in groups[group].users, msg
-    msg = 'User (' + user.name + ') not successfully deleted.'
+    msg = 'Group (' + name + ') not successfully deleted.'
     assert groups.delete(groups[group]), msg
     access_deleted_group(group)
 

@@ -50,6 +50,19 @@ Environments can also perform any of the actions of other
 :class:`SkytapGroup` objects. See the documentation
 on the :class:`skytap.models.SkytapGroup` class for
 information there.
+
+.. note::
+    Some pieces of a given environment, specifically `notes` and `user_data`,
+    are only available via additional calls to the API. These fields will
+    not exist when first creating the environments object, but any direct
+    access to those fields will trigger the API call behind the scenes.
+
+    This is important if you're listing the entire contents (say, sending it
+    to a JSON) - these fields won't be included if you haven't made that direct
+    access.
+
+    This is by design to conserve API calls as most usage doesn't need or use
+    those fields.
 """
 from skytap.models.Environment import Environment
 from skytap.models.SkytapGroup import SkytapGroup

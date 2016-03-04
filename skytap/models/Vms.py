@@ -11,10 +11,10 @@ class Vms(SkytapGroup):
     def __init__(self, vms_json, env):
         """Create the list of VMs.
 
-        :param vms_json: The JSON from Skytap API to build the list from.
-        :type vms_json: json
-        :param parent: The parent object - evironment or template.
-        :type parent: Environment or template
+        Args:
+            vms_json (string): The JSON from Skytap API to build the list from.
+            parent (Environment or Template): The parent object -
+                evironment or template.
 
         """
         super(Vms, self).__init__()
