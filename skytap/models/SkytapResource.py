@@ -37,12 +37,12 @@ class SkytapResource(object):
         if 'created_at' in self.data:
             try:
                 self.data['created_at'] = Utils.convert_date(self.created_at)
-            except ValueError:
+            except (ValueError, AttributeError):
                 pass
         if 'updated_at' in self.data:
             try:
                 self.data['updated_at'] = Utils.convert_date(self.updated_at)
-            except ValueError:
+            except (ValueError, AttributeError):
                 pass
         if 'last_installed' in self.data:
             try:
