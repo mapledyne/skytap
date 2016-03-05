@@ -12,6 +12,6 @@ install:
   - pip install coveralls
   # command to run tests
 script:
-  - nosetests --with-coverage --cover-package=skytap
+  - nosetests --with-coverage --cover-package skytap
 after_success:
   - coveralls
