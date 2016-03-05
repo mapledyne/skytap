@@ -9,5 +9,9 @@ python:
 install:
   - pip install .
   - pip install nose coverage
+  - pip install coveralls
   # command to run tests
-script: nosetests --with-coverage
+script:
+  - nosetests --with-coverage --cover-package=skytap
+after_success:
+  - coveralls
