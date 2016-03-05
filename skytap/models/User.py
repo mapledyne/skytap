@@ -2,6 +2,7 @@ import json
 import logging
 
 from skytap.framework.ApiClient import ApiClient
+from skytap.Environments import Environments
 from skytap.models.SkytapResource import SkytapResource
 
 

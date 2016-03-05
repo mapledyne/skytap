@@ -3,8 +3,10 @@ import json
 import logging
 import requests
 import six
-from skytap.framework.Config import Config
 import sys
+import time
+
+from skytap.framework.Config import Config
 
 requests.packages.urllib3.disable_warnings()
 
@@ -102,7 +104,7 @@ class ApiClient(object):
                       if value is not None]
         return '?' + "&".join(param_list)
 
-    def rest(self, url, params={}, req='get', data=None):
+    def rest(self, url, params=None, req='get', data=None):
         """Call the REST API, returning all results.
 
         This calls the actual REST API, then checks the returning headers in
@@ -113,6 +115,8 @@ class ApiClient(object):
         This defeats the pagination that Skytap uses in their v2 API, but is
         useful for us given how we use the API.
         """
+        if params is None:
+            params = {}
         if not url.upper().startswith('HTTP'):
             url = Config.base_url + url
 

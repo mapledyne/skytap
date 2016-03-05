@@ -20,7 +20,7 @@ class SkytapGroup(ApiClient, six.Iterator):
         self.itercount = 0
         self.search_fields = ['name']
 
-    def load_list_from_api(self, url, target, params={}):
+    def load_list_from_api(self, url, target, params=None):
         """Load something from the Skytap API and fill this object.
 
         .. note: This should rarely be called by anything but a child object,
@@ -37,6 +37,8 @@ class SkytapGroup(ApiClient, six.Iterator):
             self.load_list_from_api('/v2/projects', Project)
 
         """
+        if params is None:
+            params = {}
         self.load_list_from_json(self.rest(url, params), target)
         self.params = params
         self.url = url
