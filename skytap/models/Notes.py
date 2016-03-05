@@ -1,7 +1,7 @@
 """Support for notes that are attached to VMs and environments."""
-
 import json
 import logging
+
 from skytap.framework.ApiClient import ApiClient
 from skytap.models.Note import Note
 from skytap.models.SkytapGroup import SkytapGroup

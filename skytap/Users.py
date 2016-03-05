@@ -8,10 +8,11 @@ return the users from Skytap in a JSON format.
 """
 import json
 import logging
+import sys
+
 from skytap.framework.ApiClient import ApiClient
 from skytap.models.SkytapGroup import SkytapGroup
 from skytap.models.User import User
-import sys
 
 
 class Users(SkytapGroup):
@@ -56,6 +57,9 @@ class Users(SkytapGroup):
             int: The new user id from Skytap.
 
         Example:
+
+        .. code-block:: python
+
             users = skytap.Users()
             new_user = users.add('kermit.frog@fulcrum.net')
             print(users[new_user].login_name)

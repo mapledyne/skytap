@@ -6,9 +6,10 @@ but gives us better access to the bits and pieces of the templates.
 If accessed via the command line (``python -m skytap.Templates``) this will
 return the templates from Skytap in a JSON format.
 """
+import sys
+
 from skytap.models.SkytapGroup import SkytapGroup
 from skytap.models.Template import Template
-import sys
 
 
 class Templates(SkytapGroup):

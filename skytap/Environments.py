@@ -67,9 +67,10 @@ information there.
     This is by design to conserve API calls as most usage doesn't need or use
     those fields.
 """
+import sys
+
 from skytap.models.Environment import Environment
 from skytap.models.SkytapGroup import SkytapGroup
-import sys
 
 
 class Environments(SkytapGroup):

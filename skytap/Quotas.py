@@ -3,9 +3,10 @@
 If accessed via the command line (``python -m skytap.Quotas``) this will
 return the quotas from Skytap in a JSON format.
 """
+import sys
+
 from skytap.models.Quota import Quota
 from skytap.models.SkytapGroup import SkytapGroup
-import sys
 
 
 class Quotas(SkytapGroup):

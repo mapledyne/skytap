@@ -1,6 +1,7 @@
 """Support for Skytap groups."""
 import json
 import logging
+
 from skytap.framework.ApiClient import ApiClient
 from skytap.models.SkytapResource import SkytapResource
 from skytap.Users import Users

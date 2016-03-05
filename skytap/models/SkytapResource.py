@@ -1,6 +1,7 @@
 """Base class for all Skytap Resources."""
 import json
 import six
+
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Json import SkytapJsonEncoder
 import skytap.framework.Utils as Utils

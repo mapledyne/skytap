@@ -1,5 +1,6 @@
 """Support for Skytap VMs."""
 import json
+
 from skytap.models.SkytapGroup import SkytapGroup
 from skytap.models.Vm import Vm
 

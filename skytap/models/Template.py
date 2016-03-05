@@ -1,5 +1,6 @@
 """Support for an Template resource in Skytap."""
 import json
+
 from skytap.framework.ApiClient import ApiClient
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource

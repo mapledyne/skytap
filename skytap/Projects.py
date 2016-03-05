@@ -1,6 +1,7 @@
+import sys
+
 from skytap.models.Project import Project
 from skytap.models.SkytapGroup import SkytapGroup
-import sys
 
 
 class Projects(SkytapGroup):

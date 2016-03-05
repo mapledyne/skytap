@@ -45,10 +45,11 @@ information there.
 """
 import json
 import logging
+import sys
+
 from skytap.framework.ApiClient import ApiClient
 from skytap.models.Group import Group
 from skytap.models.SkytapGroup import SkytapGroup
-import sys
 
 
 class Groups(SkytapGroup):
