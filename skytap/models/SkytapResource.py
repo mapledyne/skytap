@@ -47,7 +47,7 @@ class SkytapResource(object):
         if 'last_installed' in self.data:
             try:
                 self.data['last_installed'] = Utils.convert_date(self.last_installed)  # nopep8
-            except ValueError:
+            except (ValueError, AttributeError):
                 pass
 
         try:
