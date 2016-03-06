@@ -3,7 +3,7 @@ import os
 import sys
 
 sys.path.append('..')
-from skytap.Quotas import Quotas  # nopep8
+from skytap.Quotas import Quotas  # noqa
 
 quotas = Quotas()
 

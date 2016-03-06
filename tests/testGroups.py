@@ -5,8 +5,8 @@ import sys
 import uuid
 
 sys.path.append('..')
-from skytap.Groups import Groups  # nopep8
-from skytap.Users import Users  # nopep8
+from skytap.Groups import Groups  # noqa
+from skytap.Users import Users  # noqa
 groups = Groups()
 
 

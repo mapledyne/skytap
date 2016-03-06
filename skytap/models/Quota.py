@@ -1,6 +1,5 @@
 """Support for Skytap quotas."""
 from datetime import timedelta
-import json
 
 from skytap.models.SkytapResource import SkytapResource
 

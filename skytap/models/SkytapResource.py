@@ -1,6 +1,5 @@
 """Base class for all Skytap Resources."""
 import json
-import six
 
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Json import SkytapJsonEncoder
@@ -46,7 +45,7 @@ class SkytapResource(object):
                 pass
         if 'last_installed' in self.data:
             try:
-                self.data['last_installed'] = Utils.convert_date(self.last_installed)  # nopep8
+                self.data['last_installed'] = Utils.convert_date(self.last_installed)  # noqa
             except (ValueError, AttributeError):
                 pass
 

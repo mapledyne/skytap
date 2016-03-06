@@ -3,7 +3,7 @@ import json
 import sys
 
 sys.path.append('..')
-from skytap.framework.ApiClient import ApiClient  # nopep8
+from skytap.framework.ApiClient import ApiClient  # noqa
 
 
 class TestApiClient(object):

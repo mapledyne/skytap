@@ -5,7 +5,7 @@ import sys
 import uuid
 
 sys.path.append('..')
-from skytap.Users import Users  # nopep8
+from skytap.Users import Users  # noqa
 
 users = Users()
 

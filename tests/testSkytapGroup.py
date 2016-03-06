@@ -3,8 +3,8 @@ import os
 import sys
 
 sys.path.append('..')
-from skytap.models.Environment import Environment  # nopep8
-from skytap.models.SkytapGroup import SkytapGroup  # nopep8
+from skytap.models.Environment import Environment  # noqa
+from skytap.models.SkytapGroup import SkytapGroup  # noqa
 
 
 class SkytapGroupToTest(SkytapGroup):

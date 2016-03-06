@@ -4,7 +4,7 @@ import os
 import sys
 
 sys.path.append('..')
-from skytap.Templates import Templates  # nopep8
+from skytap.Templates import Templates  # noqa
 
 
 templates = Templates()

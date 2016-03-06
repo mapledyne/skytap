@@ -1,8 +1,4 @@
 """Support for a single note in a Skytap environment or vm."""
-import datetime
-import json
-
-import skytap.framework.Utils as Utils
 from skytap.models.SkytapResource import SkytapResource
 
 

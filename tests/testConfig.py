@@ -4,7 +4,7 @@ import nose
 import sys
 
 sys.path.append('..')
-from skytap.framework.Config import Config  # nopep8
+from skytap.framework.Config import Config  # noqa
 
 
 class TestConfig(object):

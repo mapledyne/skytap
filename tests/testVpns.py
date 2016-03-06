@@ -3,7 +3,7 @@ import os
 import sys
 
 sys.path.append('..')
-from skytap.Vpns import Vpns  # nopep8
+from skytap.Vpns import Vpns  # noqa
 
 vpns = Vpns()
 

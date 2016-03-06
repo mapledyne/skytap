@@ -1,13 +1,9 @@
 """Base object to handle groups of Skytap objects."""
-from collections import Iterator
 import json
 import six
 
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Json import SkytapJsonEncoder
-
-
-import skytap.framework.Utils as Utils
 
 
 class SkytapGroup(ApiClient, six.Iterator):
@@ -181,13 +177,7 @@ class SkytapGroup(ApiClient, six.Iterator):
         return len(self.data)
 
     def __str__(self):
-        data_str = ''
-        for u in self.data:
-            try:
-                data_str += str(self.data[u]) + '\n'
-            except UnicodeEncodeError:
-                data_str += (unicode(self.data[u]).encode('utf_8') + '\n')
-        return data_str
+        return json.dumps(self.json, indent=4)
 
     def __getitem__(self, key):
         return self.data[key]

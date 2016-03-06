@@ -74,10 +74,10 @@ class ApiClient(object):
         if resp.status_code == 423:  # "Busy"
             if 'Retry-After' in resp.headers:
                 logging.info('Received HTTP 423. Retry-After set to ' +
-                              resp.headers['Retry-After'] + ' sec. Waiting to retry.')  # nopep8
+                              resp.headers['Retry-After'] + ' sec. Waiting to retry.')  # noqa
                 time.sleep(int(resp.headers['Retry-After']) + 1)
             else:
-                logging.info('Received HTTP 429. Too many requests. Waiting to retry.')  # nopep8
+                logging.info('Received HTTP 429. Too many requests. Waiting to retry.')  # noqa
                 time.sleep(Config.retry_wait)
             return False
 

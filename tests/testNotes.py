@@ -4,7 +4,7 @@ import os
 import sys
 
 sys.path.append('..')
-from skytap.Environments import Environments  # nopep8
+from skytap.Environments import Environments  # noqa
 
 
 class TestNotes(object):

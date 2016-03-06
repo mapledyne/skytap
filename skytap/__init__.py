@@ -1,7 +1,7 @@
-from skytap.Environments import Environments
-from skytap.Groups import Groups
-from skytap.Projects import Projects
-from skytap.Quotas import Quotas
-from skytap.Templates import Templates
-from skytap.Users import Users
-from skytap.Vpns import Vpns
+from skytap.Environments import Environments  # noqa
+from skytap.Groups import Groups  # noqa
+from skytap.Projects import Projects  # noqa
+from skytap.Quotas import Quotas  # noqa
+from skytap.Templates import Templates  # noqa
+from skytap.Users import Users  # noqa
+from skytap.Vpns import Vpns  # noqa

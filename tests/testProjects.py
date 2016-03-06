@@ -3,7 +3,7 @@ import os
 import sys
 
 sys.path.append('..')
-from skytap.Projects import Projects  # nopep8
+from skytap.Projects import Projects  # noqa
 
 
 class TestProjects(object):

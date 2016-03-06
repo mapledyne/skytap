@@ -2,7 +2,30 @@
 Skytap REST API wrapper
 =======================
 
-Skytap is a set of modules that we use to manage aspects of our Skytap infrastructure here at `Fulcrum Technologies <http://fulcrum.net>`__.
+.. image:: https://img.shields.io/pypi/v/skytap.svg
+   :target: https://pypi.python.org/pypi/skytap
+
+
+.. image:: https://readthedocs.org/projects/skytap/badge/?version=latest
+   :target: http://skytap.readthedocs.org/en/latest/
+   :alt: Documentation
+
+.. image:: https://travis-ci.org/FulcrumIT/skytap.svg?branch=master
+    :target: https://travis-ci.org/FulcrumIT/skytap
+    :alt: Travis build status
+
+.. image:: https://landscape.io/github/FulcrumIT/skytap/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/FulcrumIT/skytap/master
+   :alt: Code Health
+
+.. image:: https://coveralls.io/repos/github/FulcrumIT/skytap/badge.svg?branch=master
+   :target: https://coveralls.io/github/FulcrumIT/skytap?branch=master
+   :alt: Code coverage
+
+
+Skytap is a set of modules that we use to manage aspects of our Skytap
+infrastructure here at `Fulcrum Technologies <http://fulcrum.net>`__, but are
+built and supported with public use in mind.
 
 Usage
 ---------------

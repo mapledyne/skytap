@@ -1,4 +1,3 @@
-import json
 import logging
 
 from skytap.framework.ApiClient import ApiClient
@@ -23,7 +22,7 @@ class User(SkytapResource):
             if (isinstance(self.data['configurations'], list)):
                 if len(self.data['configurations']) > 0:
                     if isinstance(self.data['configurations'][0], dict):
-                        self.data['configurations'] = Environments(self.data['configurations'])  # nopep8
+                        self.data['configurations'] = Environments(self.data['configurations'])  # noqa
 
     def delete(self, transfer_user):
         """Delete the user."""

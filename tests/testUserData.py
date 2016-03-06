@@ -4,7 +4,7 @@ import os
 import sys
 
 sys.path.append('..')
-from skytap.Environments import Environments  # nopep8
+from skytap.Environments import Environments  # noqa
 
 environments = Environments()
 things_to_check = 25

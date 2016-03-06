@@ -3,7 +3,6 @@ import json
 import logging
 import os
 import six
-import sys
 
 try:  # Python 2.7+
     from logging import NullHandler
@@ -59,7 +58,7 @@ class ConfigType(type):
         """
         temp_config = cls.config_data.copy()
         temp_config["token"] = ''
-        return json.dump(temp_config, indent=4)
+        return json.dumps(temp_config, indent=4)
 
     def __repr__(cls):
         """A string representation of the config, JSON formatted.
@@ -69,7 +68,7 @@ class ConfigType(type):
         """
         temp_config = cls.config_data.copy()
         temp_config["token"] = ''
-        return json.dump(temp_config)
+        return json.dumps(temp_config)
 
     def __dir__(cls):
         """List only items in the config_data list.
@@ -135,7 +134,7 @@ if os.environ.get('READTHEDOCS', None) != 'True':
 logging.getLogger(__name__).addHandler(NullHandler())
 logger = logging.getLogger()
 handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')  # nopep8
+formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')  # noqa
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
