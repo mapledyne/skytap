@@ -131,8 +131,8 @@ class ApiClient(object):
 
     def _rest(self, req, url, params=None, data=None, attempts=0):
         """Send a rest rest request to the server."""
-        if param is None:
-            param = {}
+        if params is None:
+            params = {}
         cmd = req.upper()
         if cmd not in self.cmds.keys():
             raise ValueError("Command type (" + cmd + ") not recognized.")
