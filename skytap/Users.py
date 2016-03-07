@@ -72,13 +72,13 @@ class Users(SkytapGroup):
                 "email": email}
         url = self.url_v1 + '.json'
         response = api.rest(url, data, 'POST')
-        new_group = json.loads(response)
+        new_user = json.loads(response)
         self.refresh()
-        if 'id' in new_group:
-            return int(new_group['id'])
-        Utils.warning('Trying to create group (' + group + '), but ' +
-                        'got an unexpected return from Skytap. Response:\n' +
-                        response)
+        if 'id' in new_user:
+            return int(new_user['id'])
+        Utils.warning('Trying to create user (' + login_name + '), but ' +
+                      'got an unexpected return from Skytap. Response:\n' +
+                      response)
         return 0
 
     def delete(self, user, transfer_user):

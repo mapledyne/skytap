@@ -26,10 +26,6 @@ def warning(msg):
     logger.warning(msg)
 
 
-def error(msg):
-    logger.error(msg)
-
-
 def info(msg):
     logger.info(msg)
 
@@ -42,12 +38,15 @@ def log(level, msg):
     logger.log(level, msg)
 
 
-def log_level(level):
-    logger.setLevel(level)
+def log_level(level=None):
+    if level is not None:
+        logger.setLevel(level)
+    return logger.getEffectiveLevel()
 
 
 def error(err):
     """Convert an error message into JSON."""
+    logger.error(err)
     return json.dumps({"error": err})
 
 
