@@ -1,9 +1,9 @@
 """Support for a VM resource in Skytap."""
 import json
-import logging
 
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
+import skytap.framework.Utils as Utils
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
 from skytap.models.UserData import UserData
@@ -54,7 +54,7 @@ class Vm(SkytapResource, Suspendable):
 
         In general, it'd seem wise not to do this very often.
         """
-        logging.info('Deleting VM: ' + str(self.id) + '(' + self.name + ')')
+        Utils.info('Deleting VM: ' + str(self.id) + '(' + self.name + ')')
         api = ApiClient()
         response = api.rest(self.url,
                             {},

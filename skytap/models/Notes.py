@@ -1,7 +1,6 @@
 """Support for notes that are attached to VMs and environments."""
-import logging
-
 from skytap.framework.ApiClient import ApiClient
+import skytap.framework.Utils as Utils
 from skytap.models.Note import Note
 from skytap.models.SkytapGroup import SkytapGroup
 
@@ -25,7 +24,7 @@ class Notes(SkytapGroup):
         Returns:
             str: The response from Skytap, typically the new note.
         """
-        logging.info('Adding note: ' + note)
+        Utils.info('Adding note: ' + note)
         api = ApiClient()
         data = {"text": note}
         response = api.rest(self.url, data, 'POST')
@@ -48,7 +47,7 @@ class Notes(SkytapGroup):
             return False
         if not isinstance(note, Note):
             raise TypeError
-        logging.info('Deleting note ID: ' + str(note.id))
+        Utils.info('Deleting note ID: ' + str(note.id))
         api = ApiClient()
         url = self.url.replace('.json', '/' + str(note.id))
         response = api.rest(url,
@@ -105,7 +104,7 @@ class Notes(SkytapGroup):
 
         Use with care!
         """
-        logging.debug('Deleting all notes.')
+        Utils.debug('Deleting all notes.')
         keys = self.data.keys()
         count = len(keys)
         for key in keys:

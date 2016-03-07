@@ -1,15 +1,9 @@
 """Handle the config file and such for the Skytap system."""
 import json
-import logging
 import os
 import six
 
-try:  # Python 2.7+
-    from logging import NullHandler
-except ImportError:
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
+import skytap.framework.Utils as Utils
 
 initial_config = {'user': '',           # Should only be defined in env vars.
                   'token': '',          # Should only be defined in env vars.
@@ -41,8 +35,8 @@ class ConfigType(type):
             # during testing. Not the best, but tests look better with these
             # supressed.
             if key not in ['__test__', 'address', 'im_class', '__self__']:
-                logging.error("Tried to access config value '" +
-                              str(key) + "', which doesn't exist.")
+                Utils.error("Tried to access config value '" +
+                            str(key) + "', which doesn't exist.")
             raise AttributeError
         return cls.config_data[key]
 
@@ -80,10 +74,6 @@ class ConfigType(type):
             dir_list.append(config_item)
         return dir_list
 
-    def __nonzero__(cls):
-        """Return False if there are no config items."""
-        return len(cls.config_data) > 0
-
     def __contains__(cls, item):
         """Allow checks for items in the config list."""
         return item in cls.config_data
@@ -113,33 +103,24 @@ for key in Config:
     env_val = "SKYTAP_" + key.upper()
     if env_val in os.environ:
         Config.config_data[key] = os.environ[env_val]
+        try:
+            Config.config_data[key] = int(Config.config_data[key])
+        except ValueError:
+            pass
 
 if os.environ.get('READTHEDOCS', None) != 'True':
     if Config.base_url != 'https://cloud.skytap.com':
-        logging.warning('Base URL is not Skytap\'s recommended value. ' +
-                        'This very likely will break things.')
+        Utils.warning('Base URL is not Skytap\'s recommended value. ' +
+                      'This very likely will break things.')
 
     if len(Config.token) == 0:
-        logging.error('No environment variable SKYTAP_TOKEN found. ' +
-                      'Set this variable and try again.')
-        exit(1)
+        Utils.error('No environment variable SKYTAP_TOKEN found. ' +
+                    'Set this variable and try again.')
+        raise ValueError
 
     if len(Config.user) == 0:
-        logging.error('No environment variable SKYTAP_USER found. ' +
-                      'Set this variable and try again.')
-        exit(1)
+        Utils.error('No environment variable SKYTAP_USER found. ' +
+                    'Set this variable and try again.')
+        raise ValueError
 
-# Set up the logging system:
-
-logging.getLogger(__name__).addHandler(NullHandler())
-logger = logging.getLogger()
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')  # noqa
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
-# Change the log level of the requests object, if appropriate.
-logger.setLevel(int(Config.log_level))
-logging.getLogger("requests").setLevel(logging.WARNING)
-if (int(Config.log_level) < logging.INFO):
-    logging.getLogger("requests").setLevel(int(Config.log_level))
+Utils.log_level(Config.log_level)

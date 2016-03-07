@@ -44,10 +44,10 @@ on the :class:`skytap.models.SkytapGroup` class for
 information there.
 """
 import json
-import logging
 import sys
 
 from skytap.framework.ApiClient import ApiClient
+import skytap.framework.Utils as Utils
 from skytap.models.Group import Group
 from skytap.models.SkytapGroup import SkytapGroup
 
@@ -97,7 +97,7 @@ class Groups(SkytapGroup):
             new_group = groups.add('muppets', 'felt covered friends')
             print(groups[new_group].name)
         """
-        logging.info('Adding group: ' + group)
+        Utils.info('Adding group: ' + group)
         api = ApiClient()
         data = {"name": group,
                 "description": description}
@@ -107,9 +107,9 @@ class Groups(SkytapGroup):
         self.refresh()
         if 'id' in new_group:
             return int(new_group['id'])
-        logging.warning('Trying to create group (' + group + '), but ' +
-                        'got an unexpected return from Skytap. Response:\n' +
-                        response)
+        Utils.warning('Trying to create group (' + group + '), but ' +
+                      'got an unexpected return from Skytap. Response:\n' +
+                      response)
         return 0
 
     def delete(self, group):

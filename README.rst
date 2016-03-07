@@ -39,9 +39,15 @@ Optionally, you can also add::
 
     SKYTAP_LOG_LEVEL=20
 
-This can be a number between 0-50 and corresponds to the logging module from Python. If you move the log level to "DEBUG" (10), you'll also see logging from the requests module that this module leverages, which will display the direct URL calls. This can be verbose, but helpful for troubleshooting.
+This can be a number between 0-50 and corresponds to the logging module from Python:
 
-An easy way to do this is to create a .skytap file in your home directory (~/.skytap) with the variables in there::
+* DEBUG: 0
+* INFO: 10
+* WARNING: 20
+* ERROR: 30
+* CRITICAL: 50
+
+An easy way to set these variables is to create a .skytap file in your home directory (~/.skytap) with the variables in there::
 
     export SKYTAP_USER=kermit.frog@fulcrum.net
     export SKYTAP_TOKEN=79824879aeb2b34534e112d23a3c

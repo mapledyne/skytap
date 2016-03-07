@@ -1,7 +1,6 @@
-import logging
-
-from skytap.framework.ApiClient import ApiClient
 from skytap.Environments import Environments
+from skytap.framework.ApiClient import ApiClient
+import skytap.framework.Utils as Utils
 from skytap.models.SkytapResource import SkytapResource
 
 
@@ -30,9 +29,9 @@ class User(SkytapResource):
             transfer_user = transfer_user.id
         if not isinstance(transfer_user, int):
             raise TypeError('transfer_user must be a User or int.')
-        logging.info('Deleting user: ' +
-                     str(self.id) + ' (' + self.name + ') and transferring ' +
-                     'resources to user id: ' + str(transfer_user))
+        Utils.info('Deleting user: ' +
+                   str(self.id) + ' (' + self.name + ') and transferring ' +
+                   'resources to user id: ' + str(transfer_user))
         api = ApiClient()
 
         transfer = {"transfer_user_id": str(transfer_user)}

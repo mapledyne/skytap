@@ -9,13 +9,6 @@ from skytap.framework.Config import Config  # noqa
 
 class TestConfig(object):
 
-    def setUp(self):
-        self.previous_level = logging.root.manager.disable
-        logging.disable(logging.CRITICAL)
-
-    def tearDown(self):
-        logging.disable(self.previous_level)
-
     def test_we_have_some_config_values(self):
         """Check to see we have some config values."""
         assert len(Config) > 0

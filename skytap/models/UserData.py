@@ -1,7 +1,7 @@
 import json
-import logging
 
 from skytap.framework.ApiClient import ApiClient
+import skytap.framework.Utils as Utils
 from skytap.models.SkytapResource import SkytapResource
 
 
@@ -35,8 +35,8 @@ class UserData(SkytapResource):
                     add_key = False
 
         if add_key:
-            logging.info('Adding key \"' + key + '\" with value \"'
-                         '' + value + '\"')
+            Utils.info('Adding key \"' + key + '\" with value \"'
+                       '' + value + '\"')
             api = ApiClient()
             new_content = "" + key + ": " + value + "\n" + self.contents
             data = {"contents": new_content}
@@ -45,8 +45,8 @@ class UserData(SkytapResource):
             self.refresh()
             return response
         else:
-            logging.info('Key \"' + key + '\" with value \"' + value + '\"'
-                         'already exists.')
+            Utils.info('Key \"' + key + '\" with value \"' + value + '\"'
+                       'already exists.')
             return "{}"
 
     def delete(self, key):
@@ -74,14 +74,14 @@ class UserData(SkytapResource):
                     new_content += (i.strip() + "\n")
 
         if del_key:
-            logging.info('Deleting key \"' + key + '\".')
+            Utils.info('Deleting key \"' + key + '\".')
             api = ApiClient()
             data = {"contents": "" + new_content}
             response = api.rest(self.url, data, 'POST')
             self.refresh()
             return response
         else:
-            logging.info('Key \"' + key + '\" already exists.')
+            Utils.info('Key \"' + key + '\" already exists.')
             return "{}"
 
     def add_line(self, text, line=-1):
@@ -122,7 +122,7 @@ class UserData(SkytapResource):
         if not line_found:
             new_content += (text.strip() + "\n")
 
-        logging.info('Adding line: \"' + text + '\"')
+        Utils.info('Adding line: \"' + text + '\"')
         api = ApiClient()
         data = {"contents": new_content}
         response = api.rest(self.url, data, 'POST')
@@ -152,7 +152,7 @@ class UserData(SkytapResource):
                         new_content += (i.strip() + "\n")
                         line_found = True
 
-        logging.info('Removing line: \"' + str(line) + '\"')
+        Utils.info('Removing line: \"' + str(line) + '\"')
         api = ApiClient()
         data = {"contents": new_content.lstrip()}
         response = api.rest(self.url, data, 'POST')
@@ -197,8 +197,8 @@ class UserData(SkytapResource):
             if len(tokens) < 2:
                 continue
 
-            # Check for valid YAML formatting in first and second tokens in each
-            # line, then add those values to dict.
+            # Check for valid YAML formatting in first and second tokens in
+            # each line, then add those values to dict.
             if (tokens[0].endswith(":") and "#" not in tokens[0] and
                     len(tokens) > 1 and "#" not in tokens[1]):
                     # If variable is a number, make it integer

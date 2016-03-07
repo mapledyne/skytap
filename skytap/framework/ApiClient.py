@@ -1,12 +1,12 @@
 """Functions needed to access the skytap api."""
 import json
-import logging
 import requests
 import six
 import sys
 import time
 
 from skytap.framework.Config import Config
+import skytap.framework.Utils as Utils
 
 requests.packages.urllib3.disable_warnings()
 
@@ -73,11 +73,11 @@ class ApiClient(object):
 
         if resp.status_code == 423:  # "Busy"
             if 'Retry-After' in resp.headers:
-                logging.info('Received HTTP 423. Retry-After set to ' +
+                Utils.info('Received HTTP 423. Retry-After set to ' +
                               resp.headers['Retry-After'] + ' sec. Waiting to retry.')  # noqa
                 time.sleep(int(resp.headers['Retry-After']) + 1)
             else:
-                logging.info('Received HTTP 429. Too many requests. Waiting to retry.')  # noqa
+                Utils.info('Received HTTP 429. Too many requests. Waiting to retry.')  # noqa
                 time.sleep(Config.retry_wait)
             return False
 

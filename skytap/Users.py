@@ -7,10 +7,10 @@ If accessed via the command line (``python -m skytap.Users``) this will
 return the users from Skytap in a JSON format.
 """
 import json
-import logging
 import sys
 
 from skytap.framework.ApiClient import ApiClient
+import skytap.framework.Utils as Utils
 from skytap.models.SkytapGroup import SkytapGroup
 from skytap.models.User import User
 
@@ -64,7 +64,7 @@ class Users(SkytapGroup):
             new_user = users.add('kermit.frog@fulcrum.net')
             print(users[new_user].login_name)
         """
-        logging.info('Adding user: ' + login_name)
+        Utils.info('Adding user: ' + login_name)
         if email is None:
             email = login_name
         api = ApiClient()
@@ -76,7 +76,7 @@ class Users(SkytapGroup):
         self.refresh()
         if 'id' in new_group:
             return int(new_group['id'])
-        logging.warning('Trying to create group (' + group + '), but ' +
+        Utils.warning('Trying to create group (' + group + '), but ' +
                         'got an unexpected return from Skytap. Response:\n' +
                         response)
         return 0

@@ -59,10 +59,10 @@ the action is completed by Skytap.
     those fields.
 """
 import json
-import logging
 
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
+import skytap.framework.Utils as Utils
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
 from skytap.models.UserData import UserData
@@ -115,8 +115,8 @@ class Environment(SkytapResource, Suspendable):
 
         In general, it'd seem wise not to do this very often.
         """
-        logging.info('Deleting environment: ' +
-                     str(self.id) + '(' + self.name + ')')
+        Utils.info('Deleting environment: ' +
+                   str(self.id) + '(' + self.name + ')')
         api = ApiClient()
         response = api.rest(self.url_v1,
                             {},

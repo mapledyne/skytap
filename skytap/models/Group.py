@@ -1,8 +1,8 @@
 """Support for Skytap groups."""
 import json
-import logging
 
 from skytap.framework.ApiClient import ApiClient
+import skytap.framework.Utils as Utils
 from skytap.models.SkytapResource import SkytapResource
 from skytap.Users import Users
 
@@ -52,8 +52,8 @@ class Group(SkytapResource):
         if (type(user) is not int):
             raise TypeError('User must be an int.')
 
-        logging.info('Removing user ' + str(user) +
-                     ' from group: ' + self.name)
+        Utils.info('Removing user ' + str(user) +
+                   ' from group: ' + self.name)
         api = ApiClient()
         user_json = api.rest(self.url + '/users/' + str(user),
                              {},
@@ -84,7 +84,7 @@ class Group(SkytapResource):
         if (type(user) is not int):
             raise TypeError('User must be an int.')
 
-        logging.info('Adding user ' + str(user) + ' to group: ' + self.name)
+        Utils.info('Adding user ' + str(user) + ' to group: ' + self.name)
         api = ApiClient()
         user_json = api.rest(self.url + '/users/' + str(user) + '.json',
                              {},
@@ -94,8 +94,8 @@ class Group(SkytapResource):
 
     def delete(self):
         """Delete the group."""
-        logging.info('Deleting group: ' +
-                     str(self.id) + ' (' + self.name + ')')
+        Utils.info('Deleting group: ' +
+                   str(self.id) + ' (' + self.name + ')')
         api = ApiClient()
         response = api.rest(self.url_v1,
                             {},

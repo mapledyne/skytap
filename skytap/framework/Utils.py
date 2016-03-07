@@ -4,6 +4,46 @@ from datetime import datetime
 from datetime import timedelta
 from datetime import tzinfo
 import json
+import logging
+from logging import NullHandler
+
+
+# Set up the logging system:
+
+logging.getLogger(__name__).addHandler(NullHandler())
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')  # noqa
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
+
+def debug(msg):
+    logger.debug(msg)
+
+
+def warning(msg):
+    logger.warning(msg)
+
+
+def error(msg):
+    logger.error(msg)
+
+
+def info(msg):
+    logger.info(msg)
+
+
+def critical(msg):
+    logger.critical(msg)
+
+
+def log(level, msg):
+    logger.log(level, msg)
+
+
+def log_level(level):
+    logger.setLevel(level)
 
 
 def error(err):
