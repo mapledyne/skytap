@@ -22,11 +22,11 @@ def test_group_id():
         assert g.id > 0
 
 
-def test_user_details():
-    """Ensure user has details()."""
+def test_user_json():
+    """Ensure user json conversion seems to be working."""
     for l in list(groups.data):
         g = groups[l]
-        assert len(g.details()) > 0
+        assert len(json.dumps(g.json())) > 0
 
 
 def test_user_count_matches():

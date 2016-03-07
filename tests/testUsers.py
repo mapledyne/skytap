@@ -26,10 +26,11 @@ def test_user_id():
         assert u.id > 0
 
 
-def test_user_details():
-    """Ensure user has details()."""
-    for u in users:
-        assert len(u.details()) > 0
+def test_user_json():
+    """Ensure environment json conversion seems to be working."""
+    for l in list(users.data):
+        u = users[l]
+        assert len(json.dumps(u.json())) > 0
 
 
 def test_user_str_conversion():

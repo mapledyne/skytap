@@ -19,10 +19,11 @@ def test_vpn_id():
         assert len(v.id) > 0
 
 
-def test_vpn_details():
-    """Ensure that details() returns something."""
-    for v in vpns:
-        assert len(v.details()) > 0
+def test_vpn_json():
+    """Ensure vpn json conversion seems to be working."""
+    for l in list(vpns.data):
+        v = vpns[l]
+        assert len(json.dumps(v.json())) > 0
 
 
 def test_vpn_string_conversion():

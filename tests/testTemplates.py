@@ -36,10 +36,11 @@ def test_template_ids():
         assert t.id > 0
 
 
-def test_template_details():
-    """Test to ensure details() returns something."""
-    for t in templates:
-        assert len(t.details()) > 0
+def test_template_json():
+    """Ensure template json conversion seems to be working."""
+    for l in list(templates.data):
+        t = templates[l]
+        assert len(json.dumps(t.json())) > 0
 
 
 def test_template_name():

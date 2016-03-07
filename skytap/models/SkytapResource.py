@@ -67,21 +67,6 @@ class SkytapResource(object):
             raise AttributeError
         return self.data[key]
 
-    def details(self):
-        """Print a simple list of everything the object knows about.
-
-        Useful for debugging, but not intended for much else.
-        """
-        det = ''
-        for x in self.data:
-            try:
-                det += str(x) + ': ' + str(self.data[x]) + '\n'
-            except UnicodeEncodeError:
-                det += (unicode(x).encode('utf_8') +
-                        ': ' + unicode(self.data[x]).encode('utf_8') +
-                        '\n')
-        return det
-
     def json(self):
         """Convert the object to JSON."""
         return json.dumps(self.data, indent=4, cls=SkytapJsonEncoder)

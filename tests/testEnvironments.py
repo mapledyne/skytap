@@ -52,11 +52,11 @@ def test_environment_id():
         assert e.id > 0
 
 
-def test_environment_details():
-    """Ensure environments have details."""
+def test_environment_json():
+    """Ensure environment json conversion seems to be working."""
     for l in list(environments.data):
         e = environments[l]
-        assert len(e.details()) > 0
+        assert len(json.dumps(e.json())) > 0
 
 
 def test_environment_str_conversion():

@@ -22,9 +22,9 @@ group = SkytapGroupToTest()
 resource = group.first()
 
 
-def test_read_details():
-    """Ensure we get something from details()."""
-    assert len(resource.details()) > 0
+def test_resource_json():
+    """Ensure json conversion seems to be working."""
+    assert len(json.dumps(resource.json())) > 0
 
 
 def test_has_id():
