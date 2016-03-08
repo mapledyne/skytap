@@ -124,6 +124,6 @@ Contributor list
 
 * Bill Wellington `github <https://github.com/thewellington/>`__ `twitter <https://twitter.com/CollectiveWe>`__ `blog <http://www.wellingtonnet.net>`__
 * Michael Knowles `github <https://github.com/mapledyne>`__ `twitter <https://twitter.com/Mapledyne>`__ `blog <http://mapledyne.com>`__
-* Caleb Hawkins `github <https://github.com/calebh93>`__ `twitter <https://twitter.com/MuddyTM>`__
+* Caleb Hawkins `github <https://github.com/calebh93>`__ `twitter <https://twitter.com/MuddyTM>`__ `blog <http://calebh93.github.io>`__
 
 Contact us directly for questions, or you can reach Fulcrum Technologies on `Twitter <https://twitter.com/lifeatfulcrum>`__.
