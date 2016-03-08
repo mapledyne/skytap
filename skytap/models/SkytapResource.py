@@ -33,25 +33,35 @@ class SkytapResource(object):
 
     def _convert_data_elements(self):
         """Convert some data elements into variable types that make sense."""
-        if 'created_at' in self.data:
-            try:
-                self.data['created_at'] = Utils.convert_date(self.created_at)
-            except (ValueError, AttributeError):
-                pass
-        if 'updated_at' in self.data:
-            try:
-                self.data['updated_at'] = Utils.convert_date(self.updated_at)
-            except (ValueError, AttributeError):
-                pass
-        if 'last_installed' in self.data:
-            try:
-                self.data['last_installed'] = Utils.convert_date(self.last_installed)  # noqa
-            except (ValueError, AttributeError):
-                pass
+
+        try:
+            print(self.data['created_at'])
+            self.data['created_at'] = Utils.convert_date(self.data['created_at'])  # noqa
+        except (ValueError, AttributeError, KeyError):
+            pass
+
+        try:
+            self.data['last_login'] = Utils.convert_date(self.data['last_login'])  # noqa
+        except (ValueError, AttributeError, KeyError):
+            pass
+
+        try:
+            self.data['last_run'] = Utils.convert_date(self.data['last_run'])
+        except (ValueError, AttributeError, KeyError):
+            pass
+
+        try:
+            self.data['updated_at'] = Utils.convert_date(self.data['updated_at'])  # noqa
+        except (ValueError, AttributeError, KeyError):
+            pass
+        try:
+            self.data['last_installed'] = Utils.convert_date(self.data['last_installed'])  # noqa
+        except (ValueError, AttributeError, KeyError):
+            pass
 
         try:
             self.data['id'] = int(self.data['id'])
-        except ValueError:
+        except (ValueError, AttributeError, KeyError):
             pass
 
     def refresh(self):
@@ -72,7 +82,7 @@ class SkytapResource(object):
         return json.dumps(self.data, indent=4, cls=SkytapJsonEncoder)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def __int__(self):
         return int(self.id)
