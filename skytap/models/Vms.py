@@ -15,7 +15,7 @@ class Vms(SkytapGroup):
         Args:
             vms_json (string): The JSON from Skytap API to build the list from.
             parent (Environment or Template): The parent object -
-                evironment or template.
+                environment or template.
 
         """
         super(Vms, self).__init__()

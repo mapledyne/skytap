@@ -4,6 +4,7 @@ import json
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 import skytap.framework.Utils as Utils
+from skytap.models.Interfaces import Interfaces
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
 from skytap.models.UserData import UserData
@@ -30,8 +31,8 @@ class Vm(SkytapResource, Suspendable):
     def __getattr__(self, key):
         """Load values for anything that doesn't get loaded by default.
 
-        For user_data and notes, a secondary API call is needed. Only make that
-        call when the info is requested.
+        For user_data, notes, and interfaces, a secondary API call is needed.
+        Only make that call when the info is requested.
         """
         if key == 'user_data':
             if key in self.data:
@@ -46,6 +47,14 @@ class Vm(SkytapResource, Suspendable):
             notes_json = api.rest(self.url + '/notes.json')
             self.notes = Notes(notes_json, self.url)
             return self.notes
+
+        if key == 'interfaces':
+            if key in self.data:
+                return self.data[key]
+            api = ApiClient()
+            interfaces_json = json.loads(api.rest(self.url))
+            self.interfaces = Interfaces(interfaces_json["interfaces"], self.url)
+            return self.interfaces
 
         return super(Vm, self).__getattr__(key)
 

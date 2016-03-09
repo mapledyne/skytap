@@ -1,9 +1,9 @@
 """Base class for all Skytap Resources."""
 import json
 
-from skytap.framework.ApiClient import ApiClient
-from skytap.framework.Json import SkytapJsonEncoder
-import skytap.framework.Utils as Utils
+from skytap.framework.ApiClient import ApiClient  # noqa
+from skytap.framework.Json import SkytapJsonEncoder  # noqa
+import skytap.framework.Utils as Utils  # noqa
 
 
 class SkytapResource(object):

@@ -1,4 +1,4 @@
-"""Test Skytap Environments API access."""
+"""Test Skytap Userdata API access."""
 import json
 import os
 import sys
