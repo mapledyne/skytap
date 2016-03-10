@@ -5,7 +5,7 @@ from setuptools import setup
 setup(
     name='skytap',
     packages=find_packages(),
-    version='1.2.0',
+    version='1.3.0',
     description='Skytap REST API access modules',
     author='Fulcrum Technologies',
     test_suite='nose.collector',
