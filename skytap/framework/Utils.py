@@ -5,8 +5,14 @@ from datetime import timedelta
 from datetime import tzinfo
 import json
 import logging
-from logging import NullHandler
 
+
+try:  # Python 2.7+
+    from logging import NullHandler
+except ImportError:
+    class NullHandler(logging.Handler):
+        def emit(self, record):
+            pass
 
 # Set up the logging system:
 
