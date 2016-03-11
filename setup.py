@@ -14,6 +14,7 @@ setup(
     maintainer_email='mknowles@fulcrum.net',
     license='MIT',
     install_requires=['requests', 'six'],
+    scripts=['bin/skytap'],
     url='https://github.com/FulcrumIT/skytap',
     download_url='https://github.com/FulcrumIT/skytap/tarball/v1.2.0',
     keywords=['skytap', 'cloud', 'client', 'rest', 'api', 'development'],

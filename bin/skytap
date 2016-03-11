@@ -1,0 +1,29 @@
+import argparse
+import skytap
+from skytap.models.SkytapGroup import SkytapGroup
+
+parser = argparse.ArgumentParser()
+
+targets = []
+
+possible_targets = SkytapGroup.__subclasses__()
+for t in possible_targets:
+    if t.__name__ in skytap.__dict__:
+        targets.append(t.__name__)
+
+for t in targets:
+    parser.add_argument('--' + t.lower(),
+                        help='Access {} from Skytap (or blank for full list)'.format(t.lower()),
+                        default=None,
+                        nargs='*')
+
+args = parser.parse_args()
+
+for t in targets:
+    att = getattr(args, t.lower())
+    if att is not None:
+        cmd = getattr(skytap, t)()
+        print cmd.main(att)
+        exit(0)
+
+parser.print_help()

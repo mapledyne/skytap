@@ -1,4 +1,5 @@
 """Base object to handle groups of Skytap objects."""
+import argparse
 import json
 import six
 
@@ -35,17 +36,10 @@ class SkytapGroup(ApiClient, six.Iterator):
         """
         if params is None:
             params = {}
-        self.load_list_from_json(self.rest(url, params), target)
+        self.load_list_from_json(self.rest(url, params), target, url)
         self.params = params
-        self.url = url
-        if '/v2/' in self.url:
-            self.url_v1 = self.url.replace('/v2/', '/')
-            self.url_v2 = self.url
-        else:
-            self.url_v1 = self.url
-            self.url_v2 = None
 
-    def load_list_from_json(self, json_list, target):
+    def load_list_from_json(self, json_list, target, url=None):
         """Load items from a json list and fill this object.
 
         Args:
@@ -62,6 +56,15 @@ class SkytapGroup(ApiClient, six.Iterator):
         """
         self.data = {}
         self.target = target
+
+        if url is not None:
+            self.url = url
+            if '/v2/' in self.url:
+                self.url_v1 = self.url.replace('/v2/', '/')
+                self.url_v2 = self.url
+            else:
+                self.url_v1 = self.url
+                self.url_v2 = None
 
         if isinstance(json_list, str):
             self.json_from_load = json.loads(json_list)
@@ -116,9 +119,11 @@ class SkytapGroup(ApiClient, six.Iterator):
                 if int(search) == test.id:
                     found.append(test)
             except ValueError:
+                if search == str(test.id):
+                    found.append(test)
                 pass
             for field in self.search_fields:
-                if str(search).upper() in test.data[field].upper():
+                if str(search).upper() in str(test.data[field]).upper():
                     found.append(test)
         return found
 
