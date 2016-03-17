@@ -97,4 +97,7 @@ class FixedOffset(tzinfo):
 
     def __repr__(self):
         """String representation of the offset."""
-        return 'FixedOffset(%d)' % (self.utcoffset().total_seconds() / 60)
+        total_seconds = (self.utcoffset().microseconds + 0.0 +
+                         (self.utcoffset().seconds + self.utcoffset().days *
+                         24 * 3600) * 10 ** 6) / 10 ** 6
+        return 'FixedOffset(%d)' % (total_seconds / 60)
