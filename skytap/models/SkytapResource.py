@@ -35,7 +35,6 @@ class SkytapResource(object):
         """Convert some data elements into variable types that make sense."""
 
         try:
-            print(self.data['created_at'])
             self.data['created_at'] = Utils.convert_date(self.data['created_at'])  # noqa
         except (ValueError, AttributeError, KeyError):
             pass
