@@ -21,7 +21,7 @@ class Template(SkytapResource):
 
         Convert the list of VMs into a Vms object group.
         """
-        self.data['vms'] = Vms(self.vms, self.id)
+        self.data['vms'] = Vms(self.vms, self.url)
 
     def __getattr__(self, key):
         """Load values for anything that doesn't get loaded by default.
