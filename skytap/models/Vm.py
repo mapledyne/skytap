@@ -53,7 +53,8 @@ class Vm(SkytapResource, Suspendable):
                 return self.data[key]
             api = ApiClient()
             interfaces_json = json.loads(api.rest(self.url))
-            self.interfaces = Interfaces(interfaces_json["interfaces"], self.url)
+            self.interfaces = Interfaces(interfaces_json["interfaces"],
+                                         self.url)
             return self.interfaces
 
         return super(Vm, self).__getattr__(key)

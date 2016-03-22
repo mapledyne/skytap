@@ -1,9 +1,7 @@
 """Support for Skytap interfacess."""
 import json
 
-from skytap.framework.ApiClient import ApiClient  # noqa
 from skytap.models.Interface import Interface  # noqa
-from skytap.models.PublishedServices import PublishedServices  # noqa
 from skytap.models.SkytapGroup import SkytapGroup  # noqa
 
 
@@ -18,12 +16,7 @@ class Interfaces(SkytapGroup):
                                       from.
         """
         super(Interfaces, self).__init__()
-        self.load_list_from_json(interface_json, Interface)
+        self.load_list_from_json(interface_json, Interface, vm_url)
         for i in self.data:
             self.data[i].data['url'] = (vm_url + "/interfaces/"
-                                        "" + self.data[i].id)
-
-            api = ApiClient()
-            services_json = json.loads(api.rest(self.data[i].url))
-            self.data[i].services = PublishedServices(services_json["services"],
-                                                      self.data[i].url)
+                                        "" + str(self.data[i].id))

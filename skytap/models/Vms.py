@@ -6,10 +6,9 @@ from skytap.models.Vm import Vm
 
 
 class Vms(SkytapGroup):
-
     """A list of VMs."""
 
-    def __init__(self, vms_json, env):
+    def __init__(self, vms_json, env_url):
         """Create the list of VMs.
 
         Args:
@@ -19,7 +18,7 @@ class Vms(SkytapGroup):
 
         """
         super(Vms, self).__init__()
-        self.load_list_from_json(vms_json, Vm)
+        self.load_list_from_json(vms_json, Vm, env_url)
         for v in self.data:
-            self.data[v].data['url'] = ('/v2/configurations/' + str(env) +
-                                        '/vms/' + str(self.data[v].id))
+            self.data[v].data['url'] = (env_url + '/vms/'
+                                        "" + str(self.data[v].id))
