@@ -11,3 +11,4 @@ htmlcov/
 _build/
 _static/
 _templates/
+tests/testHierarchy.py
