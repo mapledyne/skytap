@@ -9,12 +9,9 @@ labels = Labels()
 
 def test_labels():
     """Peform tests relating to labels."""
+    sys.exit()
 
-    labels.create("barf", True)
+    #labels.create("barf", True)
 
     for l in labels:
         print l
-
-
-if __name__ == "__main__":
-    test_labels()
