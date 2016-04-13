@@ -9,7 +9,7 @@ labels = Labels()
 
 def test_labels():
     """Peform tests relating to labels."""
-    sys.exit()
+    return
 
     #labels.create("barf", True)
 
