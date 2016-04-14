@@ -26,8 +26,6 @@ class Labels(SkytapGroup):
                    ". Single-value: " + str(single_value))
         api = ApiClient()
         data = {"name": name, "single-value": single_value}
-        print self.url
-        print data
         response = api.rest(self.url, data, 'POST')
         self.refresh()
         return response
