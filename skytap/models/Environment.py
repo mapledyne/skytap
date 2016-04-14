@@ -63,6 +63,7 @@ import json
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 import skytap.framework.Utils as Utils
+from skytap.Labels import Labels
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
 from skytap.models.UserData import UserData
@@ -107,6 +108,12 @@ class Environment(SkytapResource, Suspendable):
             notes_json = api.rest(self.url + '/notes.json')
             self.notes = Notes(notes_json, self.url)
             return self.notes
+
+        if key == 'labels':
+            api = ApiClient()
+            labels_json = api.rest(self.url + '/labels')
+            self.labels = Labels(labels_json, self.url)
+            return self.labels
 
         return super(Environment, self).__getattr__(key)
 

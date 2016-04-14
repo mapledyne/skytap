@@ -5,6 +5,7 @@ from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 import skytap.framework.Utils as Utils
 from skytap.models.Interfaces import Interfaces
+from skytap.Labels import Labels
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
 from skytap.models.UserData import UserData
@@ -56,6 +57,12 @@ class Vm(SkytapResource, Suspendable):
             self.interfaces = Interfaces(interfaces_json["interfaces"],
                                          self.url)
             return self.interfaces
+
+        if key == 'labels':
+            api = ApiClient()
+            labels_json = api.rest(self.url + '/labels')
+            self.labels = Labels(labels_json, self.url)
+            return self.labels
 
         return super(Vm, self).__getattr__(key)
 

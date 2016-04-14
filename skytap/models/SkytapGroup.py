@@ -39,7 +39,7 @@ class SkytapGroup(ApiClient, six.Iterator):
         self.load_list_from_json(self.rest(url, params), target, url)
         self.params = params
 
-    def load_list_from_json(self, json_list, target, url=None):
+    def load_list_from_json(self, json_list, target, url=None, params=None):
         """Load items from a json list and fill this object.
 
         Args:
@@ -56,6 +56,9 @@ class SkytapGroup(ApiClient, six.Iterator):
         """
         self.data = {}
         self.target = target
+
+        if params:
+            self.params = params
 
         if url is not None:
             self.url = url

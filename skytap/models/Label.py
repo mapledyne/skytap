@@ -1,5 +1,6 @@
 from skytap.models.SkytapResource import SkytapResource
 
+
 class Label(SkytapResource):
 
     """One Skytap label."""
