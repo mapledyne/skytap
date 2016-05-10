@@ -14,7 +14,8 @@ class Labels(SkytapGroup):
             self.load_list_from_api('/v2/label_categories', Label,
                                     {'scope': 'company'})
         else:
-            self.load_list_from_json(labels_json, Label, url + '/labels',
+            self.load_list_from_json(labels_json, Label,
+                                     url + '/labels.json',
                                      {'scope': 'company'})
 
     def create(self, name, single_value):
@@ -34,6 +35,8 @@ class Labels(SkytapGroup):
         """Add label to environment or VM."""
         if self.url.endswith("label_categories"):
             return "Cannot add label. Did you mean to use \"create()\"?"
+
+        print self.url
 
         Utils.info("Adding Label to " + category + " with value " + value + ".")
         api = ApiClient()
