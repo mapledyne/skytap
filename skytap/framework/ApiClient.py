@@ -94,6 +94,11 @@ class ApiClient(object):
 
         Turns {'count': 5, 'offset': 2} into '?count=5&offset=2'.
         """
+
+        # Specific case for labels params, until it is fixed by Skytap
+        if not isinstance(d, dict):
+            d = d[0]
+
         if d is None or len(d) == 0:
             return ''
 

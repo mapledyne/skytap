@@ -15,7 +15,7 @@ class Labels(SkytapGroup):
                                     {'scope': 'company'})
         else:
             self.load_list_from_json(labels_json, Label,
-                                     url + '/labels.json',
+                                     url + '/labels',
                                      {'scope': 'company'})
 
     def create(self, name, single_value):
@@ -26,8 +26,8 @@ class Labels(SkytapGroup):
         Utils.info("Creating Label: " + name + ""
                    ". Single-value: " + str(single_value))
         api = ApiClient()
-        data = {"name": name, "single-value": single_value}
-        response = api.rest(self.url, data, 'POST')
+        data = [{"name": name, "single-value": single_value}]
+        response = api.rest(self.url, data, "POST")
         self.refresh()
         return response
 
@@ -36,11 +36,33 @@ class Labels(SkytapGroup):
         if self.url.endswith("label_categories"):
             return "Cannot add label. Did you mean to use \"create()\"?"
 
-        print self.url
-
         Utils.info("Adding Label to " + category + " with value " + value + ".")
         api = ApiClient()
-        data = {"label_category": category, "value": value}
-        response = api.rest(self.url, data, 'PUT')
+        data = [{"label_category": category, "value": value}]
+        response = api.rest(self.url, data, "PUT")
+        self.refresh()
+        return response
+
+    def disable(self, id):
+        """Disable a label category (the closest thing to deleting)."""
+        if not self.url.endswith("label_categories"):
+            return "Can only disable label categories."
+
+        Utils.info("Disabling label category of id " + str(id) + ".")
+        api = ApiClient()
+        data = {"enabled": "False"}
+        response = api.rest(self.url + "/" + str(id), data, "PUT")
+        self.refresh()
+        return response
+
+    def enable(self, id):
+        """Enable a label category."""
+        if not self.url.endswith("label_categories"):
+            return "Can only enable label categories."
+
+        Utils.info("Enabling label category of id " + str(id) + ".")
+        api = ApiClient()
+        data = {"enabled": "True"}
+        response = api.rest(self.url + "/" + str(id), data, "PUT")
         self.refresh()
         return response
