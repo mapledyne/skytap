@@ -16,7 +16,6 @@ from skytap.models.User import User
 
 
 class Users(SkytapGroup):
-
     """Set of Skytap users.
 
     Example:

@@ -23,7 +23,7 @@ for t in targets:
     att = getattr(args, t.lower())
     if att is not None:
         cmd = getattr(skytap, t)()
-        print cmd.main(att)
+        print(cmd.main(att))
         exit(0)
 
 parser.print_help()

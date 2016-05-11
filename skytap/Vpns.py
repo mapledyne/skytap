@@ -13,7 +13,6 @@ from skytap.models.Vpn import Vpn
 
 
 class Vpns(SkytapGroup):
-
     """Set of Skytap VPNs.
 
     Example:

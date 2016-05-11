@@ -74,7 +74,6 @@ from skytap.models.SkytapGroup import SkytapGroup
 
 
 class Environments(SkytapGroup):
-
     """Set of Skytap environments."""
 
     def __init__(self):

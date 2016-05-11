@@ -13,7 +13,6 @@ from skytap.models.Template import Template
 
 
 class Templates(SkytapGroup):
-
     """Set of Skytap templates.
 
     Example:

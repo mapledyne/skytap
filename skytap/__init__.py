@@ -1,3 +1,4 @@
+"""Load the main groups for when we're imported."""
 from skytap.Environments import Environments  # noqa
 from skytap.Groups import Groups  # noqa
 from skytap.Labels import Labels  # noqa

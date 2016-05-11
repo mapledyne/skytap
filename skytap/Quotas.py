@@ -10,7 +10,6 @@ from skytap.models.SkytapGroup import SkytapGroup
 
 
 class Quotas(SkytapGroup):
-
     """Company/account quotas object."""
 
     def __init__(self):

@@ -53,7 +53,6 @@ from skytap.models.SkytapGroup import SkytapGroup
 
 
 class Groups(SkytapGroup):
-
     """Set of Skytap groups.
 
     Generally, access this through simply creating a

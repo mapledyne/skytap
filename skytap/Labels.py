@@ -1,3 +1,4 @@
+"""Support for Skytap API access to the labels."""
 from skytap.framework.ApiClient import ApiClient
 import skytap.framework.Utils as Utils
 from skytap.models.Label import Label
@@ -36,7 +37,10 @@ class Labels(SkytapGroup):
         if self.url.endswith("label_categories"):
             return "Cannot add label. Did you mean to use \"create()\"?"
 
-        Utils.info("Adding Label to " + category + " with value " + value + ".")
+        Utils.info("Adding Label to " +
+                   category +
+                   " with value " +
+                   value + ".")
         api = ApiClient()
         data = [{"label_category": category, "value": value}]
         response = api.rest(self.url, data, "PUT")
