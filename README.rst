@@ -10,29 +10,28 @@ Skytap REST API wrapper
    :target: http://skytap.readthedocs.org/en/latest/
    :alt: Documentation
 
-.. image:: https://travis-ci.org/FulcrumIT/skytap.svg?branch=master
-    :target: https://travis-ci.org/FulcrumIT/skytap
+.. image:: https://travis-ci.org/mapledyne/skytap.svg?branch=master
+    :target: https://travis-ci.org/mapledyne/skytap
     :alt: Travis build status
 
-.. image:: https://landscape.io/github/FulcrumIT/skytap/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/FulcrumIT/skytap/master
+.. image:: https://landscape.io/github/mapledyne/skytap/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/mapledyne/skytap/master
    :alt: Code Health
 
-.. image:: https://coveralls.io/repos/github/FulcrumIT/skytap/badge.svg?branch=master
-   :target: https://coveralls.io/github/FulcrumIT/skytap?branch=master
+.. image:: https://coveralls.io/repos/github/mapledyne/skytap/badge.svg?branch=master
+   :target: https://coveralls.io/github/mapledyne/skytap?branch=master
    :alt: Code coverage
 
 
 Skytap is a set of modules that we use to manage aspects of our Skytap
-infrastructure here at `Fulcrum Technologies <http://fulcrum.net>`__, but are
-built and supported with public use in mind.
+infrastructure.
 
 Usage
 ---------------
 
 To use the module, you'll need to create at least two environment variables::
 
-    SKYTAP_USER=kermit.frog@fulcrum.net
+    SKYTAP_USER=kermit.frog@sesamestreet.net
     SKYTAP_TOKEN=79824879aeb2b34534e112d23a3c
 
 Optionally, you can also add::
@@ -49,7 +48,7 @@ This can be a number between 0-50 and corresponds to the logging module from Pyt
 
 An easy way to set these variables is to create a .skytap file in your home directory (~/.skytap) with the variables in there::
 
-    export SKYTAP_USER=kermit.frog@fulcrum.net
+    export SKYTAP_USER=kermit.frog@sesamestreet.net
     export SKYTAP_TOKEN=79824879aeb2b34534e112d23a3c
 
 Then you can source the file::
@@ -72,11 +71,11 @@ You'll get back a JSON for the request, something like::
       {
         "id": "12345",
         "url": "https://cloud.skytap.com/users/12345",
-        "login_name": "kermit.frog@fulcrum.net",
+        "login_name": "kermit.frog@sesamestreet.net",
         "first_name": "Kermit",
         "last_name": "The Frog",
         "title": "Master of Ceremonies",
-        "email": "kermit.frog@fulcrum.net",
+        "email": "kermit.frog@sesamestreet.net",
         "created_at": "2012-01-02T12:43:05-08:00",
         "deleted": false
       }
@@ -126,4 +125,4 @@ Contributor list
 * Michael Knowles `github <https://github.com/mapledyne>`__ `twitter <https://twitter.com/Mapledyne>`__ `blog <http://mapledyne.com>`__
 * Caleb Hawkins `github <https://github.com/calebh93>`__ `twitter <https://twitter.com/MuddyTM>`__ `blog <http://calebh93.github.io>`__
 
-Contact us directly for questions, or you can reach Fulcrum Technologies on `Twitter <https://twitter.com/lifeatfulcrum>`__.
+Contact us directly for questions.
