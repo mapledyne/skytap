@@ -149,8 +149,8 @@ class UserData(SkytapResource):
         for i in lines:
             if i != "":
                 if i.strip() != line.strip():
-                        new_content += (i.strip() + "\n")
-                        line_found = True
+                    new_content += (i.strip() + "\n")
+                    line_found = True
 
         Utils.info('Removing line: \"' + str(line) + '\"')
         api = ApiClient()
@@ -180,7 +180,7 @@ class UserData(SkytapResource):
         count = 0
         for i in lines:
             if line == count:
-                    return i
+                return i
 
         if not line_found:
             return ""
@@ -201,13 +201,12 @@ class UserData(SkytapResource):
             # each line, then add those values to dict.
             if (tokens[0].endswith(":") and "#" not in tokens[0] and
                     len(tokens) > 1 and "#" not in tokens[1]):
-                    # If variable is a number, make it integer
-                    try:
-                        values[tokens[0][:-1]] = int(tokens[1])
-                    except ValueError:
-                        values[tokens[0][:-1]] = tokens[1]
-
-                    self.data[tokens[0][:-1]] = values[tokens[0][:-1]]
+                # If variable is a number, make it integer
+                try:
+                    values[tokens[0][:-1]] = int(tokens[1])
+                except ValueError:
+                    values[tokens[0][:-1]] = tokens[1]
+                self.data[tokens[0][:-1]] = values[tokens[0][:-1]]
 
         return values
 
