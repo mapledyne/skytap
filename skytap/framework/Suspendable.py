@@ -49,7 +49,7 @@ class Suspendable(object):
         api = ApiClient()
         url = self.url + '.json'
         data = {"runstate": state}
-        response = api.rest(url, {}, 'PUT', data)
+        api.rest(url, {}, 'PUT', data)
         if not wait:
             return True
 

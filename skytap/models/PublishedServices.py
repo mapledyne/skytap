@@ -1,8 +1,6 @@
 """Support for Skytap services."""
-import json
-
-from skytap.models.SkytapGroup import SkytapGroup  # noqa
 from skytap.models.PublishedService import PublishedService  # noqa
+from skytap.models.SkytapGroup import SkytapGroup  # noqa
 
 
 class PublishedServices(SkytapGroup):

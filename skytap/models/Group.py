@@ -86,9 +86,9 @@ class Group(SkytapResource):
 
         Utils.info('Adding user ' + str(user) + ' to group: ' + self.name)
         api = ApiClient()
-        user_json = api.rest(self.url + '/users/' + str(user) + '.json',
-                             {},
-                             'PUT')
+        api.rest(self.url + '/users/' + str(user) + '.json',
+                 {},
+                 'PUT')
         self.refresh()
         return user in self.users
 

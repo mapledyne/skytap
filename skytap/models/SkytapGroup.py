@@ -3,7 +3,7 @@ import json
 import six
 
 from skytap.framework.ApiClient import ApiClient
-from skytap.framework.Json import SkytapJsonEncoder
+# from skytap.framework.Json import SkytapJsonEncoder
 
 
 class SkytapGroup(ApiClient, six.Iterator):
@@ -123,7 +123,6 @@ class SkytapGroup(ApiClient, six.Iterator):
             except ValueError:
                 if search == str(test.id):
                     found.append(test)
-                pass
             for field in self.search_fields:
                 if str(search).upper() in str(test.data[field]).upper():
                     found.append(test)
@@ -160,9 +159,9 @@ class SkytapGroup(ApiClient, six.Iterator):
         Returns:
             str: Formatted JSON of the request.
         """
-        obj_type = type(self.data[list(self.data)[0]])
-        obj_name = obj_type.__name__
-        obj_id_type = type(self.data[list(self.data)[0]].id)
+        # obj_type = type(self.data[list(self.data)[0]])
+        # obj_name = obj_type.__name__
+        # obj_id_type = type(self.data[list(self.data)[0]].id)
 
         if len(argv) > 0:
             found = self.find(argv[0])

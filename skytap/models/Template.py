@@ -2,7 +2,7 @@
 import json
 
 from skytap.framework.ApiClient import ApiClient
-from skytap.models.Notes import Notes
+# from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
 from skytap.models.UserData import UserData
 from skytap.models.Vms import Vms
