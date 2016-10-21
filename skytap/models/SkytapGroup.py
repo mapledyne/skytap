@@ -1,5 +1,4 @@
 """Base object to handle groups of Skytap objects."""
-import argparse
 import json
 import six
 

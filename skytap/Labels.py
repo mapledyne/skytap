@@ -47,26 +47,26 @@ class Labels(SkytapGroup):
         self.refresh()
         return response
 
-    def disable(self, id):
+    def disable(self, label_id):
         """Disable a label category (the closest thing to deleting)."""
         if not self.url.endswith("label_categories"):
             return "Can only disable label categories."
 
-        Utils.info("Disabling label category of id " + str(id) + ".")
+        Utils.info("Disabling label category of id " + str(label_id) + ".")
         api = ApiClient()
         data = {"enabled": "False"}
-        response = api.rest(self.url + "/" + str(id), data, "PUT")
+        response = api.rest(self.url + "/" + str(label_id), data, "PUT")
         self.refresh()
         return response
 
-    def enable(self, id):
+    def enable(self, label_id):
         """Enable a label category."""
         if not self.url.endswith("label_categories"):
             return "Can only enable label categories."
 
-        Utils.info("Enabling label category of id " + str(id) + ".")
+        Utils.info("Enabling label category of id " + str(label_id) + ".")
         api = ApiClient()
         data = {"enabled": "True"}
-        response = api.rest(self.url + "/" + str(id), data, "PUT")
+        response = api.rest(self.url + "/" + str(label_id), data, "PUT")
         self.refresh()
         return response

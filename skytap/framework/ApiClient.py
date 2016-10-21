@@ -2,7 +2,6 @@
 import json
 import requests
 import six
-import sys
 import time
 
 from skytap.framework.Config import Config

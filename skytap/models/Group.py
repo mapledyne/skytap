@@ -55,9 +55,9 @@ class Group(SkytapResource):
         Utils.info('Removing user ' + str(user) +
                    ' from group: ' + self.name)
         api = ApiClient()
-        user_json = api.rest(self.url + '/users/' + str(user),
-                             {},
-                             'DELETE')
+        api.rest(self.url + '/users/' + str(user),
+                 {},
+                 'DELETE')
 
         self.refresh()
         return user not in self.users
