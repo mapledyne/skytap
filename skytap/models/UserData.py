@@ -1,3 +1,13 @@
+"""Support for the UserData resource in Skytap.
+
+Specifically, this is for custom ('user data') that's applied to an environment
+or VM. This data can be text or, in the context of using it with this Skytap
+script, it can also be JSON or YAML and will then be re-parsed.
+
+This allows users to put data into a VM user data block and it'll filter down
+and be accessible to this script. We use this to expose variables to the user
+like shutdown time and other automation pieces.
+"""
 import json
 
 from skytap.framework.ApiClient import ApiClient
@@ -6,11 +16,18 @@ from skytap.models.SkytapResource import SkytapResource
 
 
 class UserData(SkytapResource):
+    """UserData object to handle custom user data for a Skytap object.
+
+    This typically would be for a VM or Environment.
+    """
+
     def __init__(self, contents, env_url):
+        """Create the UserData object."""
         super(UserData, self).__init__(contents)
         self.url = env_url + '/user_data.json'
 
     def __str__(self):
+        """Express the userdata as a string."""
         return self.contents
 
     def add(self, key, value):
@@ -23,7 +40,6 @@ class UserData(SkytapResource):
         Returns:
             str: The response from Skytap, or "{}".
         """
-
         add_key = True
 
         lines = self.contents.split("\n")
@@ -58,7 +74,6 @@ class UserData(SkytapResource):
         Returns:
             str: The response from Skytap, or "{}".
         """
-
         new_content = ""
 
         del_key = False
@@ -94,7 +109,6 @@ class UserData(SkytapResource):
         Returns:
             str: The response from Skytap.
         """
-
         try:
             line = int(line)
         except ValueError:
@@ -138,7 +152,6 @@ class UserData(SkytapResource):
         Returns:
             str: The response from Skytap.
         """
-
         line = str(line)
 
         lines = self.contents.split("\n")
@@ -168,7 +181,6 @@ class UserData(SkytapResource):
         Returns:
             str: The content of the line, or "".
         """
-
         try:
             line = int(line)
         except ValueError:

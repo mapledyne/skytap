@@ -7,10 +7,10 @@ import skytap.framework.Utils as Utils  # noqa
 
 
 class SkytapResource(object):
-
     """Represents one Skytap Resource - a VM, Environment, User, whatever."""
 
     def __init__(self, initial_json):
+        """Build one SkytapResource thing."""
         super(SkytapResource, self).__init__()
 
         self.data = {}
@@ -33,7 +33,6 @@ class SkytapResource(object):
 
     def _convert_data_elements(self):
         """Convert some data elements into variable types that make sense."""
-
         try:
             self.data['created_at'] = Utils.convert_date(self.data['created_at'])  # noqa
         except (ValueError, AttributeError, KeyError):
@@ -72,6 +71,13 @@ class SkytapResource(object):
         self.__init__(json.loads(env_json))
 
     def __getattr__(self, key):
+        """Access custom attributes.
+
+        This allows us to access members of self.data as if they're attributes
+        of the resource. This transparently extends the object with all of the
+        keys returned from the Skytap API without each resource having to do
+        anything special except for exception cases.
+        """
         if key not in self.data:
             raise AttributeError
         return self.data[key]
@@ -81,22 +87,29 @@ class SkytapResource(object):
         return json.dumps(self.data, indent=4, cls=SkytapJsonEncoder)
 
     def __str__(self):
+        """Represent the resource as a string."""
         return str(self.name)
 
     def __int__(self):
+        """Represent the resource as an int."""
         return int(self.id)
 
     def __gt__(self, other):
+        """Compare the resource to another one, helpful for sorting."""
         return int(self) > int(other)
 
     def __lt__(self, other):
+        """Compare the resource to another one, helpful for sorting."""
         return int(self) < int(other)
 
     def __hash__(self):
+        """Represent the resource as a hash."""
         return hash(repr(self.data))
 
     def __eq__(self, other):
+        """Compare the resource to another one, helpful for sorting."""
         return hash(self) == hash(other)
 
     def __contains__(self, key):
+        """Check if this resource has a particular key in its data."""
         return key in self.data

@@ -1,8 +1,8 @@
+"""Support for Skytap's Labels."""
 from skytap.models.SkytapResource import SkytapResource
 
 
 class Label(SkytapResource):
-
     """One Skytap label."""
 
     def __init__(self, label_json):

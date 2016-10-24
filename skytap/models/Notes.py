@@ -6,7 +6,6 @@ from skytap.models.SkytapGroup import SkytapGroup
 
 
 class Notes(SkytapGroup):
-
     """A collection of notes."""
 
     def __init__(self, note_json, env_url):

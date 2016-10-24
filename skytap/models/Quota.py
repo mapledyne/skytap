@@ -5,7 +5,6 @@ from skytap.models.SkytapResource import SkytapResource
 
 
 class Quota(SkytapResource):
-
     """One piece of quota information."""
 
     def __init__(self, quota_json):
@@ -25,6 +24,7 @@ class Quota(SkytapResource):
         self.data['name'] = self.id
 
     def __str__(self):
+        """Represent object as a string."""
         quota = self.id + " = " + str(self.usage)
         if self.units != 'integer':
             quota += "" + self.units

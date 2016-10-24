@@ -9,7 +9,6 @@ from skytap.models.Vms import Vms
 
 
 class Template(SkytapResource):
-
     """One Skytap template."""
 
     def __init__(self, tmp_json):

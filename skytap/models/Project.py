@@ -4,7 +4,6 @@ from skytap.Users import Users
 
 
 class Project(SkytapResource):
-
     """One Skytap project."""
 
     def __init__(self, project_json):

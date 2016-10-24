@@ -16,7 +16,6 @@ initial_config = {'user': '',           # Should only be defined in env vars.
 
 
 class ConfigType(type):
-
     """A meta class for Config.
 
     This allows magic methods to be used on the Config class, making things
@@ -89,7 +88,6 @@ class ConfigType(type):
 
 @six.add_metaclass(ConfigType)
 class Config(object):
-
     """Contain all of our config values into this object."""
 
     # Some very basic defaults. This will allow the module to work by

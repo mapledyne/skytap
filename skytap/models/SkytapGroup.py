@@ -7,10 +7,18 @@ from skytap.framework.ApiClient import ApiClient
 
 
 class SkytapGroup(ApiClient, six.Iterator):
+    """Base object for use with Skytap resource groups.
 
-    """Base object for use with Skytap resource groups."""
+    A SkytapGroup is essentially a set of SkytapResource objects. This allows
+    us to more easily interact with 'VMs' as collections of VM objects.
+    A list or dictionary could do much of this, but this allows us to also
+    batch API calls intelligently (since many calls return a 'group' of data)
+    and run other operations on multiple objects, when appropriate, like
+    doing something across every VM inside an environment.
+    """
 
     def __init__(self):
+        """Build a SkytapGroup object - some collection of resources."""
         super(SkytapGroup, self).__init__()
         self.data = {}
         self.itercount = 0
@@ -180,18 +188,28 @@ class SkytapGroup(ApiClient, six.Iterator):
         return json_return
 
     def __len__(self):
+        """Get length of the object."""
         return len(self.data)
 
     def __str__(self):
+        """Represent the group as a string.
+
+        It'd be good to consider something more clever here, but returning
+        the object back as a JSON also doesn't seem unreasonable as a way to
+        make this data accessible to other processes.
+        """
         return json.dumps(self.json, indent=4)
 
     def __getitem__(self, key):
+        """Return a data element from self.data."""
         return self.data[key]
 
     def __iter__(self):
+        """Allow this object to be iterated over."""
         return self
 
     def __next__(self):
+        """Get the next item in iteration."""
         if self.itercount >= len(self.data):
             raise StopIteration
         n = list(self.data)[self.itercount]
@@ -203,4 +221,5 @@ class SkytapGroup(ApiClient, six.Iterator):
         return self.data.keys()
 
     def __contains__(self, key):
+        """Check if the object contains an element."""
         return key in self.data

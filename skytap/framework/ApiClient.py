@@ -11,7 +11,6 @@ requests.packages.urllib3.disable_warnings()
 
 
 class ApiClient(object):
-
     """Wrap the calls to the Skytap API."""
 
     def __init__(self):
@@ -93,7 +92,6 @@ class ApiClient(object):
 
         Turns {'count': 5, 'offset': 2} into '?count=5&offset=2'.
         """
-
         # Specific case for labels params, until it is fixed by Skytap
         if not isinstance(d, dict):
             d = d[0]

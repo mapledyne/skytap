@@ -6,7 +6,6 @@ import time
 
 
 class Suspendable(object):
-
     """Add the change_state() functionality to the class.
 
     This includes supporting functions, like run() and suspend().

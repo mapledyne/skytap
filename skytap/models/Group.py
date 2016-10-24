@@ -8,6 +8,7 @@ from skytap.Users import Users
 
 
 class Group(SkytapResource):
+    """One Skytap Group."""
 
     def __getattr__(self, key):
         """Load values for anything that doesn't get loaded by default.

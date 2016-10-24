@@ -4,15 +4,14 @@ import json
 from skytap.framework.ApiClient import ApiClient
 from skytap.framework.Suspendable import Suspendable
 import skytap.framework.Utils as Utils
-from skytap.models.Interfaces import Interfaces
 from skytap.Labels import Labels
+from skytap.models.Interfaces import Interfaces
 from skytap.models.Notes import Notes
 from skytap.models.SkytapResource import SkytapResource
 from skytap.models.UserData import UserData
 
 
 class Vm(SkytapResource, Suspendable):
-
     """One Skytap VM."""
 
     def __init__(self, vm_json):

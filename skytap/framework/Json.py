@@ -4,7 +4,6 @@ import json
 
 
 class SkytapJsonEncoder(json.JSONEncoder):
-
     """Convert a few additional types into JSON."""
 
     def default(self, o):

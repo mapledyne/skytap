@@ -25,26 +25,32 @@ logger.addHandler(handler)
 
 
 def debug(msg):
+    """Log a debug message."""
     logger.debug(msg)
 
 
 def warning(msg):
+    """Log a warning message."""
     logger.warning(msg)
 
 
 def info(msg):
+    """Log an informational message."""
     logger.info(msg)
 
 
 def critical(msg):
+    """Log a critical error message."""
     logger.critical(msg)
 
 
 def log(level, msg):
+    """Log a message."""
     logger.log(level, msg)
 
 
 def log_level(level=None):
+    """Set or get the log level."""
     if level is not None:
         logger.setLevel(level)
     return logger.getEffectiveLevel()
@@ -71,7 +77,6 @@ def convert_date(date_str):
 
 
 class FixedOffset(tzinfo):
-
     """Fixed offset in minutes: `time = utc_time + utc_offset`."""
 
     def __init__(self, offset):

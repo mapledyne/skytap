@@ -71,7 +71,6 @@ from skytap.models.Vms import Vms
 
 
 class Environment(SkytapResource, Suspendable):
-
     """One Skytap environment."""
 
     def __init__(self, env_json):

@@ -1,3 +1,4 @@
+"""Support for a User resource in Skytap."""
 from skytap.Environments import Environments
 from skytap.framework.ApiClient import ApiClient
 import skytap.framework.Utils as Utils
@@ -5,10 +6,20 @@ from skytap.models.SkytapResource import SkytapResource
 
 
 class User(SkytapResource):
+    """One Skytap User resource."""
+
     def __init__(self, user_json):
+        """Create a Skytap User object."""
         super(User, self).__init__(user_json)
 
     def _calculate_custom_data(self):
+        """Add custom data.
+
+        Standarize sso_enabled to a boolean.
+        Create 'name' from first_name and last_name.
+        Create an 'admin' flag from account_role.
+        If there are environments with this user, turn them into objects.
+        """
         if 'sso_enabled' in self.data:
             self.data['sso'] = bool(self.sso_enabled)
         else:
