@@ -156,12 +156,10 @@ class UserData(SkytapResource):
 
         new_content = ""
 
-        line_found = False
         for i in lines:
             if i != "":
                 if i.strip() != line.strip():
                     new_content += (i.strip() + "\n")
-                    line_found = True
 
         Utils.info('Removing line: \"' + str(line) + '\"')
         api = ApiClient()
@@ -182,18 +180,10 @@ class UserData(SkytapResource):
         try:
             line = int(line)
         except ValueError:
-            return ""  # Not an integer
+            raise ValueError("Line must be an integer.")
 
         lines = self.contents.split("\n")
-
-        line_found = False
-        count = 0
-        for i in lines:
-            if line == count:
-                return i
-
-        if not line_found:
-            return ""
+        return lines[line]
 
     def _get_values(self, contents):
         """Check userdata and set variables based on keys/values within."""
