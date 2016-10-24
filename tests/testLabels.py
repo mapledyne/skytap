@@ -8,31 +8,23 @@ from skytap.Labels import Labels  # noqa
 envs = Environments()
 labels = Labels()
 
-
-def test_labels():
-    """Peform tests relating to labels."""
-    pass
-    #print labels.create("M-V", False)
-    #labels.create("supafly", True)
-
-    #print labels.enable(26)
-    #print labels.disable(26)
-
-    #print json.dumps(labels.json())
-
-    # for e in envs:
-    #     if "lord of the vms" not in e.name.lower():
-    #         continue
-    #     env_labels = e.labels
-    #     print env_labels.json()
-    #     print env_labels.add("hmmwat", "barf")
-    #     env_labels = e.labels
-    #     print env_labels.json()
-    #     #for l in env_labels:
-    #     #    print l
-    #
-    #     break
+vms_to_check = 10
 
 
-if __name__ == "__main__":
-    test_labels()
+def test_vm_labels():
+    """Ensure VM has a label object."""
+    vm_count = 0
+    for e in envs:
+        for v in e.vms:
+            vm_count += 1
+            if vm_count > vms_to_check:
+                return
+            for l in v.labels:
+                assert len(str(l)) > 0, ('Label ' + str(l) + ' from VM '
+                                         + v.name + ' has no length.')
+
+
+def test_lables():
+    """Get list of label categories."""
+    for l in labels:
+        assert len(str(l)) > 0, 'Zero length label (or error) found.'

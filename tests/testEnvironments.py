@@ -52,6 +52,13 @@ def test_environment_id():
         assert e.id > 0
 
 
+def test_environment_storage():
+    """Ensure environments storage seems reasonable."""
+    for l in list(environments.data):
+        e = environments[l]
+        assert e.storage > 0
+
+
 def test_environment_json():
     """Ensure environment json conversion seems to be working."""
     for l in list(environments.data):
