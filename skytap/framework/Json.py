@@ -6,7 +6,7 @@ import json
 class SkytapJsonEncoder(json.JSONEncoder):
     """Convert a few additional types into JSON."""
 
-    def default(self, o):
+    def default(self, o):  # noqa
         """Convert datetime and our custom objects to JSON.
 
         Our objects all have a .json() function available to them,

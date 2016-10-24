@@ -33,7 +33,7 @@ class Template(SkytapResource):
                 return self.data[key]
             api = ApiClient()
             user_json = api.rest(self.url + '/user_data.json')
-            self.user_data = UserData(json.loads(user_json))
+            self.user_data = UserData(json.loads(user_json), self.url)
             return self.user_data
 
         return super(Template, self).__getattr__(key)
