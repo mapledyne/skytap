@@ -8,8 +8,6 @@ This allows users to put data into a VM user data block and it'll filter down
 and be accessible to this script. We use this to expose variables to the user
 like shutdown time and other automation pieces.
 """
-import json
-
 from skytap.framework.ApiClient import ApiClient
 import skytap.framework.Utils as Utils
 from skytap.models.SkytapResource import SkytapResource
@@ -223,7 +221,12 @@ class UserData(SkytapResource):
         return values
 
     def _calculate_custom_data(self):
+        """Add custom data.
+
+        Check contents and if there's something there, try to parse it, then
+        add all those key/value pairs to the data block. See _get_values()
+        """
         if self.contents:
-            values = self._get_values(self.contents)
+            self._get_values(self.contents)
         else:
             self.data["contents"] = ""

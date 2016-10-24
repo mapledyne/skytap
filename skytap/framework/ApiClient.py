@@ -131,7 +131,7 @@ class ApiClient(object):
 
         return self._rest(req, url, params, data)
 
-    def _rest(self, req, url, params=None, data=None, attempts=0):
+    def _rest(self, req, url, params=None, data=None, attempts=0):  # noqa
         """Send a rest rest request to the server."""
         if params is None:
             params = {}
