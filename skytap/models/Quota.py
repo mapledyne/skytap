@@ -18,7 +18,7 @@ class Quota(SkytapResource):
     def _calculate_custom_data(self):
         """Create a percentage used and time object, if applicable."""
         if self.limit is not None:
-            self.data['pct'] = self.usage / self.limit
+            self.data['pct'] = self.usage * 100.0 / self.limit
         if self.units == 'hours':
             self.time = timedelta(hours=self.usage)
         self.data['name'] = self.id

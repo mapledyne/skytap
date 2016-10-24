@@ -19,8 +19,7 @@ class Quotas(SkytapGroup):
         quota_rest = self.rest('/v2/company/quotas')
         quota_json = json.loads(quota_rest)
         for qu in quota_json:
-            print(quota_json[qu][0])
-        q = Quota(quota_json["US-West"][0])
+            self.data[qu] = Quota(quota_json[qu][0])
 
 
 if __name__ == '__main__':
