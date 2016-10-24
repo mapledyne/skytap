@@ -11,7 +11,16 @@ from skytap.models.SkytapGroup import SkytapGroup
 
 
 class Quotas(SkytapGroup):
-    """Company/account quotas object."""
+    """Company/account quotas object.
+
+    Note: This code assumes that you have regional limits on your account.
+    The return is different if you don't (see the /v2 API doc). We should get
+    each piece of the return and sort it into type-and-region (whether you
+    have regional limits or not) and can then access things uniformly. Doing
+    so will also require smartly accessing the API on demand more, since
+    accounts with regional limits may require multiple calls to get the info
+    desired.
+    """
 
     def __init__(self):
         """Load the quotas from Skytap."""
