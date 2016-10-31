@@ -99,8 +99,8 @@ class Environments(SkytapGroup):
             print(envs.vm_count())
         """
         count = 0
-        for e in self.data:
-            count += self.data[e].vm_count
+        for data_element in self.data:
+            count += self.data[data_element].vm_count
         return count
 
     def svms(self):
@@ -117,8 +117,8 @@ class Environments(SkytapGroup):
             print(envs.svms())
         """
         count = 0
-        for e in self.data:
-            count += self.data[e].svms
+        for data_element in self.data:
+            count += self.data[data_element].svms
         return count
 
     def storage(self):
@@ -135,8 +135,8 @@ class Environments(SkytapGroup):
             print(envs.storage()))
         """
         count = 0
-        for e in list(self.data):
-            count += self.data[e].storage
+        for data_element in list(self.data):
+            count += self.data[data_element].storage
         return count
 
     def delete(self, env):

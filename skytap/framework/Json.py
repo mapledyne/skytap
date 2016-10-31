@@ -19,7 +19,7 @@ class SkytapJsonEncoder(json.JSONEncoder):
         else:
             return list(iterable)
 
-        if (isinstance(o, datetime)):
+        if isinstance(o, datetime):
             return o.isoformat()
 
         try:

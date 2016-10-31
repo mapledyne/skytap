@@ -87,22 +87,22 @@ class ApiClient(object):
         return False
 
     @staticmethod
-    def _dict_to_query_params(d):
+    def _dict_to_query_params(param_dict):
         """Return proper query string to add to a url.
 
         Turns {'count': 5, 'offset': 2} into '?count=5&offset=2'.
         """
         # Specific case for labels params, until it is fixed by Skytap
-        if not isinstance(d, dict):
-            d = d[0]
+        if not isinstance(param_dict, dict):
+            param_dict = param_dict[0]
 
-        if d is None or len(d) == 0:
+        if param_dict is None or len(param_dict) == 0:
             return ''
 
         param_list = [param + '=' +
                       (str(value).lower()
                        if type(value) == bool else str(value))
-                      for param, value in six.iteritems(d)
+                      for param, value in six.iteritems(param_dict)
                       if value is not None]
         return '?' + "&".join(param_list)
 

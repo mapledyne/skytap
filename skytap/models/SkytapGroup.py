@@ -212,9 +212,9 @@ class SkytapGroup(ApiClient, six.Iterator):
         """Get the next item in iteration."""
         if self.itercount >= len(self.data):
             raise StopIteration
-        n = list(self.data)[self.itercount]
+        next_item = list(self.data)[self.itercount]
         self.itercount += 1
-        return self.data[n]
+        return self.data[next_item]
 
     def keys(self):
         """Return the keys from the group list."""

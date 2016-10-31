@@ -29,7 +29,7 @@ class User(SkytapResource):
         if 'account_role' in self.data:
             self.data['admin'] = self.account_role == 'admin'
         if 'configurations' in self.data:
-            if (isinstance(self.data['configurations'], list)):
+            if isinstance(self.data['configurations'], list):
                 if len(self.data['configurations']) > 0:
                     if isinstance(self.data['configurations'][0], dict):
                         self.data['configurations'] = Environments(self.data['configurations'])  # noqa

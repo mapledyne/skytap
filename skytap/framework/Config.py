@@ -5,7 +5,7 @@ import six
 
 import skytap.framework.Utils as Utils
 
-initial_config = {'user': '',           # Should only be defined in env vars.
+INITIAL_CONFIG = {'user': '',           # Should only be defined in env vars.
                   'token': '',          # Should only be defined in env vars.
                   'log_level': 30,      # 0 - 50. Debug=10, Info=20, Warn=30
                   'base_url': 'https://cloud.skytap.com',
@@ -23,13 +23,13 @@ class ConfigType(type):
     and not an object. This makes for cleaner use in other classes.
     """
 
-    def __getattr__(self, key):
+    def __getattr__(cls, key):
         """Make the config values accessible.
 
         This allows all config values to be available via calls like:
         Config.user
         """
-        if key not in self.config_data:
+        if key not in cls.config_data:
             # These are called during nose setup before logging is turned off
             # during testing. Not the best, but tests look better with these
             # supressed.
@@ -37,53 +37,53 @@ class ConfigType(type):
                 Utils.error("Tried to access config value '" +
                             str(key) + "', which doesn't exist.")
             raise AttributeError
-        return self.config_data[key]
+        return cls.config_data[key]
 
-    def __len__(self):
+    def __len__(cls):
         """Expose how many config items we have."""
-        return len(self.config_data)
+        return len(cls.config_data)
 
-    def __str__(self):
+    def __str__(cls):
         """A string representation of the config, JSON formatted, and prettified.
 
         Token is excluded from this, so this can be safely printed for
         debugging.
         """
-        temp_config = self.config_data.copy()
+        temp_config = cls.config_data.copy()
         temp_config["token"] = ''
         return json.dumps(temp_config, indent=4)
 
-    def __repr__(self):
+    def __repr__(cls):
         """A string representation of the config, JSON formatted.
 
         Token is excluded from this, so this can be safely printed for
         debugging.
         """
-        temp_config = self.config_data.copy()
+        temp_config = cls.config_data.copy()
         temp_config["token"] = ''
         return json.dumps(temp_config)
 
-    def __dir__(self):
+    def __dir__(cls):
         """List only items in the config_data list.
 
         Polite since we're implementing __getattr__.
         """
         dir_list = []
-        for config_item in self.config_data:
+        for config_item in cls.config_data:
             dir_list.append(config_item)
         return dir_list
 
-    def __contains__(self, item):
+    def __contains__(cls, item):
         """Allow checks for items in the config list."""
-        return item in self.config_data
+        return item in cls.config_data
 
-    def __iter__(self):
+    def __iter__(cls):
         """Allow 'for x in config'.
 
         Ultimately, this passes the 'how to iterate' problem down to the
         config_data object and lets that object handle the actual iteration.
         """
-        return iter(self.config_data)
+        return iter(cls.config_data)
 
 
 @six.add_metaclass(ConfigType)
@@ -93,7 +93,7 @@ class Config(object):
     # Some very basic defaults. This will allow the module to work by
     # just creating the SKYTAP_TOKEN and SKYTAP_USER env variables
     # for most things you'd want to do.
-    config_data = initial_config
+    config_data = INITIAL_CONFIG
 
 # Load config values and set up the class.
 

@@ -17,6 +17,6 @@ class Vms(SkytapGroup):
         """
         super(Vms, self).__init__()
         self.load_list_from_json(vms_json, Vm, env_url)
-        for v in self.data:
-            self.data[v].data['url'] = (env_url + '/vms/'
-                                        "" + str(self.data[v].id))
+        for each_vm in self.data:
+            self.data[each_vm].data['url'] = (env_url + '/vms/'
+                                              "" + str(self.data[each_vm].id))

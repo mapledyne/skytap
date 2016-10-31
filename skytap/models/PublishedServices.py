@@ -15,6 +15,6 @@ class PublishedServices(SkytapGroup):
         """
         super(PublishedServices, self).__init__()
         self.load_list_from_json(service_json, PublishedService, interface_url)
-        for s in self.data:
-            self.data[s].data["url"] = (interface_url + "/services/"
-                                        "" + str(self.data[s].id))
+        for service in self.data:
+            self.data[service].data["url"] = (interface_url + "/services/"
+                                              "" + str(self.data[service].id))

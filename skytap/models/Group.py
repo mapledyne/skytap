@@ -28,7 +28,7 @@ class Group(SkytapResource):
 
     def _calculate_custom_data(self):
         if 'users' in self.data:
-            if (isinstance(self.data['users'], list)):
+            if isinstance(self.data['users'], list):
                 if len(self.data['users']) > 0:
                     if isinstance(self.data['users'][0], dict):
                         self.data['users'] = Users(self.data['users'])
@@ -50,7 +50,7 @@ class Group(SkytapResource):
             >>> groups = skytap.Groups()
             >>> groups[1234].remove_user(12345)
         """
-        if (type(user) is not int):
+        if type(user) is not int:
             raise TypeError('User must be an int.')
 
         Utils.info('Removing user ' + str(user) +
@@ -82,7 +82,7 @@ class Group(SkytapResource):
             >>> for u in users:
             ...     groups[12345].add(u.id)
         """
-        if (type(user) is not int):
+        if type(user) is not int:
             raise TypeError('User must be an int.')
 
         Utils.info('Adding user ' + str(user) + ' to group: ' + self.name)

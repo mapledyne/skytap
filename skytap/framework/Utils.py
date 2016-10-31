@@ -17,48 +17,48 @@ except ImportError:
 # Set up the logging system:
 
 logging.getLogger(__name__).addHandler(NullHandler())
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
+LOGGER = logging.getLogger(__name__)
+HANDLER = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')  # noqa
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+HANDLER.setFormatter(formatter)
+LOGGER.addHandler(HANDLER)
 
 
 def debug(msg):
     """Log a debug message."""
-    logger.debug(msg)
+    LOGGER.debug(msg)
 
 
 def warning(msg):
     """Log a warning message."""
-    logger.warning(msg)
+    LOGGER.warning(msg)
 
 
 def info(msg):
     """Log an informational message."""
-    logger.info(msg)
+    LOGGER.info(msg)
 
 
 def critical(msg):
     """Log a critical error message."""
-    logger.critical(msg)
+    LOGGER.critical(msg)
 
 
 def log(level, msg):
     """Log a message."""
-    logger.log(level, msg)
+    LOGGER.log(level, msg)
 
 
 def log_level(level=None):
     """Set or get the log level."""
     if level is not None:
-        logger.setLevel(level)
-    return logger.getEffectiveLevel()
+        LOGGER.setLevel(level)
+    return LOGGER.getEffectiveLevel()
 
 
 def error(err):
     """Convert an error message into JSON."""
-    logger.error(err)
+    LOGGER.error(err)
     return json.dumps({"error": err})
 
 
@@ -72,8 +72,8 @@ def convert_date(date_str):
     offset = int(offset_str[-4:-2]) * 60 + int(offset_str[-2:])
     if offset_str[0] == "-":
         offset = -offset
-    dt = naive_dt.replace(tzinfo=FixedOffset(offset))
-    return dt
+    converted_dt = naive_dt.replace(tzinfo=FixedOffset(offset))
+    return converted_dt
 
 
 class FixedOffset(tzinfo):

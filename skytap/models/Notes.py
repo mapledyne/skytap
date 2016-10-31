@@ -72,12 +72,12 @@ class Notes(SkytapGroup):
             # notes.delete(notes.oldest())  # most common use case.
         """
         target = None
-        for n in self.data:
+        for each_note in self.data:
             if target is None:
-                target = self.data[n]
+                target = self.data[each_note]
                 continue
-            if self.data[n].updated_at > target.updated_at:
-                target = self.data[n]
+            if self.data[each_note].updated_at > target.updated_at:
+                target = self.data[each_note]
         return target
 
     def newest(self):
@@ -87,12 +87,12 @@ class Notes(SkytapGroup):
             ~skytap.models.Note: The newest note.
         """
         target = None
-        for n in self.data:
+        for each_note in self.data:
             if target is None:
-                target = self.data[n]
+                target = self.data[each_note]
                 continue
-            if self.data[n].updated_at < target.updated_at:
-                target = self.data[n]
+            if self.data[each_note].updated_at < target.updated_at:
+                target = self.data[each_note]
         return target
 
     def delete_all(self):
