@@ -6,12 +6,12 @@ from datetime import tzinfo
 import json
 import logging
 
-
+# Create the NullHandler object, regardless of Python version:
 try:  # Python 2.7+
     from logging import NullHandler
 except ImportError:
-    class NullHandler(logging.Handler):
-        def emit(self, record):
+    class NullHandler(logging.Handler):  # noqa
+        def emit(self, record):  # noqa
             pass
 
 # Set up the logging system:

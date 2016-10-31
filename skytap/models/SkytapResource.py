@@ -31,31 +31,20 @@ class SkytapResource(object):
         """Used so objects can create and calculate new data elements."""
         pass
 
+    def _convert_date(self, element):
+        """Try to convert element to a date."""
+        try:
+            self.data[element] = Utils.convert_date(self.data[element])
+        except (ValueError, AttributeError, KeyError):
+            pass
+
     def _convert_data_elements(self):
         """Convert some data elements into variable types that make sense."""
-        try:
-            self.data['created_at'] = Utils.convert_date(self.data['created_at'])  # noqa
-        except (ValueError, AttributeError, KeyError):
-            pass
-
-        try:
-            self.data['last_login'] = Utils.convert_date(self.data['last_login'])  # noqa
-        except (ValueError, AttributeError, KeyError):
-            pass
-
-        try:
-            self.data['last_run'] = Utils.convert_date(self.data['last_run'])
-        except (ValueError, AttributeError, KeyError):
-            pass
-
-        try:
-            self.data['updated_at'] = Utils.convert_date(self.data['updated_at'])  # noqa
-        except (ValueError, AttributeError, KeyError):
-            pass
-        try:
-            self.data['last_installed'] = Utils.convert_date(self.data['last_installed'])  # noqa
-        except (ValueError, AttributeError, KeyError):
-            pass
+        self._convert_date('created_at')
+        self._convert_date('last_login')
+        self._convert_date('last_run')
+        self._convert_date('updated_at')
+        self._convert_date('last_installed')
 
         try:
             self.data['id'] = int(self.data['id'])

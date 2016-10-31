@@ -1,0 +1,11 @@
+strictness: veryhigh
+test-warnings: true
+doc-warnings: true
+
+ignore-paths:
+  - tests
+  - docs
+
+pep257:
+  disable:
+    - D203

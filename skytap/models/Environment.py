@@ -20,8 +20,8 @@ Some data conversions are handled for you. Specifically:
 
 * Dates are converted into :class:`datetime` objects, like :attr:`created_at`.
 * The :attr:`vms` list is loaded into a :class:`skytap.models.Vms` class.
-* The :attr:`notes`, if loaded, are put into a :class:`skytap.models.Notes` class.
-* The :attr:`user_data`, if loaded, is put into a :class:`skytap.models.UserData` class.
+* The :attr:`notes` are put into a :class:`skytap.models.Notes` class.
+* The :attr:`user_data` is put into a :class:`skytap.models.UserData` class.
 
 
 There's also the ability to change the runstate of the environment through
