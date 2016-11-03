@@ -7,12 +7,6 @@ from skytap.Vpns import Vpns  # noqa
 
 vpns = Vpns()
 
-
-def test_vpn_count():
-    """Test VPN count."""
-    assert len(vpns) > 0, 'Vpn list is empty.'
-
-
 def test_vpn_id():
     """Ensure each VPN has an ID."""
     for v in vpns:
