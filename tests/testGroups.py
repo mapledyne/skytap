@@ -10,9 +10,13 @@ from skytap.Users import Users  # noqa
 groups = Groups()
 
 
-def test_group_list():
-    """Ensure we have some users."""
-    assert len(groups) > 0, 'User list is empty.'
+def group_list_count():
+    """Ensure we have some groups.
+
+    This is run by test_group_creation to guarantee that we have
+    at least one group there - that function creates a test group.
+    """
+    assert len(groups) > 0
 
 
 def test_group_id():
@@ -57,7 +61,13 @@ def test_group_module_main():
     assert len(ret) == len(groups.data)
 
 
-def test_group_main_good_group():
+def group_main_good_group():
+    """Does running this via main() return the expected result.
+
+    This is run by test_group_creation to guarantee that we have
+    at least one group there - that function creates a test group.
+    """
+    assert len(groups.data) > 0, "No groups found to test against."
     group = list(groups.data)[0]
     ret = json.loads(groups.main([groups[group].id]))
     assert groups[group].id == ret[0]['id']
@@ -74,6 +84,12 @@ def test_group_creation():
     name = str(uuid.uuid4())
     description = 'Group creation test.'
     group = groups.add(name, description)
+
+    # Run these from inside this test since we can now
+    # assume we have some actual group(s) to test:
+    group_list_count()
+    group_main_good_group()
+
     assert groups[group].name == name
     user = Users().first()
     msg = 'User (' + user.name + ') not successfully added.'
@@ -83,10 +99,16 @@ def test_group_creation():
     msg = 'User (' + user.name + ') not successfully removed.'
     assert groups[group].remove_user(user.id), msg
     msg = 'User (' + user.name + ') still in group after being removed.'
+    remove_invalid_user(group)
     assert user not in groups[group].users, msg
     msg = 'Group (' + name + ') not successfully deleted.'
     assert groups.delete(groups[group]), msg
     access_deleted_group(group)
+
+
+@nose.tools.raises(TypeError)
+def remove_invalid_user(group):
+    groups[group].remove_user("string")
 
 
 @nose.tools.raises(KeyError)
