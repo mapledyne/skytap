@@ -9,7 +9,7 @@ return the Public IP info from Skytap in a JSON format.
 import sys
 
 from skytap.models.SkytapGroup import SkytapGroup
-from skytap.models.IP import IP
+from skytap.models.PublicIP import PublicIP
 
 
 class PublicIPs(SkytapGroup):
@@ -23,7 +23,7 @@ class PublicIPs(SkytapGroup):
     def __init__(self):
         """Build the IP list from the Skytap API."""
         super(PublicIPs, self).__init__()
-        self.load_list_from_api('/v2/ips', IP)
+        self.load_list_from_api('/v2/ips', PublicIP)
 
 
 if __name__ == '__main__':

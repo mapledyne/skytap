@@ -2,9 +2,9 @@
 from skytap.models.SkytapResource import SkytapResource
 
 
-class IP(SkytapResource):
-    """One Skytap VPN object."""
+class PublicIP(SkytapResource):
+    """One Skytap Public IP object."""
 
     def __init__(self, ip_json):
         """Create one VPN object."""
-        super(IP, self).__init__(ip_json)
+        super(PublicIP, self).__init__(ip_json)
