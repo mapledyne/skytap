@@ -4,7 +4,7 @@ This roughly translates to the Skytap API call of /v2/vpns REST call,
 but gives us better access to the bits and pieces of the VPN.
 
 If accessed via the command line (``python -m skytap.Vpns``) this will
-return the quotas from Skytap in a JSON format.
+return the VPN information from Skytap in a JSON format.
 """
 import sys
 
@@ -16,7 +16,7 @@ class Vpns(SkytapGroup):
     """Set of Skytap VPNs.
 
     Example:
-        v = skytap.Users()
+        v = skytap.Vpns()
         print len(v)
     """
 
@@ -24,6 +24,7 @@ class Vpns(SkytapGroup):
         """Build the VPN list from the Skytap API."""
         super(Vpns, self).__init__()
         self.load_list_from_api('/v2/vpns', Vpn)
+
 
 if __name__ == '__main__':
     print(Vpns().main(sys.argv[1:]))
