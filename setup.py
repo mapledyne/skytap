@@ -7,7 +7,7 @@ setup(
     packages=find_packages(),
     version='1.3.1',
     description='Skytap REST API access modules',
-    author='Fulcrum Technologies',
+    author='Bill Wellington, Michael Knowles, and Caleb Hawkins',
     test_suite='nose.collector',
     author_email='bill@wellingtonnet.net',
     maintainer='Michael Knowles',
