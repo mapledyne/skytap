@@ -26,18 +26,26 @@ class Exports(SkytapGroup):
         self.load_list_from_api('/v2/exports', Export)
 
     def delete(self, job):
+        """Delete an Export job."""
+        target_id = 0
 
-        target_id = job.id
         if isinstance(job, Export):
-            if target_id not in self.data:
+            if job.id not in self.data:
                 raise KeyError
-            job.delete()
+            target_id = job.id
         elif isinstance(job, int):
             if job not in self.data:
                 raise KeyError
-            self.data[job].delete()
+            target_id = job
         else:
             raise KeyError
+
+        # or maybe should raise a KeyError?
+        # We'll only get here if somehow we didn't set target
+        if target_id == 0:
+            return false
+
+        self.data[target_id].delete()
         self.refresh()
         return target_id not in self.data
 
