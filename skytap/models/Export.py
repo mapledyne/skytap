@@ -12,13 +12,14 @@ class Export(SkytapResource):
     def __init__(self, export_json):
         """Create one Export object."""
         super(Export, self).__init__(export_json)
+        self.url = '/v2/exports/' + str(self.id)
 
     def delete(self):
         """Delete this export job."""
         Utils.info('Deleting job ' + str(self.id) +
                    ' from queue.')
         api = ApiClient()
-        api.rest(self.url + '/v2/exports/' + str(self.id),
+        api.rest(self.url,
                  {},
                  'DELETE')
         return response
