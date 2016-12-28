@@ -25,6 +25,22 @@ class Exports(SkytapGroup):
         super(Exports, self).__init__()
         self.load_list_from_api('/v2/exports', Export)
 
+    def delete(self, job):
+
+        target_id = job.id
+        if isinstance(job, Export):
+            if target_id not in self.data:
+                raise KeyError
+            job.delete()
+        elif isinstance(job, int):
+            if job not in self.data:
+                raise KeyError
+            self.data[job].delete()
+        else:
+            raise KeyError
+        self.refresh()
+        return target_id not in self.data
+
 
 if __name__ == '__main__':
     print(Exports().main(sys.argv[1:]))

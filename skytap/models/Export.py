@@ -12,13 +12,14 @@ class Export(SkytapResource):
         """Create one Export object."""
         super(Export, self).__init__(export_json)
 
-    def delete_export_job(self, export_job):
+    def delete(self, job):
         if type (job) is not int:
             raise TypeError('Export job must be an int.')
 
-    Utils.info('Deleting job ' +str(export_job) +
-                ' from queue.')
-    api = ApiClient()
-    api.rest(self.url + '/v2/exports/' + str(export_job),
-            {},
-            'DELETE')
+        Utils.info('Deleting job ' +str(job) +
+                    ' from queue.')
+        api = ApiClient()
+        api.rest(self.url + '/v2/exports/' + str(job.id),
+                {},
+                'DELETE')
+        return response
