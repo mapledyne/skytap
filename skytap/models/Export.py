@@ -16,10 +16,9 @@ class Export(SkytapResource):
 
     def delete(self):
         """Delete this export job."""
-        Utils.info('Deleting job ' + str(self.id) +
-                   ' from queue.')
+        Utils.info('Deleting job ' + str(self.id) + ' from queue.')
         api = ApiClient()
-        api.rest(self.url,
+        response = api.rest(self.url,
                  {},
                  'DELETE')
         return response
