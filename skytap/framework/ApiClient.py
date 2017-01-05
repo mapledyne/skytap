@@ -67,7 +67,11 @@ class ApiClient(object):
         # If we made it this far, we need to handle an exception
         if attempts >= Config.max_http_attempts or (resp.status_code != 429 and
                                                     resp.status_code != 423):
-            raise Exception(json.loads(resp.text))
+            Utils.error('Error recieved in API return. Response code: ' + str(resp.status_code) + '. Reponse text: ' + resp.text)
+#            print(resp.headers)
+            error_response = json.loads(resp.text)
+            error_response['status_code'] = resp.status_code
+            raise Exception(error_response)
 
         if resp.status_code == 423:  # "Busy"
             if 'Retry-After' in resp.headers:
