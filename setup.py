@@ -5,9 +5,9 @@ from setuptools import setup
 setup(
     name='skytap',
     packages=find_packages(),
-    version='1.3.1',
+    version='1.4.0',
     description='Skytap REST API access modules',
-    author='Fulcrum Technologies',
+    author='Bill Wellington, Michael Knowles, and Caleb Hawkins',
     test_suite='nose.collector',
     author_email='bill@wellingtonnet.net',
     maintainer='Michael Knowles',
@@ -16,7 +16,7 @@ setup(
     install_requires=['requests', 'six'],
     scripts=['bin/skytap'],
     url='https://github.com/mapledyne/skytap',
-    download_url='https://github.com/mapledyne/skytap/tarball/v1.2.0',
+    download_url='https://github.com/mapledyne/skytap/tarball/v1.4.0',
     keywords=['skytap', 'cloud', 'client', 'rest', 'api', 'development'],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
