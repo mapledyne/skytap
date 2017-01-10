@@ -13,3 +13,4 @@ _static/
 _templates/
 tests/testHierarchy.py
 /build
+/.env
