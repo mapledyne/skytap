@@ -12,3 +12,4 @@ _build/
 _static/
 _templates/
 tests/testHierarchy.py
+/build
