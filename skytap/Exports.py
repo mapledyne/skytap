@@ -29,19 +29,7 @@ class Exports(SkytapGroup):
         self.load_list_from_api('/v2/exports', Export)
 
     def create(self, vmid):
-        """Create an export job
-
-        Args:
-            vm_id (int):
-
-        Returns:
-
-        Example:
-
-        .. code-block:: python
-
-
-        """
+        """Create an export job from a vm in a template."""
         if type(vmid) is not int:
             raise TypeError('vmid must be an int')
 
